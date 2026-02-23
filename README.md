@@ -1,4 +1,4 @@
-# edwardosei.dev
+# devONE
 
 Personal portfolio for Edward Osei-Nyarko featuring 4 switchable visual themes. The multi-theme system itself serves as a technical showcase.
 
