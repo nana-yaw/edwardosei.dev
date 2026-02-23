@@ -84,9 +84,38 @@ That project cracked something open. The curiosity of how writing code creates d
 
 DO NOT use: "I build systems that scale", "Full-stack developer", "Passionate about technology", "Let's build something great together"
 
+### Security-First Engineering Identity
+
+Edward doesn't bolt security on as an afterthought — it's instinct. The EWC Care App's architecture tells the story:
+
+- **6-layer defense in depth** wasn't a checklist exercise. It grew from asking "what if someone tries to game the check-in system?" and then actually building spoofing detection, geofence validation, and tamper-evident audit logs.
+- **24 security-focused test files** — nearly half the test suite. Not because a compliance auditor demanded it, but because Edward doesn't ship mutations without verifying the permission gate actually stops the wrong role.
+- **Mutation testing (Stryker)** on security code — proving that removing an `if` statement in an auth guard actually breaks a test. Most developers never go this far.
+- **SHA-256 integrity chain** on audit logs — blockchain-style tamper detection on a church app, because Edward believes every system that handles people's data deserves enterprise-grade trust.
+
+This is a differentiator. Most portfolios show features. Edward's portfolio shows the security engineering *behind* the features. Use this throughout the themes:
+
+**Cinematic**: The architecture diagram should prominently show the security layers — not as a footnote, but as a central visual. The 6-layer stack IS the hero graphic.
+
+**Minimal**: In the case study section, dedicate a paragraph to the security decisions. "I built a tamper-evident audit log for a church app. Not because anyone asked — because the data deserved it."
+
+**Bold**: Use security stats as statement pieces. "24 security test files." "6 defense layers." "SHA-256 audit chain." These numbers hit harder than generic "X years of experience."
+
+**Terminal**: The `security` tab in the 5-tab explorer is where this shines. Show a real security audit pass list:
+```
+[PASS] RBAC enforcement — 6 roles, 12 resources, scope isolation
+[PASS] PII projection — sensitive fields filtered by role
+[PASS] Input validation — bounded strings, enums, pagination limits
+[PASS] Rate limiting — sliding window on auth and public endpoints
+[PASS] HTML sanitization — DOMPurify on all user content
+[PASS] Audit integrity — SHA-256 chain with tamper detection
+[PASS] Geofence verification — Haversine + multi-signal spoofing detection
+[PASS] Mutation testing — security logic survives code mutations
+```
+
 ### Professional Voice
 
-Edward is: direct, thoughtful, community-minded, technically rigorous, unpretentious.
+Edward is: direct, thoughtful, community-minded, technically rigorous, unpretentious, security-conscious by instinct (not by compliance requirement).
 Edward is NOT: flashy, buzzword-heavy, self-promotional, generic.
 
 Write copy the way a confident engineer talks to a peer — not the way LinkedIn posts read.

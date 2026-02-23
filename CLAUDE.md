@@ -7,9 +7,10 @@ A standalone Next.js portfolio for Edward Osei-Nyarko featuring **4 switchable v
 **Before implementing anything**, read `docs/plans/2026-02-23-anti-slop-design-direction.md`. It overrides generic design choices in the prototypes and original design doc with intentional, personal, non-AI-sloppy direction.
 
 ## Documents (read in this order)
-1. `docs/plans/2026-02-23-anti-slop-design-direction.md` — **READ FIRST.** Design principles, kill list, Edward's real story, per-theme redesign.
-2. `docs/plans/2026-02-23-portfolio-implementation.md` — Task-by-task implementation plan.
-3. `docs/plans/2026-02-23-portfolio-design.md` — Original design doc (use for architecture/tech stack, but anti-slop doc overrides visual/copy decisions).
+1. `docs/plans/2026-02-23-anti-slop-design-direction.md` — **READ FIRST.** Design principles, kill list, Edward's real story, per-theme redesign, D.O-N.E brand identity.
+2. `docs/ewc-architecture-portfolio.md` — **Sanitized architecture reference for public use.** 42 tables, 92 indexes, 6-role RBAC, security layers, test suite breakdown. Use this for all project showcase content (terminal tabs, architecture diagrams, code references). The unsanitized `docs/ewc-architecture.md` has internal details (rate limit thresholds, session durations, spoofing detection specifics) — NEVER expose those in the portfolio.
+3. `docs/plans/2026-02-23-portfolio-implementation.md` — Task-by-task implementation plan.
+4. `docs/plans/2026-02-23-portfolio-design.md` — Original design doc (use for architecture/tech stack, but anti-slop doc overrides visual/copy decisions).
 
 ## Reference Prototypes
 4 HTML prototypes in `reference-prototypes/`. Use for **layout and interaction patterns ONLY**. Do NOT copy their decorative effects (gradient orbs, particles, glassmorphism, etc.) — see anti-slop doc for what to keep vs kill.
@@ -59,6 +60,7 @@ npm run lint         # ESLint check
 
 ## Key Conventions
 - **Anti-slop first**: Every visual element must earn its place. If it doesn't communicate something, remove it.
+- **Security-first identity**: Edward's security instinct is a portfolio differentiator. Show the 6-layer defense, 24 security test files, mutation testing, SHA-256 audit chain prominently — not as a footnote. See the "Security-First Engineering Identity" section in the anti-slop doc.
 - Use prototypes for LAYOUT PATTERNS only — replace all decorative effects and generic copy per anti-slop doc
 - Each theme is visually independent — don't compromise one theme's design for consistency
 - All data comes from `src/data/` — never hardcode content in components
