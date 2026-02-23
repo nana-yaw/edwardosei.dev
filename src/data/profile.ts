@@ -2,14 +2,14 @@ export const profile = {
   name: "Edward Osei-Nyarko",
   firstName: "Edward",
   lastName: "Osei-Nyarko",
-  brand: "D.O-N.E",
-  brandExpansion: "Developer Osei-Nyarko Edward",
-  title: "Backend Engineer",
-  tagline: "From physics to production systems — solving problems that matter.",
+  brand: "devONE",
+  brandExpansion: "Edward Osei-Nyarko",
+  title: "Software Developer",
+  tagline: "I studied physics, then I learned to code. Now I build systems that solve real problems.",
   taglines: {
     cinematic: "Physics taught me systems. Code lets me build them.",
-    minimal: "From physics to production systems — solving problems that matter.",
-    bold: "Backend engineer. Problem-first thinker.",
+    minimal: "I studied physics, then I learned to code. Now I build systems that solve real problems.",
+    bold: "Software developer. Problem-first thinker.",
     terminal: "I write code that serves communities.",
   },
   email: "edward.osei.nyarko@gmail.com",
@@ -20,10 +20,10 @@ export const profile = {
 
   origin: {
     short:
-      "Physics graduate turned backend engineer — building software that serves communities.",
+      "I went from a physics degree to writing production software. Everything I build starts with the same question: who does this help?",
     long: [
-      "I studied physics at the University of Cape Coast in Ghana. For my final project, I programmed an Arduino UNO with C++ to regulate temperature in LDPE plastic moulds — a system designed to turn plastic waste into household products and reduce waste on campus and eventually across Ghana.",
-      "That project cracked something open. The curiosity of how writing code creates digital brains that solve real problems — I couldn't let go of it. I chose software development because of what it can do for people's daily lives. The EWC Care App exists because my church community needed better tools for pastoral care. Every project I take on starts with the same question: who does this help?",
+      "I studied physics at the University of Cape Coast in Ghana. For my final project, I programmed an Arduino UNO with C++ to regulate temperature in LDPE plastic moulds. The goal was to turn plastic waste into household products and cut waste across campus.",
+      "That project changed everything. I got hooked on the idea that writing code could solve real problems for real people. I chose software development because of what it can do for people's daily lives. The EWC Care App exists because my church community needed better tools for pastoral care. Every project I take on starts with the same question: who does this help?",
     ],
   },
 

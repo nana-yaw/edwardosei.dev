@@ -62,7 +62,7 @@ export function MinimalProject() {
           >
             My church community needed better tools for pastoral care. What
             started as a simple idea became a production system managing 5+
-            communities — with real-time sync, role-based access, and a security
+            communities, with real-time sync, role-based access, and a security
             architecture I&apos;m genuinely proud of.
           </p>
         </motion.div>
@@ -151,7 +151,7 @@ export function MinimalProject() {
                   <strong className="font-semibold text-[#1a1a2e]">
                     {layer.name}
                   </strong>{" "}
-                  — {layer.tech}. {layer.details}
+                  ({layer.tech}). {layer.details}
                 </p>
               </div>
             ))}
@@ -194,7 +194,7 @@ export function MinimalProject() {
                 <strong className="font-semibold text-[#1a1a2e]">
                   {layer.name}
                 </strong>{" "}
-                — {layer.detail}
+                · {layer.detail}
               </li>
             ))}
           </ol>

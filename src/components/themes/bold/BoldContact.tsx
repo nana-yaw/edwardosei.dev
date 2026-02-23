@@ -106,9 +106,7 @@ export function BoldContact() {
             className="text-2xl font-bold tracking-tight text-[#f5f5f0]/20"
             style={{ fontFamily: "var(--font-space-grotesk)" }}
           >
-            D<span style={{ color: "#FF6B4A" }}>.</span>O
-            <span style={{ color: "#FF6B4A" }}>-</span>N
-            <span style={{ color: "#FF6B4A" }}>.</span>E
+            dev<span style={{ color: "#FF6B4A" }}>ONE</span>
           </p>
           <p className="mt-2 text-[11px] font-medium uppercase tracking-[0.25em] text-[#666666]">
             {profile.brandExpansion}

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { profile } from "@/data/profile";
+import Avatar from "@/components/Avatar";
 import { projects } from "@/data/projects";
 
 const COMMAND_TEXT = "cat README.md";
@@ -51,7 +52,7 @@ function buildReadmeOutput() {
 
   return {
     name: profile.name,
-    tagline: profile.taglines.bold, // "Backend engineer. Problem-first thinker."
+    tagline: profile.taglines.bold,
     description: profile.taglines.terminal, // "I write code that serves communities."
     role,
     stack: stackItems.join(", "),
@@ -206,20 +207,10 @@ export function TerminalHero() {
           </div>
         </motion.div>
 
-        {/* EO initials below the terminal */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4, ease: "easeOut" as const, delay: 0.3 }}
-          className="mt-8 flex justify-center"
-        >
-          <div
-            className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#3fb950] text-lg font-semibold text-[#3fb950]"
-            style={{ fontFamily: "var(--font-fira-code)" }}
-          >
-            EO
-          </div>
-        </motion.div>
+        {/* Photo below the terminal */}
+        <div className="mt-8 flex justify-center">
+          <Avatar src="/photos/edward.jpg" size="md" />
+        </div>
       </div>
     </section>
   );

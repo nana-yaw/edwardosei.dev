@@ -55,7 +55,7 @@ export function TerminalNav() {
           style={{ fontFamily: "var(--font-fira-code)" }}
         >
           <span className="text-[#484f58]">[</span>
-          <span className="text-[#3fb950]">D.O-N.E</span>
+          <span className="text-[#3fb950]">devONE</span>
           <span className="text-[#484f58]">]</span>
           <span className="ml-1.5 text-[#484f58]">~$</span>
         </a>

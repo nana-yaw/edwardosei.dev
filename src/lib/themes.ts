@@ -49,8 +49,8 @@ export const themes: Record<ThemeId, ThemeDefinition> = {
 };
 
 export const themeOrder: ThemeId[] = [
-  "cinematic",
   "minimal",
+  "cinematic",
   "bold",
   "terminal",
 ];

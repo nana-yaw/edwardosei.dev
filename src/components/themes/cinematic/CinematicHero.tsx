@@ -2,6 +2,7 @@
 
 import { profile } from "@/data/profile";
 import { motion } from "framer-motion";
+import Avatar from "@/components/Avatar";
 
 const fadeInUp = (delay: number) => ({
   initial: { opacity: 0, y: 20 },
@@ -16,13 +17,10 @@ export function CinematicHero() {
       className="relative flex min-h-[100dvh] items-center justify-center bg-[#0a0a0a] px-6"
     >
       <div className="flex max-w-3xl flex-col items-center text-center">
-        {/* EO Initials */}
-        <motion.div
-          {...fadeInUp(0)}
-          className="mb-8 flex h-24 w-24 items-center justify-center rounded-full border-2 border-white/20 text-2xl font-semibold tracking-tight text-white"
-        >
-          EO
-        </motion.div>
+        {/* Photo */}
+        <div className="mb-8">
+          <Avatar src="/photos/edward.jpg" size="lg" />
+        </div>
 
         {/* Name */}
         <motion.h1

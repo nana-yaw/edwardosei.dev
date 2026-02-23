@@ -98,7 +98,7 @@ export const projects = [
       },
       {
         src: "/screenshots/landing-journey.png",
-        alt: "Discipleship growth track — Born, Grow, Serve, Lead, Multiply",
+        alt: "Discipleship growth track: Born, Grow, Serve, Lead, Multiply",
         device: "desktop",
       },
       {
@@ -172,10 +172,10 @@ export const projects = [
     },
 
     testing: {
-      unit: "Vitest — 36 files: 24 security (RBAC, PII, rate limiting, XSS, encryption), 4 core domain, 8 features & utils",
-      e2e: "Python Playwright — 17 files: check-in flows, visitor tracking, salvation decisions, circle guide management, geofence+QR",
+      unit: "Vitest, 36 files: 24 security (RBAC, PII, rate limiting, XSS, encryption), 4 core domain, 8 features & utils",
+      e2e: "Python Playwright, 17 files: check-in flows, visitor tracking, salvation decisions, circle guide management, geofence+QR",
       mutation:
-        "Stryker — security-focused mutation testing for critical logic",
+        "Stryker, security-focused mutation testing for critical logic",
       security:
         "24 dedicated files: RBAC enforcement, PII projection, rate limiting, auth guards, XSS prevention, XLSX sanitization, OWASP fixes",
     },
@@ -213,7 +213,7 @@ export const projects = [
 
     authFlow: [
       "Magic link email authentication (passwordless)",
-      "Email whitelist — only pre-authorized users can sign in",
+      "Email whitelist so only pre-authorized users can sign in",
       "Session management with configurable idle timeout",
       "Client-side idle detection: warning, lock screen, auto-logout",
       "Auto-accepts pending invitations on first login",
@@ -231,13 +231,13 @@ export const projects = [
 
     // Security narrative for minimal/editorial theme case study
     securityNarrative:
-      "I built a tamper-evident audit log for a church app. Not because anyone asked — because the data deserved it. Every mutation goes through a 6-layer defense stack. 24 of the 36 unit test files focus on security. I run mutation testing on auth guards to prove that removing an if statement actually breaks something.",
+      "I built a tamper-evident audit log for a church app. Nobody asked me to. The data deserved it. Every mutation goes through a 6-layer defense stack. 24 of the 36 unit test files focus on security. I run mutation testing on auth guards to prove that removing an if statement actually breaks something.",
 
     // Real code snippet for the terminal theme
     codeSnippet: {
       language: "typescript",
       filename: "convex/attendance/checkIn.ts",
-      code: `// Haversine distance — validates check-in is within venue boundary
+      code: `// Haversine distance: validates check-in is within venue boundary
 function haversineDistance(
   lat1: number, lon1: number,
   lat2: number, lon2: number

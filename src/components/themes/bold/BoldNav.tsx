@@ -4,15 +4,14 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { navItems } from "@/data/navigation";
 
-function DoneBrand() {
+function DevOneBrand() {
   return (
     <a
       href="#hero"
       className="text-xl font-bold tracking-wide text-[#f5f5f0]"
       style={{ fontFamily: "var(--font-space-grotesk)" }}
     >
-      D<span className="text-[#FF6B4A]">.</span>O-N
-      <span className="text-[#FF6B4A]">.</span>E
+      dev<span className="text-[#FF6B4A]">ONE</span>
     </a>
   );
 }
@@ -51,7 +50,7 @@ export function BoldNav() {
     >
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4 md:px-10">
         {/* Logo — left-aligned */}
-        <DoneBrand />
+        <DevOneBrand />
 
         {/* Desktop links — pushed far right with generous spacing */}
         <ul className="hidden items-center gap-10 md:flex">

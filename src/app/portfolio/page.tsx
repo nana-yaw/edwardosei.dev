@@ -6,6 +6,7 @@ import { Experience } from "@/components/sections/Experience";
 import { Skills } from "@/components/sections/Skills";
 import { Contact } from "@/components/sections/Contact";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+import { ScrollButton } from "@/components/ScrollButton";
 
 export default function PortfolioPage() {
   return (
@@ -26,6 +27,7 @@ export default function PortfolioPage() {
         <Contact />
       </main>
       <ThemeSwitcher />
+      <ScrollButton />
     </>
   );
 }
