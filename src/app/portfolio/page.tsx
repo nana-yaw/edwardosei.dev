@@ -1,3 +1,4 @@
+import { Nav } from "@/components/sections/Nav";
 import { Hero } from "@/components/sections/Hero";
 import { Project } from "@/components/sections/Project";
 import { Story } from "@/components/sections/Story";
@@ -9,6 +10,7 @@ import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 export default function PortfolioPage() {
   return (
     <>
+      <Nav />
       <Hero />
       <Project />
       <Story />

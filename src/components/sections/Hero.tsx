@@ -1,9 +1,12 @@
 "use client";
 
 import { useTheme } from "@/hooks/useTheme";
+import { CinematicHero } from "@/components/themes/cinematic";
 
 export function Hero() {
   const { theme } = useTheme();
+
+  if (theme === "cinematic") return <CinematicHero />;
 
   return (
     <section id="hero" className="min-h-dvh flex items-center justify-center">

@@ -1,9 +1,12 @@
 "use client";
 
 import { useTheme } from "@/hooks/useTheme";
+import { CinematicContact } from "@/components/themes/cinematic";
 
 export function Contact() {
   const { theme } = useTheme();
+
+  if (theme === "cinematic") return <CinematicContact />;
 
   return (
     <section id="contact" className="min-h-dvh flex items-center justify-center">
