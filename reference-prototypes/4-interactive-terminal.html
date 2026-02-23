@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edward Osei-Nyarko | Backend Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-primary: #0a0e17;
+  --bg-secondary: #0f1520;
+  --bg-card: #121a2a;
+  --bg-elevated: #162032;
+  --border: #1e2d45;
+  --border-glow: #1e3a5f;
+
+  --green: #4ade80;
+  --green-dim: #22c55e;
+  --green-glow: rgba(74, 222, 128, 0.15);
+  --amber: #fbbf24;
+  --amber-dim: #f59e0b;
+  --amber-glow: rgba(251, 191, 36, 0.12);
+  --cyan: #22d3ee;
+  --cyan-dim: #06b6d4;
+  --cyan-glow: rgba(34, 211, 238, 0.12);
+  --purple: #a78bfa;
+  --purple-dim: #8b5cf6;
+  --red: #f87171;
+  --blue: #60a5fa;
+  --pink: #f472b6;
+
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  --font-mono: 'Fira Code', 'Consolas', 'Monaco', monospace;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Grid Background */
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(34, 211, 238, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.grid-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(34, 211, 238, 0.06), transparent 60%),
+              radial-gradient(ellipse 60% 40% at 80% 100%, rgba(139, 92, 246, 0.04), transparent 50%);
+}
+
+/* Scanline overlay */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+}
+
+/* Main container */
+main {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Section base */
+section {
+  padding: 80px 0;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Navigation */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 0 24px;
+  backdrop-filter: blur(20px);
+  background: rgba(10, 14, 23, 0.8);
+  border-bottom: 1px solid var(--border);
+  transition: transform 0.3s ease;
+}
+nav.hidden { transform: translateY(-100%); }
+
+.nav-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+}
+
+.nav-logo {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--green);
+  font-weight: 500;
+}
+.nav-logo span { color: var(--text-muted); }
+
+.nav-links {
+  display: flex;
+  gap: 8px;
+}
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+.nav-links a:hover {
+  color: var(--cyan);
+  background: var(--cyan-glow);
+}
+
+.nav-mobile-btn {
+  display: none;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* Terminal window chrome */
+.terminal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3), 0 0 60px rgba(34, 211, 238, 0.03);
+}
+
+.terminal-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+}
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.terminal-dot.red { background: #ef4444; }
+.terminal-dot.yellow { background: #eab308; }
+.terminal-dot.green { background: #22c55e; }
+.terminal-title {
+  flex: 1;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.terminal-body {
+  padding: 24px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* Typing animation */
+.typed-line {
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  display: flex;
+  gap: 0;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+.typed-line.active {
+  opacity: 1;
+}
+.prompt { color: var(--green); margin-right: 8px; flex-shrink: 0; }
+.command { color: var(--text-primary); }
+.output-line {
+  color: var(--text-secondary);
+  padding-left: 26px;
+  opacity: 0;
+  margin-bottom: 8px;
+}
+.output-line.active { opacity: 1; }
+.output-line .highlight-green { color: var(--green); font-weight: 600; }
+.output-line .highlight-cyan { color: var(--cyan); }
+.output-line .highlight-amber { color: var(--amber); }
+
+.cursor-blink {
+  display: inline-block;
+  width: 8px;
+  height: 18px;
+  background: var(--green);
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+  vertical-align: text-bottom;
+}
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* Hero */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 80px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--green);
+  padding: 6px 14px;
+  background: var(--green-glow);
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  border-radius: 20px;
+  margin-bottom: 32px;
+  width: fit-content;
+}
+.hero-badge .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse-dot 2s ease infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
+  50% { opacity: 0.8; box-shadow: 0 0 0 6px rgba(74, 222, 128, 0); }
+}
+
+.hero-terminal {
+  margin-bottom: 40px;
+}
+
+.hero-links {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.hero-link {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  transition: all 0.25s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.hero-link.primary {
+  background: var(--green);
+  color: var(--bg-primary);
+  font-weight: 600;
+  border: 1px solid var(--green);
+}
+.hero-link.primary:hover {
+  background: var(--green-dim);
+  box-shadow: 0 0 20px var(--green-glow);
+}
+.hero-link.secondary {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+.hero-link.secondary:hover {
+  border-color: var(--cyan-dim);
+  color: var(--cyan);
+  background: var(--cyan-glow);
+}
+
+/* Section headers */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--cyan);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.section-title {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 32px;
+  color: var(--text-primary);
+}
+.section-title .accent { color: var(--green); }
+
+/* About / Config file */
+.config-file {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.9;
+}
+.config-comment { color: var(--text-muted); font-style: italic; }
+.config-key { color: var(--cyan); }
+.config-string { color: var(--green); }
+.config-number { color: var(--amber); }
+.config-bracket { color: var(--text-muted); }
+.config-indent { padding-left: 24px; }
+.config-indent-2 { padding-left: 48px; }
+
+/* Project section */
+.project-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 0 16px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.project-tabs::-webkit-scrollbar { display: none; }
+
+.project-tab {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.project-tab:hover { color: var(--text-secondary); }
+.project-tab.active {
+  color: var(--cyan);
+  border-bottom-color: var(--cyan);
+  background: rgba(34, 211, 238, 0.05);
+}
+
+.project-panel {
+  display: none;
+  padding: 24px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.9;
+  animation: fadePanel 0.3s ease;
+}
+.project-panel.active { display: block; }
+@keyframes fadePanel {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.pkg-field { margin-bottom: 2px; }
+.pkg-key { color: var(--purple); }
+.pkg-string { color: var(--green); }
+.pkg-number { color: var(--amber); }
+.pkg-bool { color: var(--red); }
+
+.checklist-item {
+  padding-left: 24px;
+  position: relative;
+}
+.check { color: var(--green); font-weight: 700; }
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.stat-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  text-align: center;
+  transition: all 0.3s;
+}
+.stat-card:hover {
+  border-color: var(--border-glow);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 24px;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 4px;
+}
+.stat-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+/* Git log / Experience */
+.git-log { list-style: none; }
+.git-entry {
+  position: relative;
+  padding-left: 32px;
+  padding-bottom: 48px;
+}
+.git-entry::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 8px;
+  bottom: 0;
+  width: 1px;
+  background: var(--border);
+}
+.git-entry:last-child::before { display: none; }
+.git-entry:last-child { padding-bottom: 0; }
+
+.git-dot {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--green);
+  background: var(--bg-primary);
+}
+.git-entry:last-child .git-dot { border-color: var(--amber); }
+
+.git-hash {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--amber);
+  margin-bottom: 4px;
+}
+.git-date {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+.git-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+.git-subtitle {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--cyan);
+  margin-bottom: 12px;
+}
+.git-body {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.8;
+}
+.git-body li {
+  margin-bottom: 6px;
+  list-style: none;
+  padding-left: 20px;
+  position: relative;
+}
+.git-body li::before {
+  content: '+';
+  position: absolute;
+  left: 0;
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+/* Skills */
+.skills-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.skill-group {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: all 0.3s;
+}
+.skill-group:hover {
+  border-color: var(--border-glow);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.skill-group-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: default;
+}
+.skill-group-icon { font-size: 14px; }
+.skill-group-count {
+  margin-left: auto;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.skill-tags {
+  padding: 14px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.skill-tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  transition: all 0.2s;
+}
+.skill-tag:hover {
+  border-color: var(--cyan-dim);
+  color: var(--cyan);
+  background: var(--cyan-glow);
+}
+.skill-tag.primary {
+  border-color: rgba(74, 222, 128, 0.3);
+  color: var(--green);
+  background: var(--green-glow);
+}
+
+/* Contact */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 24px;
+}
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  transition: all 0.25s;
+}
+.contact-link:hover {
+  border-color: var(--green-dim);
+  color: var(--green);
+  background: var(--green-glow);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+.contact-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.contact-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+  font-family: var(--font-sans);
+}
+.contact-value {
+  word-break: break-all;
+}
+
+/* Footer */
+footer {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 40px 24px 60px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+}
+footer .heartbeat { color: var(--red); display: inline-block; animation: heartbeat 1.5s ease infinite; }
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  14% { transform: scale(1.15); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.15); }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  main { padding: 0 16px; }
+  section { padding: 60px 0; }
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    background: rgba(10, 14, 23, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 16px;
+    gap: 4px;
+  }
+  .nav-links.open a { padding: 10px 16px; }
+  .nav-mobile-btn { display: block; }
+  .terminal-body { padding: 16px; font-size: 12px; }
+  .hero-links { flex-direction: column; }
+  .hero-link { justify-content: center; }
+  .section-title { font-size: 22px; }
+  .skills-grid { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .config-file { font-size: 11px; }
+  .git-title { font-size: 16px; }
+}
+
+@media (max-width: 480px) {
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* Selection */
+::selection {
+  background: rgba(34, 211, 238, 0.2);
+  color: var(--cyan);
+}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="scanlines"></div>
+
+<!-- Navigation -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <div class="nav-logo">edward<span>@</span>portfolio <span>~</span></div>
+    <button class="nav-mobile-btn" onclick="toggleMobileNav()" aria-label="Toggle navigation">
+      <span id="menuIcon">[ = ]</span>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="#about" onclick="closeMobileNav()">about</a>
+      <a href="#project" onclick="closeMobileNav()">project</a>
+      <a href="#experience" onclick="closeMobileNav()">experience</a>
+      <a href="#skills" onclick="closeMobileNav()">skills</a>
+      <a href="#contact" onclick="closeMobileNav()">contact</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Available for opportunities
+    </div>
+
+    <div class="terminal hero-terminal">
+      <div class="terminal-header">
+        <span class="terminal-dot red"></span>
+        <span class="terminal-dot yellow"></span>
+        <span class="terminal-dot green"></span>
+        <span class="terminal-title">edward@portfolio ~ zsh</span>
+      </div>
+      <div class="terminal-body" id="heroTerminal">
+        <div class="typed-line" data-delay="300">
+          <span class="prompt">$</span>
+          <span class="command" data-text="whoami"></span>
+        </div>
+        <div class="output-line" data-delay="1100">
+          <span class="highlight-green">Edward Osei-Nyarko</span>
+        </div>
+        <div class="typed-line" data-delay="1600">
+          <span class="prompt">$</span>
+          <span class="command" data-text="cat role.txt"></span>
+        </div>
+        <div class="output-line" data-delay="2500">
+          <span class="highlight-cyan">Backend Engineer</span> <span style="color:var(--text-muted)">|</span> <span class="highlight-amber">4+ years</span>
+        </div>
+        <div class="typed-line" data-delay="3000">
+          <span class="prompt">$</span>
+          <span class="command" data-text="echo $MISSION"></span>
+        </div>
+        <div class="output-line" data-delay="4000">
+          Building systems that scale <span class="highlight-green">_</span>
+        </div>
+        <div class="typed-line" data-delay="4600">
+          <span class="prompt">$</span>
+          <span class="command" data-text="cat stack.json | jq '.primary[]'"></span>
+        </div>
+        <div class="output-line" data-delay="5800">
+          <span style="color:var(--purple)">"PHP"</span> <span style="color:var(--purple)">"Node.js"</span> <span style="color:var(--purple)">"TypeScript"</span> <span style="color:var(--purple)">"Next.js"</span> <span style="color:var(--purple)">"PostgreSQL"</span>
+        </div>
+        <div class="typed-line" data-delay="6400" id="lastLine">
+          <span class="prompt">$</span>
+          <span class="command" data-text=""></span>
+          <span class="cursor-blink"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-links">
+      <a href="#project" class="hero-link primary">View Featured Project &darr;</a>
+      <a href="https://github.com/nana-yaw" class="hero-link secondary" target="_blank" rel="noopener">github.com/nana-yaw</a>
+      <a href="mailto:edward.osei.nyarko@gmail.com" class="hero-link secondary">Get in touch</a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-label">// about</div>
+    <h2 class="section-title">README<span class="accent">.md</span></h2>
+
+    <div class="terminal">
+      <div class="terminal-header">
+        <span class="terminal-dot red"></span>
+        <span class="terminal-dot yellow"></span>
+        <span class="terminal-dot green"></span>
+        <span class="terminal-title">about.yaml</span>
+      </div>
+      <div class="terminal-body config-file">
+        <div class="config-comment"># Edward Osei-Nyarko &mdash; Configuration</div>
+        <br>
+        <div><span class="config-key">name</span><span class="config-bracket">:</span> <span class="config-string">"Edward Osei-Nyarko"</span></div>
+        <div><span class="config-key">title</span><span class="config-bracket">:</span> <span class="config-string">"Backend Engineer"</span></div>
+        <div><span class="config-key">experience</span><span class="config-bracket">:</span> <span class="config-string">"4+ years"</span></div>
+        <div><span class="config-key">location</span><span class="config-bracket">:</span> <span class="config-string">"Ghana (remote with US teams)"</span></div>
+        <br>
+        <div class="config-comment"># background</div>
+        <div><span class="config-key">education</span><span class="config-bracket">:</span></div>
+        <div class="config-indent"><span class="config-key">degree</span><span class="config-bracket">:</span> <span class="config-string">"BSc Physics"</span></div>
+        <div class="config-indent"><span class="config-key">transition</span><span class="config-bracket">:</span> <span class="config-string">"Physics &rarr; Software Engineering"</span></div>
+        <div class="config-indent"><span class="config-key">mindset</span><span class="config-bracket">:</span> <span class="config-string">"Analytical thinking from physics,<br><span class="config-indent-2"></span>applied to scalable systems"</span></div>
+        <br>
+        <div class="config-comment"># what I do</div>
+        <div><span class="config-key">focus_areas</span><span class="config-bracket">:</span></div>
+        <div class="config-indent"><span class="config-bracket">-</span> <span class="config-string">"Scalable backend architectures"</span></div>
+        <div class="config-indent"><span class="config-bracket">-</span> <span class="config-string">"REST API design &amp; implementation"</span></div>
+        <div class="config-indent"><span class="config-bracket">-</span> <span class="config-string">"Database optimization &amp; modeling"</span></div>
+        <div class="config-indent"><span class="config-bracket">-</span> <span class="config-string">"Real-time systems &amp; event-driven architecture"</span></div>
+        <div class="config-indent"><span class="config-bracket">-</span> <span class="config-string">"Full-stack product delivery"</span></div>
+        <br>
+        <div><span class="config-key">remote_experience</span><span class="config-bracket">:</span></div>
+        <div class="config-indent"><span class="config-key">years</span><span class="config-bracket">:</span> <span class="config-number">3+</span></div>
+        <div class="config-indent"><span class="config-key">teams</span><span class="config-bracket">:</span> <span class="config-string">"US-based distributed teams"</span></div>
+        <div class="config-indent"><span class="config-key">overlap</span><span class="config-bracket">:</span> <span class="config-string">"Async-first with timezone flexibility"</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED PROJECT -->
+  <section id="project">
+    <div class="section-label">// featured_project</div>
+    <h2 class="section-title">EWC Care <span class="accent">App</span></h2>
+
+    <div class="stat-grid" style="margin-bottom: 24px;">
+      <div class="stat-card">
+        <span class="stat-value" style="color: var(--green);">30+</span>
+        <span class="stat-label">DB Tables</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" style="color: var(--cyan);">280+</span>
+        <span class="stat-label">Tests</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" style="color: var(--amber);">5</span>
+        <span class="stat-label">RBAC Tiers</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" style="color: var(--purple);">RT</span>
+        <span class="stat-label">Real-time Sync</span>
+      </div>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-header">
+        <span class="terminal-dot red"></span>
+        <span class="terminal-dot yellow"></span>
+        <span class="terminal-dot green"></span>
+        <span class="terminal-title">ewc-care-app</span>
+      </div>
+      <div class="project-tabs">
+        <button class="project-tab active" onclick="switchTab('overview')">package.json</button>
+        <button class="project-tab" onclick="switchTab('features')">FEATURES.md</button>
+        <button class="project-tab" onclick="switchTab('architecture')">architecture</button>
+        <button class="project-tab" onclick="switchTab('security')">security</button>
+        <button class="project-tab" onclick="switchTab('testing')">testing</button>
+      </div>
+
+      <!-- Overview Panel -->
+      <div class="project-panel active" id="panel-overview">
+        <div><span class="config-bracket">{</span></div>
+        <div class="config-indent"><span class="pkg-key">"name"</span>: <span class="pkg-string">"ewc-care-app"</span>,</div>
+        <div class="config-indent"><span class="pkg-key">"version"</span>: <span class="pkg-string">"2.0.0"</span>,</div>
+        <div class="config-indent"><span class="pkg-key">"description"</span>: <span class="pkg-string">"Full-stack pastoral care management PWA"</span>,</div>
+        <div class="config-indent"><span class="pkg-key">"role"</span>: <span class="pkg-string">"Solo developer &mdash; designed, built, and shipped"</span>,</div>
+        <br>
+        <div class="config-indent"><span class="pkg-key">"tech"</span>: {</div>
+        <div class="config-indent-2"><span class="pkg-key">"frontend"</span>: <span class="pkg-string">"Next.js 16, React 19, TypeScript"</span>,</div>
+        <div class="config-indent-2"><span class="pkg-key">"backend"</span>: <span class="pkg-string">"Convex (real-time serverless)"</span>,</div>
+        <div class="config-indent-2"><span class="pkg-key">"styling"</span>: <span class="pkg-string">"Tailwind CSS 4, Radix UI"</span>,</div>
+        <div class="config-indent-2"><span class="pkg-key">"ai"</span>: <span class="pkg-string">"Google Gemini (insights engine)"</span>,</div>
+        <div class="config-indent-2"><span class="pkg-key">"auth"</span>: <span class="pkg-string">"Magic link + RBAC + ABAC"</span></div>
+        <div class="config-indent">},</div>
+        <br>
+        <div class="config-indent"><span class="pkg-key">"metrics"</span>: {</div>
+        <div class="config-indent-2"><span class="pkg-key">"tables"</span>: <span class="pkg-number">30</span>,</div>
+        <div class="config-indent-2"><span class="pkg-key">"tests"</span>: <span class="pkg-number">280</span>,</div>
+        <div class="config-indent-2"><span class="pkg-key">"rbac_tiers"</span>: <span class="pkg-number">5</span>,</div>
+        <div class="config-indent-2"><span class="pkg-key">"sync"</span>: <span class="pkg-string">"real-time"</span>,</div>
+        <div class="config-indent-2"><span class="pkg-key">"offline"</span>: <span class="pkg-bool">true</span></div>
+        <div class="config-indent">}</div>
+        <div><span class="config-bracket">}</span></div>
+      </div>
+
+      <!-- Features Panel -->
+      <div class="project-panel" id="panel-features">
+        <div class="config-comment"># EWC Care App &mdash; Feature Manifest</div>
+        <br>
+        <div><span class="check">[x]</span> <span class="config-string">GPS geofenced attendance check-in</span></div>
+        <div style="padding-left:24px; color:var(--text-muted); font-size:12px;">Haversine distance + spoofing detection, venue geofences</div>
+        <br>
+        <div><span class="check">[x]</span> <span class="config-string">AI-powered pastoral insights</span></div>
+        <div style="padding-left:24px; color:var(--text-muted); font-size:12px;">Gemini integration for care pattern analysis</div>
+        <br>
+        <div><span class="check">[x]</span> <span class="config-string">Enterprise immutable audit trail</span></div>
+        <div style="padding-left:24px; color:var(--text-muted); font-size:12px;">SHA-256 integrity chain, 7-year retention</div>
+        <br>
+        <div><span class="check">[x]</span> <span class="config-string">QR code self-service attendance</span></div>
+        <div style="padding-left:24px; color:var(--text-muted); font-size:12px;">Time-limited tokens, public check-in display</div>
+        <br>
+        <div><span class="check">[x]</span> <span class="config-string">Web push notifications</span></div>
+        <div style="padding-left:24px; color:var(--text-muted); font-size:12px;">VAPID keys, birthday reminders, care alerts</div>
+        <br>
+        <div><span class="check">[x]</span> <span class="config-string">Offline-first PWA</span></div>
+        <div style="padding-left:24px; color:var(--text-muted); font-size:12px;">Service worker caching, install prompt, background sync</div>
+        <br>
+        <div><span class="check">[x]</span> <span class="config-string">Case management with priority workflows</span></div>
+        <div style="padding-left:24px; color:var(--text-muted); font-size:12px;">Status transitions, activity timeline, role-scoped access</div>
+        <br>
+        <div><span class="check">[x]</span> <span class="config-string">Circle Sunday annual reshuffling</span></div>
+        <div style="padding-left:24px; color:var(--text-muted); font-size:12px;">Preview algorithm, batch member reassignment</div>
+      </div>
+
+      <!-- Architecture Panel -->
+      <div class="project-panel" id="panel-architecture">
+        <div class="config-comment"># Architecture Overview</div>
+        <br>
+        <div style="color:var(--cyan);">Client Layer</div>
+        <div class="config-indent">Next.js 16 App Router (Server + Client Components)</div>
+        <div class="config-indent">React 19 with Suspense boundaries</div>
+        <div class="config-indent">Tailwind CSS 4 + Radix UI primitives</div>
+        <br>
+        <div style="color:var(--cyan);">Real-time Layer</div>
+        <div class="config-indent">Convex reactive queries (auto-updating subscriptions)</div>
+        <div class="config-indent">Optimistic mutations with conflict resolution</div>
+        <div class="config-indent">Cron scheduler for automated service lifecycle</div>
+        <br>
+        <div style="color:var(--cyan);">Auth &amp; Security Layer</div>
+        <div class="config-indent">Magic link auth via Resend</div>
+        <div class="config-indent">5-tier RBAC: super_admin &rarr; pastor &rarr; guide &rarr; staff &rarr; viewer</div>
+        <div class="config-indent">ABAC with scope/time/IP conditions</div>
+        <div class="config-indent">PII projection filtering by role</div>
+        <br>
+        <div style="color:var(--cyan);">Data Layer</div>
+        <div class="config-indent">30+ tables with denormalized counters</div>
+        <div class="config-indent">Soft delete with registry tracking</div>
+        <div class="config-indent">Ghana phone normalization (+233)</div>
+        <div class="config-indent">Integrity chain audit log (SHA-256)</div>
+      </div>
+
+      <!-- Security Panel -->
+      <div class="project-panel" id="panel-security">
+        <div class="config-comment"># Security Posture</div>
+        <br>
+        <div><span style="color:var(--green);">PASS</span> Hybrid RBAC + ABAC permission system</div>
+        <div><span style="color:var(--green);">PASS</span> Every mutation guarded by requirePermission()</div>
+        <div><span style="color:var(--green);">PASS</span> Input validation: length, enum, email, pagination</div>
+        <div><span style="color:var(--green);">PASS</span> Rate limiting on all public endpoints</div>
+        <div><span style="color:var(--green);">PASS</span> PII field filtering by role</div>
+        <div><span style="color:var(--green);">PASS</span> DOMPurify HTML sanitization</div>
+        <div><span style="color:var(--green);">PASS</span> CSP security headers configured</div>
+        <div><span style="color:var(--green);">PASS</span> Immutable audit log with SHA-256 integrity</div>
+        <div><span style="color:var(--green);">PASS</span> XLSX import sanitization</div>
+        <div><span style="color:var(--green);">PASS</span> Invitation token encryption</div>
+        <br>
+        <div class="config-comment"># Mutation testing with Stryker validates</div>
+        <div class="config-comment"># that security logic cannot be trivially bypassed</div>
+      </div>
+
+      <!-- Testing Panel -->
+      <div class="project-panel" id="panel-testing">
+        <div class="config-comment"># Test Suite: 280+ tests</div>
+        <br>
+        <div style="color:var(--cyan);">Unit Tests (Vitest)</div>
+        <div class="config-indent">Component tests: MemberModal (21), OnboardPage (54+)</div>
+        <div class="config-indent">Security suite: RBAC, PII, rate limiting, auth guards</div>
+        <div class="config-indent">Utility tests: phone normalization (30+ cases), geolocation</div>
+        <br>
+        <div style="color:var(--cyan);">E2E Tests (Playwright - Python)</div>
+        <div class="config-indent">Check-in flow: start &rarr; public check-in &rarr; verify &rarr; end</div>
+        <div class="config-indent">Auto-scheduling: start &rarr; cancel &rarr; reactivate lifecycle</div>
+        <div class="config-indent">Manual check-in: search &rarr; check in &rarr; verify</div>
+        <div class="config-indent">QR display: generate &rarr; invalid QR &rarr; public check-in</div>
+        <div class="config-indent">Visitor tracking: registration &rarr; duplicates &rarr; conversion</div>
+        <br>
+        <div style="color:var(--cyan);">Mutation Testing (Stryker)</div>
+        <div class="config-indent">Security-focused mutation testing suite</div>
+        <div class="config-indent">Validates security logic resilience</div>
+        <br>
+        <div style="color:var(--text-muted);">$ npm run test:run</div>
+        <div style="color:var(--green);">  All 280+ tests passed.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="section-label">// git log --oneline</div>
+    <h2 class="section-title">Experience<span class="accent">.</span>changelog</h2>
+
+    <ul class="git-log">
+      <li class="git-entry">
+        <span class="git-dot"></span>
+        <div class="git-hash">commit a4f8c2e &mdash; HEAD</div>
+        <div class="git-date">Jul 2023 &mdash; Present</div>
+        <div class="git-title">RentPost</div>
+        <div class="git-subtitle">Backend Developer (Remote, US)</div>
+        <ul class="git-body">
+          <li>Building and maintaining scalable backend services for a property management SaaS platform</li>
+          <li>Developing RESTful APIs with PHP (Symfony/Laravel) and Node.js for multi-tenant architecture</li>
+          <li>Optimizing PostgreSQL queries and database performance for high-traffic operations</li>
+          <li>Collaborating with a distributed US-based team using async-first communication</li>
+          <li>Implementing CI/CD pipelines and maintaining Docker-based development environments</li>
+        </ul>
+      </li>
+      <li class="git-entry">
+        <span class="git-dot"></span>
+        <div class="git-hash">commit 7b2d19f</div>
+        <div class="git-date">2021 &mdash; 2023</div>
+        <div class="git-title">Turntabl Ghana</div>
+        <div class="git-subtitle">Software Developer</div>
+        <ul class="git-body">
+          <li>Delivered backend systems using Java (Spring Boot) and Kotlin for enterprise clients</li>
+          <li>Built microservices and event-driven architectures for financial technology applications</li>
+          <li>Wrote comprehensive test suites with JUnit and integration testing frameworks</li>
+          <li>Gained production experience with AWS services, Linux servers, and Nginx</li>
+          <li>Contributed to agile teams serving clients in the UK financial sector</li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-label">// dependencies</div>
+    <h2 class="section-title">skills<span class="accent">.json</span></h2>
+
+    <div class="skills-grid">
+      <div class="skill-group">
+        <div class="skill-group-header">
+          <span class="skill-group-icon">&#9000;</span>
+          Backend Languages
+          <span class="skill-group-count">8</span>
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag primary">PHP</span>
+          <span class="skill-tag primary">Node.js</span>
+          <span class="skill-tag primary">TypeScript</span>
+          <span class="skill-tag">JavaScript</span>
+          <span class="skill-tag">Kotlin</span>
+          <span class="skill-tag">Java</span>
+          <span class="skill-tag">SQL</span>
+          <span class="skill-tag">Bash</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-header">
+          <span class="skill-group-icon">&#9881;</span>
+          Frameworks
+          <span class="skill-group-count">5</span>
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag primary">Symfony</span>
+          <span class="skill-tag primary">Laravel</span>
+          <span class="skill-tag">Spring Boot</span>
+          <span class="skill-tag">Next.js</span>
+          <span class="skill-tag">React</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-header">
+          <span class="skill-group-icon">&#9635;</span>
+          Databases
+          <span class="skill-group-count">3</span>
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag primary">PostgreSQL</span>
+          <span class="skill-tag">MySQL</span>
+          <span class="skill-tag">Convex</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-header">
+          <span class="skill-group-icon">&#9729;</span>
+          Cloud & DevOps
+          <span class="skill-group-count">5</span>
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag primary">Docker</span>
+          <span class="skill-tag primary">AWS</span>
+          <span class="skill-tag">Linux</span>
+          <span class="skill-tag">Nginx</span>
+          <span class="skill-tag">CI/CD</span>
+        </div>
+      </div>
+
+      <div class="skill-group" style="grid-column: 1 / -1;">
+        <div class="skill-group-header">
+          <span class="skill-group-icon">&#9745;</span>
+          Testing
+          <span class="skill-group-count">6</span>
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag primary">Cypress</span>
+          <span class="skill-tag primary">Playwright</span>
+          <span class="skill-tag">Vitest</span>
+          <span class="skill-tag">PHPUnit</span>
+          <span class="skill-tag">JUnit</span>
+          <span class="skill-tag">Stryker</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-label">// connect</div>
+    <h2 class="section-title">$ connect <span class="accent">--with</span> edward</h2>
+
+    <div class="terminal" style="margin-bottom: 24px;">
+      <div class="terminal-header">
+        <span class="terminal-dot red"></span>
+        <span class="terminal-dot yellow"></span>
+        <span class="terminal-dot green"></span>
+        <span class="terminal-title">contact.sh</span>
+      </div>
+      <div class="terminal-body" style="font-size: 13px; line-height: 2;">
+        <div><span class="prompt">$</span> <span style="color:var(--text-primary)">echo $EMAIL</span></div>
+        <div style="color:var(--green); padding-left: 26px;">edward.osei.nyarko@gmail.com</div>
+        <div><span class="prompt">$</span> <span style="color:var(--text-primary)">echo $GITHUB</span></div>
+        <div style="color:var(--cyan); padding-left: 26px;">github.com/nana-yaw</div>
+        <div><span class="prompt">$</span> <span style="color:var(--text-primary)">echo $LINKEDIN</span></div>
+        <div style="color:var(--amber); padding-left: 26px;">linkedin.com/in/edward-osei-nyarko-5789b3118</div>
+      </div>
+    </div>
+
+    <div class="contact-grid">
+      <a href="mailto:edward.osei.nyarko@gmail.com" class="contact-link">
+        <span class="contact-icon" style="background: var(--green-glow); color: var(--green);">@</span>
+        <div>
+          <div class="contact-label">Email</div>
+          <div class="contact-value" style="color:var(--green);">edward.osei.nyarko@gmail.com</div>
+        </div>
+      </a>
+      <a href="https://github.com/nana-yaw" class="contact-link" target="_blank" rel="noopener">
+        <span class="contact-icon" style="background: var(--cyan-glow); color: var(--cyan);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        </span>
+        <div>
+          <div class="contact-label">GitHub</div>
+          <div class="contact-value" style="color:var(--cyan);">github.com/nana-yaw</div>
+        </div>
+      </a>
+      <a href="https://linkedin.com/in/edward-osei-nyarko-5789b3118" class="contact-link" target="_blank" rel="noopener" style="grid-column: 1 / -1;">
+        <span class="contact-icon" style="background: var(--amber-glow); color: var(--amber);">in</span>
+        <div>
+          <div class="contact-label">LinkedIn</div>
+          <div class="contact-value" style="color:var(--amber);">linkedin.com/in/edward-osei-nyarko-5789b3118</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div>Built with <span class="heartbeat">&hearts;</span> and lots of <span style="color:var(--green);">coffee</span></div>
+  <div style="margin-top: 8px;">&copy; 2026 Edward Osei-Nyarko &middot; All rights reserved</div>
+</footer>
+
+<script>
+// ─── Typing Animation ─────────────────────────────────────────────
+function typeText(element, text, speed = 45) {
+  return new Promise(resolve => {
+    let i = 0;
+    element.textContent = '';
+    function type() {
+      if (i < text.length) {
+        element.textContent += text.charAt(i);
+        i++;
+        setTimeout(type, speed + Math.random() * 30);
+      } else {
+        resolve();
+      }
+    }
+    type();
+  });
+}
+
+async function runHeroAnimation() {
+  const terminal = document.getElementById('heroTerminal');
+  const lines = terminal.children;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const delay = parseInt(line.dataset.delay) || 0;
+
+    await new Promise(r => setTimeout(r, i === 0 ? delay : 200));
+
+    if (line.classList.contains('typed-line')) {
+      line.classList.add('active');
+      const cmd = line.querySelector('.command');
+      if (cmd) {
+        const text = cmd.dataset.text;
+        if (text) {
+          await typeText(cmd, text);
+        }
+      }
+    } else if (line.classList.contains('output-line')) {
+      await new Promise(r => setTimeout(r, 300));
+      line.classList.add('active');
+    }
+  }
+}
+
+// ─── Intersection Observer (Section Reveals) ──────────────────────
+const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('section').forEach(section => {
+  sectionObserver.observe(section);
+});
+
+// ─── Nav Hide on Scroll ───────────────────────────────────────────
+let lastScrollY = 0;
+const navbar = document.getElementById('navbar');
+
+window.addEventListener('scroll', () => {
+  const currentY = window.scrollY;
+  if (currentY > lastScrollY && currentY > 100) {
+    navbar.classList.add('hidden');
+  } else {
+    navbar.classList.remove('hidden');
+  }
+  lastScrollY = currentY;
+}, { passive: true });
+
+// ─── Mobile Nav Toggle ────────────────────────────────────────────
+function toggleMobileNav() {
+  const links = document.getElementById('navLinks');
+  const icon = document.getElementById('menuIcon');
+  links.classList.toggle('open');
+  icon.textContent = links.classList.contains('open') ? '[ x ]' : '[ = ]';
+}
+function closeMobileNav() {
+  const links = document.getElementById('navLinks');
+  const icon = document.getElementById('menuIcon');
+  links.classList.remove('open');
+  icon.textContent = '[ = ]';
+}
+
+// ─── Project Tabs ─────────────────────────────────────────────────
+function switchTab(tabName) {
+  document.querySelectorAll('.project-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.project-panel').forEach(p => p.classList.remove('active'));
+
+  event.target.classList.add('active');
+  document.getElementById('panel-' + tabName).classList.add('active');
+}
+
+// ─── Init ─────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  // Hero is always visible
+  document.getElementById('hero').classList.add('visible');
+
+  // Start typing animation after a short delay
+  setTimeout(runHeroAnimation, 600);
+});
+</script>
+</body>
+</html>
