@@ -2,6 +2,7 @@
 
 import { projects } from "@/data/projects";
 import { motion } from "framer-motion";
+import DeviceMockup from "@/components/DeviceMockup";
 
 const project = projects[0];
 
@@ -64,6 +65,54 @@ export function CinematicProject() {
             <p className="mb-10 max-w-2xl text-[1.05rem] leading-relaxed text-[#8888a0]">
               {project.longDescription}
             </p>
+
+            {/* ── In Production — Screenshot showcase ────────────── */}
+            <div className="mb-10">
+              <motion.div
+                {...revealDelay(0.3)}
+                className="mb-4 flex items-center gap-3"
+              >
+                <h4 className="text-xs font-semibold uppercase tracking-[0.15em] text-[#4f7df5]">
+                  In Production
+                </h4>
+                <span className="h-px flex-1 bg-white/[0.06]" />
+              </motion.div>
+
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                {project.screenshots
+                  .filter((s) => s.device === "desktop")
+                  .slice(0, 4)
+                  .map((shot, i) => (
+                    <motion.div key={shot.src} {...revealDelay(0.4 + 0.1 * i)}>
+                      <DeviceMockup
+                        device="desktop"
+                        src={shot.src}
+                        alt={shot.alt}
+                        className="rounded-xl border border-white/[0.06]"
+                      />
+                    </motion.div>
+                  ))}
+              </div>
+
+              {/* Mobile screenshot — smaller, standalone */}
+              {project.screenshots
+                .filter((s) => s.device === "mobile")
+                .slice(0, 1)
+                .map((shot) => (
+                  <motion.div
+                    key={shot.src}
+                    {...revealDelay(0.8)}
+                    className="mx-auto mt-6 max-w-[200px]"
+                  >
+                    <DeviceMockup
+                      device="mobile"
+                      src={shot.src}
+                      alt={shot.alt}
+                      className="rounded-xl border border-white/[0.06]"
+                    />
+                  </motion.div>
+                ))}
+            </div>
 
             {/* ── Security Defense Stack — THE hero graphic ──────── */}
             <div className="mb-10">

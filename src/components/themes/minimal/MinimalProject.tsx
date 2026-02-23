@@ -2,6 +2,7 @@
 
 import { projects } from "@/data/projects";
 import { motion } from "framer-motion";
+import DeviceMockup from "@/components/DeviceMockup";
 
 const project = projects[0];
 
@@ -86,6 +87,47 @@ export function MinimalProject() {
             </strong>
           </p>
         </motion.div>
+
+        {/* ── Screenshots — editorial moment ─────────────────── */}
+        <motion.hr
+          {...revealDelay(0.35)}
+          className="mb-10 border-t border-[#1a1a2e]/10"
+        />
+
+        <motion.div {...revealDelay(0.4)} className="mb-10">
+          {/* Hero screenshot — dashboard dark (the most impressive) */}
+          <DeviceMockup
+            device="desktop"
+            src="/screenshots/dashboard-dark.png"
+            alt="Dashboard in dark mode with weekly care trend chart"
+            className="shadow-sm"
+          />
+
+          {/* 2-up row: one desktop + one mobile */}
+          <div className="mt-6 flex items-end gap-6">
+            <div className="flex-1">
+              <DeviceMockup
+                device="desktop"
+                src="/screenshots/members-dark.png"
+                alt="Members management table with filters and stats"
+                className="shadow-sm"
+              />
+            </div>
+            <div className="w-[120px] shrink-0 sm:w-[140px]">
+              <DeviceMockup
+                device="mobile"
+                src="/screenshots/mobile-landing.png"
+                alt="Mobile responsive landing page"
+                className="shadow-sm"
+              />
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.hr
+          {...revealDelay(0.45)}
+          className="mb-10 border-t border-[#1a1a2e]/10"
+        />
 
         {/* ── Architecture ─────────────────────────────────── */}
         <motion.div {...revealDelay(0)} className="mb-12">
