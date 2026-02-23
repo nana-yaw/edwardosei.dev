@@ -87,34 +87,34 @@ export const projects = [
 
     screenshots: [
       {
-        src: "/screenshots/dashboard.png",
-        alt: "Dashboard with shepherd queue and care stats",
+        src: "/screenshots/landing-hero.png",
+        alt: "Landing page hero with pastoral care messaging",
         device: "desktop",
       },
       {
-        src: "/screenshots/checkin.png",
-        alt: "Check-in station with live attendance",
+        src: "/screenshots/landing-dashboard-preview.png",
+        alt: "Stats bar and care pledge section",
         device: "desktop",
       },
       {
-        src: "/screenshots/members.png",
-        alt: "Member management with search and filters",
+        src: "/screenshots/landing-journey.png",
+        alt: "Discipleship growth track — Born, Grow, Serve, Lead, Multiply",
         device: "desktop",
       },
       {
-        src: "/screenshots/mobile-dashboard.png",
-        alt: "Mobile dashboard view",
+        src: "/screenshots/onboarding.png",
+        alt: "Circle lookup and onboarding flow",
+        device: "desktop",
+      },
+      {
+        src: "/screenshots/sign-in.png",
+        alt: "Magic link email authentication",
+        device: "desktop",
+      },
+      {
+        src: "/screenshots/mobile-landing.png",
+        alt: "Mobile responsive landing page",
         device: "mobile",
-      },
-      {
-        src: "/screenshots/case-detail.png",
-        alt: "Case detail with activity timeline",
-        device: "desktop",
-      },
-      {
-        src: "/screenshots/attendance-analytics.png",
-        alt: "Attendance trends and analytics",
-        device: "desktop",
       },
     ],
 
