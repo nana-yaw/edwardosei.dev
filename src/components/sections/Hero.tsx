@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import { useTheme } from "@/hooks/useTheme";
 import { CinematicHero } from "@/components/themes/cinematic";
 import { MinimalHero } from "@/components/themes/minimal";
@@ -9,8 +10,26 @@ import { TerminalHero } from "@/components/themes/terminal";
 export function Hero() {
   const { theme } = useTheme();
 
-  if (theme === "cinematic") return <CinematicHero />;
-  if (theme === "minimal") return <MinimalHero />;
-  if (theme === "bold") return <BoldHero />;
-  return <TerminalHero />;
+  const Component =
+    theme === "cinematic"
+      ? CinematicHero
+      : theme === "minimal"
+        ? MinimalHero
+        : theme === "bold"
+          ? BoldHero
+          : TerminalHero;
+
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={theme}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3, ease: "easeInOut" as const }}
+      >
+        <Component />
+      </motion.div>
+    </AnimatePresence>
+  );
 }
