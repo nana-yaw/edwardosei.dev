@@ -3,12 +3,14 @@
 import { useTheme } from "@/hooks/useTheme";
 import { CinematicProject } from "@/components/themes/cinematic";
 import { MinimalProject } from "@/components/themes/minimal";
+import { BoldProject } from "@/components/themes/bold";
 
 export function Project() {
   const { theme } = useTheme();
 
   if (theme === "cinematic") return <CinematicProject />;
   if (theme === "minimal") return <MinimalProject />;
+  if (theme === "bold") return <BoldProject />;
 
   return (
     <section id="project" className="min-h-dvh flex items-center justify-center">

@@ -3,12 +3,14 @@
 import { useTheme } from "@/hooks/useTheme";
 import { CinematicNav } from "@/components/themes/cinematic";
 import { MinimalNav } from "@/components/themes/minimal";
+import { BoldNav } from "@/components/themes/bold";
 
 export function Nav() {
   const { theme } = useTheme();
 
   if (theme === "cinematic") return <CinematicNav />;
   if (theme === "minimal") return <MinimalNav />;
+  if (theme === "bold") return <BoldNav />;
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-[var(--bg)]/80 border-b border-[var(--border)]">
