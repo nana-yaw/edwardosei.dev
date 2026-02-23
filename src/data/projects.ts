@@ -12,9 +12,12 @@ export const projects = [
     featured: true,
 
     stats: {
-      databaseTables: "30+",
+      databaseTables: 42,
+      databaseIndexes: 92,
       tests: "280+",
-      rbacTiers: 5,
+      testFiles: 53,
+      rbacRoles: 6,
+      securityLayers: 6,
       dataSync: "Real-time",
     },
 
@@ -69,9 +72,9 @@ export const projects = [
         category: "pwa",
       },
       {
-        name: "5-Tier RBAC",
+        name: "6-Role RBAC + ABAC",
         description:
-          "Hybrid RBAC+ABAC permission system. Super admin, pastor, circle guide, staff, viewer. PII field filtering by role.",
+          "Hybrid RBAC+ABAC permission system. Super admin, pastor, discovery lead, circle guide, staff, viewer. 12 resources, PII field filtering by role, custom permission scoping.",
         category: "security",
       },
       {
@@ -132,25 +135,63 @@ export const projects = [
           name: "Auth & Security",
           tech: "Convex Auth + RBAC",
           details:
-            "Magic link, 5-tier roles, PII projection, rate limiting",
+            "Magic link, 6 roles, ABAC scoping, PII projection, rate limiting",
         },
         {
           name: "Data",
           tech: "Convex DB",
           details:
-            "30+ tables, denormalized counters, soft delete, integrity chain",
+            "42 tables, 92 indexes, denormalized counters, soft delete, SHA-256 audit chain",
         },
       ],
     },
 
     testing: {
-      unit: "Vitest — 280+ tests covering components, security, phone utils, geolocation",
-      e2e: "Python Playwright — check-in flows, scheduling, QR display, visitor tracking",
+      unit: "Vitest — 36 files: 24 security (RBAC, PII, rate limiting, XSS, encryption), 4 core domain, 8 features & utils",
+      e2e: "Python Playwright — 17 files: check-in flows, visitor tracking, salvation decisions, circle guide management, geofence+QR",
       mutation:
         "Stryker — security-focused mutation testing for critical logic",
       security:
-        "Dedicated suite: RBAC enforcement, PII projection, rate limiting, auth guards, XSS prevention",
+        "24 dedicated files: RBAC enforcement, PII projection, rate limiting, auth guards, XSS prevention, XLSX sanitization, OWASP fixes",
     },
+
+    // Detailed architecture data from docs/ewc-architecture.md
+    securityLayers: [
+      { name: "Input Validation", detail: "String limits, email regex, enum validation, pagination max 200" },
+      { name: "Rate Limiting", detail: "Sliding window — auth emails: 3/15min" },
+      { name: "PII Projection", detail: "8 sensitive fields filtered by role before response" },
+      { name: "HTML Sanitization", detail: "DOMPurify for all user-generated content" },
+      { name: "Enterprise Audit", detail: "SHA-256 chain, sequence verification, 7-year retention" },
+      { name: "Geolocation Validation", detail: "Haversine geofence + spoofing detection (accuracy, timezone, staleness)" },
+    ],
+
+    rbacRoles: [
+      { role: "super_admin", level: 100, scope: "Full system access, impersonation" },
+      { role: "pastor", level: 50, scope: "Community-level: members, circles, cases" },
+      { role: "discovery_lead", level: 30, scope: "Visitors, first-timers, discipleship" },
+      { role: "circle_guide", level: 25, scope: "Assigned circle members only" },
+      { role: "staff", level: 10, scope: "Read-only across most resources" },
+      { role: "viewer", level: 5, scope: "Dashboard and reports only" },
+    ],
+
+    authFlow: [
+      "Email entered at /sign-in",
+      "Rate limit: 3 emails per 15 min (sliding window)",
+      "Checked against authorizedEmails whitelist",
+      "Magic link via Resend (24-hour validity)",
+      "Session: 7-day lifetime, 6-hour inactivity, 15-min JWT",
+      "Auto-accepts pending invitations on first login",
+    ],
+
+    tableCategories: [
+      { name: "Core Data", count: 8, key: "members (13 indexes), communities, circles" },
+      { name: "Care System", count: 8, key: "careInteractions, cases (8 statuses, 4 priorities)" },
+      { name: "Attendance", count: 9, key: "attendanceRecords (7 indexes), venueLocations" },
+      { name: "Auth & RBAC", count: 6, key: "userRoles, customPermissions, impersonation" },
+      { name: "Activity & Notifications", count: 6, key: "activityLog (21 action types), aiInsights" },
+      { name: "Circle Management", count: 4, key: "assignmentHistory, sundayEvents, shareLinks" },
+      { name: "Enterprise Audit", count: 3, key: "auditLog (SHA-256), softDeleteRegistry, archivedRecords" },
+    ],
 
     // Real code snippet for the terminal theme
     codeSnippet: {
