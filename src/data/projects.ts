@@ -116,6 +116,31 @@ export const projects = [
         alt: "Mobile responsive landing page",
         device: "mobile",
       },
+      {
+        src: "/screenshots/dashboard.png",
+        alt: "Pastoral care dashboard with stats, care trend, and follow-ups",
+        device: "desktop",
+      },
+      {
+        src: "/screenshots/dashboard-dark.png",
+        alt: "Dashboard in dark mode with weekly care trend chart",
+        device: "desktop",
+      },
+      {
+        src: "/screenshots/members-dark.png",
+        alt: "Members management table with filters and stats",
+        device: "desktop",
+      },
+      {
+        src: "/screenshots/care-dark.png",
+        alt: "Care activity feed with interaction logs and follow-ups",
+        device: "desktop",
+      },
+      {
+        src: "/screenshots/attendance-dark.png",
+        alt: "Attendance analytics with demographics and check-in methods",
+        device: "desktop",
+      },
     ],
 
     architecture: {
