@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { profile } from "@/data/profile";
+import { resumeUrl } from "@/data/navigation";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -98,6 +99,19 @@ export function TerminalContact() {
               <ContactLink href={profile.linkedin}>
                 {linkedinDisplay}
               </ContactLink>
+            </motion.div>
+
+            {/* Resume download */}
+            <motion.div variants={lineVariants} className="mt-6">
+              <span className="text-[#3fb950]">$ </span>
+              <a
+                href={resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#79c0ff] underline-offset-2 transition-colors duration-150 hover:underline hover:brightness-125"
+              >
+                open ./resume.pdf
+              </a>
             </motion.div>
 
             {/* Echo command */}

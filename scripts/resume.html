@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page { margin: 0.45in 0.55in; size: letter; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 10.2pt;
+    line-height: 1.3;
+    color: #000;
+  }
+  .header { text-align: center; margin-bottom: 10pt; }
+  .header h1 { font-size: 20pt; font-weight: bold; margin-bottom: 3pt; }
+  .header .contact { font-size: 9.5pt; }
+  .section { margin-bottom: 7pt; }
+  .section-title {
+    font-size: 10.2pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5pt;
+    border-bottom: 0.8pt solid #000;
+    padding-bottom: 1.5pt;
+    margin-bottom: 4pt;
+  }
+  .summary { font-size: 10.2pt; line-height: 1.35; }
+  .skills-row { margin-bottom: 0.5pt; font-size: 10.2pt; }
+  .skills-row strong { font-weight: bold; }
+  .job { margin-bottom: 7pt; }
+  .job-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1pt; }
+  .job-title { font-size: 10.2pt; }
+  .job-title strong { font-weight: bold; }
+  .job-date { font-size: 10.2pt; white-space: nowrap; }
+  ul { padding-left: 13pt; margin-top: 2pt; }
+  li { margin-bottom: 1.5pt; font-size: 10.2pt; line-height: 1.3; }
+  .project { margin-bottom: 7pt; }
+  .project-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5pt; }
+  .project-tech { font-size: 9.2pt; color: #444; margin-bottom: 2pt; }
+  .edu { font-size: 10.2pt; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Edward Osei-Nyarko</h1>
+  <div class="contact">
+    edward.osei.nyarko@gmail.com<br>
+    github.com/nana-yaw &nbsp;|&nbsp; linkedin.com/in/edward-osei-nyarko-5789b3118 &nbsp;|&nbsp; edwardoseidev.vercel.app
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Summary</div>
+  <div class="summary">
+    Backend engineer with 4+ years of experience building scalable APIs, test infrastructure, and distributed systems for SaaS platforms. Designed database architectures and automation frameworks that reduced test execution time by 50%. Experienced working remotely with US-based teams, writing clean documented code, and collaborating across engineering and product.
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Technical Skills</div>
+  <div class="skills-row"><strong>Backend:</strong> PHP, Node.js, TypeScript, JavaScript, Kotlin, Java, SQL, Bash</div>
+  <div class="skills-row"><strong>Frameworks:</strong> Symfony, Laravel, Spring Boot, Next.js, React</div>
+  <div class="skills-row"><strong>Testing:</strong> Cypress, Playwright, Vitest, PHPUnit, JUnit, Stryker (mutation testing)</div>
+  <div class="skills-row"><strong>Databases & Cloud:</strong> PostgreSQL, MySQL, Convex, Docker, AWS, Linux, Nginx, CI/CD</div>
+  <div class="skills-row"><strong>APIs & Tools:</strong> REST, GraphQL, Git, Swagger/OpenAPI, JIRA, Slack, Agile/Scrum</div>
+</div>
+
+<div class="section">
+  <div class="section-title">Experience</div>
+
+  <div class="job">
+    <div class="job-header">
+      <div class="job-title"><strong>Backend Engineer</strong> &mdash; RentPost, Inc. (Remote, US)</div>
+      <div class="job-date">Jul 2023 &ndash; Present</div>
+    </div>
+    <ul>
+      <li>Designed PostgreSQL database isolation architecture for parallel test execution using template-based cloning, reducing total test runtime by 50% with 2&ndash;4 concurrent workers</li>
+      <li>Built cross-repository orchestration layer decoupling frontend and backend tests through CLI interfaces, establishing clean service boundaries</li>
+      <li>Developed PASETO token-based authentication system for test automation, enabling secure stateless API access without session overhead</li>
+      <li>Engineered parallel test runner with timing persistence and data-driven load balancing, maintaining 92% pass rate across 24 automated tests</li>
+      <li>Refactored infrastructure scripts following YAGNI principles, reducing codebase by 61% while preserving functionality</li>
+      <li>Developed and optimized SaaS APIs using PHP/Symfony with PSR-12 compliance; wrote comprehensive technical documentation</li>
+      <li>Implemented interactive onboarding tour with driver.js, improving user adoption and reducing support tickets</li>
+    </ul>
+  </div>
+
+  <div class="job">
+    <div class="job-header">
+      <div class="job-title"><strong>Software Engineer</strong> &mdash; Turntabl Ghana Ltd. (Accra, Ghana)</div>
+      <div class="job-date">2021 &ndash; 2023</div>
+    </div>
+    <ul>
+      <li>Built News Aggregator REST API using Spring Boot and Kotlin, scaling from 100 to 1,000+ users after company website integration</li>
+      <li>Optimized API performance for internal systems; wrote technical documentation for engineer onboarding</li>
+      <li>Mentored junior engineers on best practices, fostering team growth and improving code quality</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Projects</div>
+
+  <div class="project">
+    <div class="project-header">
+      <div class="job-title"><strong>EWC Care App</strong> &mdash; Full-Stack Pastoral Care Platform</div>
+      <div class="job-date">Side Project</div>
+    </div>
+    <div class="project-tech">Next.js, React, TypeScript, Convex, Tailwind CSS, Vitest, Playwright, Google Gemini AI</div>
+    <ul>
+      <li>Designed and built a production PWA serving 5+ church communities with real-time data sync, managing member data, attendance, case management, and pastoral care workflows</li>
+      <li>Architected a 42-table database with 92 indexes and a 6-role RBAC system controlling access across 6 distinct permission levels</li>
+      <li>Built a 6-layer security defense stack: auth guards, RBAC, field-level PII projection, input sanitization, rate limiting, and tamper-evident SHA-256 audit logging</li>
+      <li>Wrote 280+ automated tests across 53 files: 24 security-focused unit test files, 17 E2E test files (Playwright), and mutation testing (Stryker) on critical auth logic</li>
+      <li>Implemented GPS geofenced check-in with Haversine distance calculation, spoofing detection, and QR code self-check-in</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Education</div>
+  <div class="edu"><strong>B.Sc. Physics</strong> &mdash; University of Cape Coast, Ghana (2015)</div>
+</div>
+
+</body>
+</html>

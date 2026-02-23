@@ -9,3 +9,5 @@ export const navItems = [
   { label: "Skills", href: "#skills" },
   { label: "Contact", href: "#contact" },
 ] as const;
+
+export const resumeUrl = "/Edward_Osei-Nyarko_Resume.pdf";
