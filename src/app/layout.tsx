@@ -29,9 +29,45 @@ const firaCode = Fira_Code({
 });
 
 export const metadata: Metadata = {
-  title: "D.O-N.E — Edward Osei-Nyarko",
+  title: {
+    default: "D.O-N.E — Edward Osei-Nyarko",
+    template: "%s | D.O-N.E",
+  },
   description:
-    "Backend engineer. From physics to production systems — solving problems that matter.",
+    "Backend engineer building production systems that serve communities. From physics to code — security-first, problem-first.",
+  metadataBase: new URL("https://edwardosei.dev"),
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://edwardosei.dev",
+    siteName: "D.O-N.E — Edward Osei-Nyarko",
+    title: "D.O-N.E — Edward Osei-Nyarko",
+    description:
+      "Backend engineer building production systems that serve communities. Security-first. Problem-first.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "D.O-N.E — Edward Osei-Nyarko, Backend Engineer",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "D.O-N.E — Edward Osei-Nyarko",
+    description:
+      "Backend engineer building production systems that serve communities.",
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({

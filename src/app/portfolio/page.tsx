@@ -10,13 +10,21 @@ import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 export default function PortfolioPage() {
   return (
     <>
+      <a
+        href="#main-content"
+        className="fixed left-4 top-4 z-[100] -translate-y-full rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--bg)] transition-transform focus:translate-y-0"
+      >
+        Skip to content
+      </a>
       <Nav />
-      <Hero />
-      <Project />
-      <Story />
-      <Experience />
-      <Skills />
-      <Contact />
+      <main id="main-content">
+        <Hero />
+        <Project />
+        <Story />
+        <Experience />
+        <Skills />
+        <Contact />
+      </main>
       <ThemeSwitcher />
     </>
   );
