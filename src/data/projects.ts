@@ -155,43 +155,58 @@ export const projects = [
         "24 dedicated files: RBAC enforcement, PII projection, rate limiting, auth guards, XSS prevention, XLSX sanitization, OWASP fixes",
     },
 
-    // Detailed architecture data from docs/ewc-architecture.md
+    // Sanitized from docs/ewc-architecture-portfolio.md — no internal thresholds
     securityLayers: [
-      { name: "Input Validation", detail: "String limits, email regex, enum validation, pagination max 200" },
-      { name: "Rate Limiting", detail: "Sliding window — auth emails: 3/15min" },
-      { name: "PII Projection", detail: "8 sensitive fields filtered by role before response" },
-      { name: "HTML Sanitization", detail: "DOMPurify for all user-generated content" },
-      { name: "Enterprise Audit", detail: "SHA-256 chain, sequence verification, 7-year retention" },
-      { name: "Geolocation Validation", detail: "Haversine geofence + spoofing detection (accuracy, timezone, staleness)" },
+      { name: "Input Validation", detail: "String length limits, email format validation, enum constraints, bounded pagination" },
+      { name: "Rate Limiting", detail: "Sliding window algorithm on authentication and public endpoints" },
+      { name: "PII Projection", detail: "Role-based field filtering strips sensitive data before client response" },
+      { name: "HTML Sanitization", detail: "DOMPurify on all user-generated content" },
+      { name: "Enterprise Audit", detail: "Immutable SHA-256 chain with tamper-evident linking and regulatory retention" },
+      { name: "Geolocation Verification", detail: "Haversine geofence validation with multi-signal spoofing detection" },
+    ],
+
+    // Security audit pass list (for terminal theme)
+    securityAudit: [
+      { check: "RBAC enforcement", detail: "6 roles, 12 resources, scope isolation" },
+      { check: "PII projection", detail: "Sensitive fields filtered by role" },
+      { check: "Input validation", detail: "Bounded strings, enums, pagination limits" },
+      { check: "Rate limiting", detail: "Sliding window on auth and public endpoints" },
+      { check: "HTML sanitization", detail: "DOMPurify on all user content" },
+      { check: "Audit integrity", detail: "SHA-256 chain with tamper detection" },
+      { check: "Geofence verification", detail: "Haversine + multi-signal spoofing detection" },
+      { check: "Mutation testing", detail: "Security logic survives code mutations" },
     ],
 
     rbacRoles: [
-      { role: "super_admin", level: 100, scope: "Full system access, impersonation" },
-      { role: "pastor", level: 50, scope: "Community-level: members, circles, cases" },
-      { role: "discovery_lead", level: 30, scope: "Visitors, first-timers, discipleship" },
-      { role: "circle_guide", level: 25, scope: "Assigned circle members only" },
-      { role: "staff", level: 10, scope: "Read-only across most resources" },
-      { role: "viewer", level: 5, scope: "Dashboard and reports only" },
+      { role: "Super Admin", scope: "Full system access, role impersonation" },
+      { role: "Pastor", scope: "Community-level: members, circles, cases" },
+      { role: "Discovery Lead", scope: "Visitors, first-timers, discipleship" },
+      { role: "Circle Guide", scope: "Assigned circle members only" },
+      { role: "Staff", scope: "Read-only across most resources" },
+      { role: "Viewer", scope: "Dashboard and reports only" },
     ],
 
     authFlow: [
-      "Email entered at /sign-in",
-      "Rate limit: 3 emails per 15 min (sliding window)",
-      "Checked against authorizedEmails whitelist",
-      "Magic link via Resend (24-hour validity)",
-      "Session: 7-day lifetime, 6-hour inactivity, 15-min JWT",
+      "Magic link email authentication (passwordless)",
+      "Email whitelist — only pre-authorized users can sign in",
+      "Session management with configurable idle timeout",
+      "Client-side idle detection: warning, lock screen, auto-logout",
       "Auto-accepts pending invitations on first login",
     ],
 
     tableCategories: [
-      { name: "Core Data", count: 8, key: "members (13 indexes), communities, circles" },
-      { name: "Care System", count: 8, key: "careInteractions, cases (8 statuses, 4 priorities)" },
-      { name: "Attendance", count: 9, key: "attendanceRecords (7 indexes), venueLocations" },
-      { name: "Auth & RBAC", count: 6, key: "userRoles, customPermissions, impersonation" },
-      { name: "Activity & Notifications", count: 6, key: "activityLog (21 action types), aiInsights" },
-      { name: "Circle Management", count: 4, key: "assignmentHistory, sundayEvents, shareLinks" },
-      { name: "Enterprise Audit", count: 3, key: "auditLog (SHA-256), softDeleteRegistry, archivedRecords" },
+      { name: "Core Data", count: 8, key: "Members, communities, circles, global stats" },
+      { name: "Care System", count: 8, key: "Care interactions, cases (8 statuses, 4 priorities)" },
+      { name: "Attendance", count: 9, key: "Attendance records, venue geofences, QR tokens, visitors" },
+      { name: "Auth & Access Control", count: 6, key: "Roles, custom permissions, impersonation, email whitelist" },
+      { name: "Activity & Notifications", count: 6, key: "Activity log (21 action types), AI insights, push" },
+      { name: "Circle Management", count: 4, key: "Assignment history, circle events, shareable links" },
+      { name: "Enterprise Audit", count: 3, key: "Immutable audit log (SHA-256), soft-delete registry, archives" },
     ],
+
+    // Security narrative for minimal/editorial theme case study
+    securityNarrative:
+      "I built a tamper-evident audit log for a church app. Not because anyone asked — because the data deserved it. Every mutation goes through a 6-layer defense stack. 24 of the 36 unit test files focus on security. I run mutation testing on auth guards to prove that removing an if statement actually breaks something.",
 
     // Real code snippet for the terminal theme
     codeSnippet: {
