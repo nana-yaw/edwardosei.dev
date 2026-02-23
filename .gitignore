@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# internal docs (not for public repo)
+docs/ewc-architecture.md
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
