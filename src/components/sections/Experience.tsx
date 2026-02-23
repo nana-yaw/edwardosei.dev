@@ -2,11 +2,13 @@
 
 import { useTheme } from "@/hooks/useTheme";
 import { CinematicExperience } from "@/components/themes/cinematic";
+import { MinimalExperience } from "@/components/themes/minimal";
 
 export function Experience() {
   const { theme } = useTheme();
 
   if (theme === "cinematic") return <CinematicExperience />;
+  if (theme === "minimal") return <MinimalExperience />;
 
   return (
     <section id="experience" className="min-h-dvh flex items-center justify-center">

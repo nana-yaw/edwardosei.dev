@@ -2,11 +2,13 @@
 
 import { useTheme } from "@/hooks/useTheme";
 import { CinematicSkills } from "@/components/themes/cinematic";
+import { MinimalSkills } from "@/components/themes/minimal";
 
 export function Skills() {
   const { theme } = useTheme();
 
   if (theme === "cinematic") return <CinematicSkills />;
+  if (theme === "minimal") return <MinimalSkills />;
 
   return (
     <section id="skills" className="min-h-dvh flex items-center justify-center">

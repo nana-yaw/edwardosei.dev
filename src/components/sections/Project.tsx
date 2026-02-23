@@ -2,11 +2,13 @@
 
 import { useTheme } from "@/hooks/useTheme";
 import { CinematicProject } from "@/components/themes/cinematic";
+import { MinimalProject } from "@/components/themes/minimal";
 
 export function Project() {
   const { theme } = useTheme();
 
   if (theme === "cinematic") return <CinematicProject />;
+  if (theme === "minimal") return <MinimalProject />;
 
   return (
     <section id="project" className="min-h-dvh flex items-center justify-center">
