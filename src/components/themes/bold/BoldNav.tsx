@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { navItems } from "@/data/navigation";
+import { navItems, resumeUrl } from "@/data/navigation";
 
 function DevOneBrand() {
   return (
@@ -65,6 +65,17 @@ export function BoldNav() {
               </a>
             </li>
           ))}
+          <li>
+            <a
+              href={resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-medium uppercase tracking-[0.2em] text-[#666] transition-colors duration-200 hover:text-[#f5f5f0]"
+              style={{ fontFamily: "var(--font-inter)" }}
+            >
+              Resume
+            </a>
+          </li>
         </ul>
 
         {/* Mobile hamburger */}
@@ -139,6 +150,33 @@ export function BoldNav() {
                   </a>
                 </motion.li>
               ))}
+              <motion.li
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{
+                  duration: 0.3,
+                  ease: "easeOut" as const,
+                  delay: navItems.length * 0.05,
+                }}
+              >
+                <a
+                  href={resumeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={closeMobile}
+                  className="flex items-center gap-4 text-2xl font-bold text-[#f5f5f0] transition-colors duration-200 hover:text-[#FF6B4A]"
+                  style={{ fontFamily: "var(--font-space-grotesk)" }}
+                >
+                  <span
+                    className="text-xs font-medium text-[#FF6B4A]"
+                    style={{ fontFamily: "var(--font-inter)" }}
+                  >
+                    0{navItems.length + 1}
+                  </span>
+                  Resume
+                </a>
+              </motion.li>
             </ul>
           </motion.div>
         )}

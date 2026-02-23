@@ -2,7 +2,8 @@
 
 import { profile } from "@/data/profile";
 import { motion } from "framer-motion";
-import { Mail, Github, Linkedin } from "lucide-react";
+import { Mail, Github, Linkedin, FileDown } from "lucide-react";
+import { resumeUrl } from "@/data/navigation";
 
 const sectionReveal = {
   initial: { opacity: 0, y: 20 },
@@ -86,6 +87,19 @@ export function CinematicContact() {
             );
           })}
         </div>
+
+        {/* Resume download */}
+        <motion.div {...sectionReveal} className="mt-10">
+          <a
+            href={resumeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 border border-white/[0.1] px-6 py-3 text-sm text-white/50 transition-colors duration-200 hover:border-white/30 hover:text-white/80"
+          >
+            <FileDown className="h-4 w-4" />
+            Download Resume
+          </a>
+        </motion.div>
 
         {/* Footer brand mark */}
         <motion.div

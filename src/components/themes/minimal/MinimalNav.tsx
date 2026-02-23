@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { navItems } from "@/data/navigation";
+import { navItems, resumeUrl } from "@/data/navigation";
 
 export function MinimalNav() {
   const [scrolled, setScrolled] = useState(false);
@@ -44,6 +44,17 @@ export function MinimalNav() {
               </a>
             </li>
           ))}
+          <li>
+            <a
+              href={resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative text-[13px] font-medium text-[#5a5a72] transition-colors duration-250 hover:text-[#1a1a2e]"
+            >
+              Resume
+              <span className="absolute -bottom-1 left-0 h-px w-0 bg-[#1a1a2e] transition-[width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-full" />
+            </a>
+          </li>
         </ul>
 
         {/* Mobile hamburger */}
@@ -85,6 +96,16 @@ export function MinimalNav() {
                 </a>
               </li>
             ))}
+            <li>
+              <a
+                href={resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[13px] font-medium text-[#5a5a72] transition-colors hover:text-[#1a1a2e]"
+              >
+                Resume
+              </a>
+            </li>
           </ul>
         </div>
       )}

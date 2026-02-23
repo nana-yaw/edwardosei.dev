@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { navItems } from "@/data/navigation";
+import { navItems, resumeUrl } from "@/data/navigation";
 
 export function TerminalNav() {
   const [scrolled, setScrolled] = useState(false);
@@ -73,6 +73,17 @@ export function TerminalNav() {
               </a>
             </li>
           ))}
+          <li>
+            <a
+              href={resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-[#484f58] transition-colors duration-150 hover:text-[#c9d1d9]"
+              style={{ fontFamily: "var(--font-fira-code)" }}
+            >
+              ./resume.pdf
+            </a>
+          </li>
         </ul>
 
         {/* Mobile hamburger */}
@@ -144,6 +155,27 @@ export function TerminalNav() {
                 </a>
               </motion.li>
             ))}
+            <motion.li
+              initial={{ opacity: 0, x: -12 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{
+                duration: 0.15,
+                ease: "easeOut" as const,
+                delay: navItems.length * 0.04,
+              }}
+            >
+              <a
+                href={resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={handleNavClick}
+                className="block px-5 py-3 text-xs text-[#484f58] transition-colors duration-150 hover:bg-[#0d1117] hover:text-[#c9d1d9]"
+                style={{ fontFamily: "var(--font-fira-code)" }}
+              >
+                <span className="text-[#3fb950]">$</span>{" "}
+                ./resume.pdf
+              </a>
+            </motion.li>
           </motion.ul>
         )}
       </AnimatePresence>

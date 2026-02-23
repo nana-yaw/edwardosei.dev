@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { navItems } from "@/data/navigation";
+import { navItems, resumeUrl } from "@/data/navigation";
 
 export function CinematicNav() {
   const [scrolled, setScrolled] = useState(false);
@@ -43,6 +43,16 @@ export function CinematicNav() {
             </a>
           </li>
         ))}
+        <li>
+          <a
+            href={resumeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-medium text-white/40 hover:text-white/90 transition-colors tracking-wide"
+          >
+            Resume
+          </a>
+        </li>
       </ul>
 
       {/* Mobile hamburger */}
@@ -70,6 +80,16 @@ export function CinematicNav() {
               </a>
             </li>
           ))}
+          <li>
+            <a
+              href={resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium text-white/50 hover:text-white/90 transition-colors"
+            >
+              Resume
+            </a>
+          </li>
         </ul>
       )}
     </nav>

@@ -2,7 +2,8 @@
 
 import { profile } from "@/data/profile";
 import { motion } from "framer-motion";
-import { Mail, Github, Linkedin } from "lucide-react";
+import { Mail, Github, Linkedin, FileDown } from "lucide-react";
+import { resumeUrl } from "@/data/navigation";
 
 const sectionReveal = {
   initial: { opacity: 0, y: 24 },
@@ -95,6 +96,20 @@ export function BoldContact() {
             );
           })}
         </div>
+
+        {/* Resume download */}
+        <motion.div {...sectionReveal} className="mt-12">
+          <a
+            href={resumeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-3 border-2 border-[#FF6B4A] px-6 py-3 text-sm font-bold uppercase tracking-[0.15em] text-[#FF6B4A] transition-colors duration-200 hover:bg-[#FF6B4A] hover:text-[#0a0a0a]"
+            style={{ fontFamily: "var(--font-space-grotesk)" }}
+          >
+            <FileDown className="h-4 w-4" />
+            Resume
+          </a>
+        </motion.div>
 
         {/* Footer brand mark */}
         <motion.div

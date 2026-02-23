@@ -21,11 +21,22 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const setTheme = useCallback((newTheme: ThemeId) => {
-    setThemeState(newTheme);
-    setHasChosen(true);
-    localStorage.setItem(STORAGE_KEY, newTheme);
-    localStorage.setItem(CHOSEN_KEY, "true");
-    document.documentElement.setAttribute("data-theme", newTheme);
+    // Brief crossfade on theme change
+    document.documentElement.style.transition = "opacity 0.15s ease";
+    document.documentElement.style.opacity = "0.6";
+    requestAnimationFrame(() => {
+      setThemeState(newTheme);
+      setHasChosen(true);
+      localStorage.setItem(STORAGE_KEY, newTheme);
+      localStorage.setItem(CHOSEN_KEY, "true");
+      document.documentElement.setAttribute("data-theme", newTheme);
+      requestAnimationFrame(() => {
+        document.documentElement.style.opacity = "1";
+        setTimeout(() => {
+          document.documentElement.style.transition = "";
+        }, 150);
+      });
+    });
   }, []);
 
   const resetChoice = useCallback(() => {

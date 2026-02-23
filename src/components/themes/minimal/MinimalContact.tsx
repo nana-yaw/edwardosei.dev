@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { profile } from "@/data/profile";
+import { resumeUrl } from "@/data/navigation";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
@@ -59,6 +60,24 @@ export function MinimalContact() {
             className="text-[15px] leading-loose text-[#3a3a4a] underline-offset-4 decoration-[#e5e5e0] hover:underline hover:decoration-[#1a1a2e] transition-colors duration-200"
           >
             LinkedIn
+          </a>
+        </motion.div>
+
+        {/* Resume download */}
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          className="mt-10"
+        >
+          <a
+            href={resumeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[15px] leading-loose text-[#3a3a4a] underline underline-offset-4 decoration-[#e5e5e0] hover:decoration-[#1a1a2e] transition-colors duration-200"
+          >
+            Download Resume (PDF)
           </a>
         </motion.div>
 

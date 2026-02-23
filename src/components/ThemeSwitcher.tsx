@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { themes, themeOrder, type ThemeId } from "@/lib/themes";
 
@@ -14,7 +14,6 @@ const dotColors: Record<ThemeId, string> = {
   terminal: "#4ade80",
 };
 
-// Per-theme pulse ring color (matches --accent)
 const pulseRingColors: Record<ThemeId, string> = {
   cinematic: "rgba(79, 125, 245, 0.4)",
   minimal: "rgba(26, 26, 46, 0.25)",
@@ -22,93 +21,89 @@ const pulseRingColors: Record<ThemeId, string> = {
   terminal: "rgba(74, 222, 128, 0.4)",
 };
 
+const SWIPE_THRESHOLD = 50;
+
 export function ThemeSwitcher() {
   const { theme, setTheme, resetChoice } = useTheme();
-  const [open, setOpen] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false);
   const [shouldPulse, setShouldPulse] = useState(false);
+  const [direction, setDirection] = useState(0);
+  const [showHint, setShowHint] = useState(true);
+  const touchStartX = useRef(0);
   const router = useRouter();
 
-  // One-time pulse on mount to draw attention
+  // Pulse on mount
   useEffect(() => {
     const timer = setTimeout(() => setShouldPulse(true), 2000);
     return () => clearTimeout(timer);
   }, []);
 
+  const currentIndex = themeOrder.indexOf(theme);
+
+  const goNext = useCallback(() => {
+    const next = (currentIndex + 1) % themeOrder.length;
+    setDirection(1);
+    setTheme(themeOrder[next]);
+    setShowHint(false);
+  }, [currentIndex, setTheme]);
+
+  const goPrev = useCallback(() => {
+    const prev = (currentIndex - 1 + themeOrder.length) % themeOrder.length;
+    setDirection(-1);
+    setTheme(themeOrder[prev]);
+    setShowHint(false);
+  }, [currentIndex, setTheme]);
+
+  // Keyboard arrow keys
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      // Don't hijack arrows if user is typing in an input
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement
+      )
+        return;
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        goNext();
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        goPrev();
+      }
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [goNext, goPrev]);
+
+  // Swipe gestures
+  useEffect(() => {
+    function onTouchStart(e: TouchEvent) {
+      touchStartX.current = e.touches[0].clientX;
+    }
+    function onTouchEnd(e: TouchEvent) {
+      const dx = e.changedTouches[0].clientX - touchStartX.current;
+      if (Math.abs(dx) >= SWIPE_THRESHOLD) {
+        if (dx < 0) goNext();
+        else goPrev();
+      }
+    }
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+    return () => {
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchend", onTouchEnd);
+    };
+  }, [goNext, goPrev]);
+
   const ringColor = pulseRingColors[theme];
 
   return (
-    <div className="fixed bottom-6 right-6 lg:bottom-auto lg:right-auto lg:top-[72px] lg:left-6 z-50 flex flex-col lg:flex-col-reverse items-end lg:items-start gap-2">
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="flex flex-col gap-1 rounded-lg border border-[var(--border)] bg-[var(--bg)] p-2 shadow-lg"
-          >
-            {themeOrder.map((id) => (
-              <button
-                key={id}
-                onClick={() => {
-                  setTheme(id);
-                  setOpen(false);
-                }}
-                className={`flex items-center gap-3 rounded-md px-3 py-2 text-left text-sm transition-colors hover:bg-[var(--border)] ${
-                  id === theme ? "text-[var(--accent)]" : "text-[var(--muted)]"
-                }`}
-              >
-                <span
-                  className="h-2.5 w-2.5 rounded-full shrink-0"
-                  style={{ background: dotColors[id] }}
-                />
-                {themes[id].name}
-              </button>
-            ))}
-            <div className="my-1 h-px bg-[var(--border)]" />
-            <button
-              onClick={() => {
-                resetChoice();
-                router.push("/");
-                setOpen(false);
-              }}
-              className="flex items-center gap-3 rounded-md px-3 py-2 text-left text-sm text-[var(--muted)] transition-colors hover:bg-[var(--border)]"
-            >
-              <ArrowLeft className="h-3.5 w-3.5 shrink-0" />
-              Theme Gallery
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Tooltip */}
-      <AnimatePresence>
-        {showTooltip && !open && (
-          <motion.span
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.15 }}
-            className="pointer-events-none whitespace-nowrap rounded-md border border-[var(--border)] bg-[var(--bg)] px-2.5 py-1 text-xs text-[var(--accent)] shadow-md"
-          >
-            Switch theme
-          </motion.span>
-        )}
-      </AnimatePresence>
-
-      {/* Trigger button */}
-      <motion.button
-        onClick={() => setOpen((o) => !o)}
-        onMouseEnter={() => setShowTooltip(true)}
-        onMouseLeave={() => setShowTooltip(false)}
-        onFocus={() => setShowTooltip(true)}
-        onBlur={() => setShowTooltip(false)}
-        aria-label="Switch theme"
+    <div className="fixed bottom-6 right-6 lg:bottom-auto lg:right-auto lg:top-[72px] lg:left-6 z-50 flex flex-col items-end lg:items-start gap-1.5">
+      {/* Carousel switcher */}
+      <motion.div
         animate={
           shouldPulse
             ? {
-                scale: [1, 1.15, 1],
+                scale: [1, 1.08, 1],
                 boxShadow: [
                   `0 0 0 0px ${ringColor}`,
                   `0 0 0 8px transparent`,
@@ -123,18 +118,69 @@ export function ThemeSwitcher() {
             : {}
         }
         onAnimationComplete={() => setShouldPulse(false)}
-        className="flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--bg)] px-3 py-2 shadow-lg transition-colors hover:border-[var(--accent)]"
+        className="flex items-center gap-0.5 rounded-full border border-[var(--border)] bg-[var(--bg)] shadow-lg"
       >
-        {themeOrder.map((id) => (
+        <button
+          onClick={goPrev}
+          aria-label="Previous theme"
+          className="flex h-9 w-8 items-center justify-center rounded-l-full text-[var(--muted)] transition-colors hover:text-[var(--accent)]"
+        >
+          <ChevronLeft className="h-3.5 w-3.5" />
+        </button>
+
+        <div className="flex items-center gap-2 px-1 min-w-[90px] justify-center">
           <span
-            key={id}
-            className={`h-2.5 w-2.5 rounded-full transition-transform ${
-              id === theme ? "scale-125" : "opacity-50"
-            }`}
-            style={{ background: dotColors[id] }}
+            className="h-2 w-2 rounded-full shrink-0 transition-colors duration-150"
+            style={{ background: dotColors[theme] }}
           />
-        ))}
-      </motion.button>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.span
+              key={theme}
+              initial={{ opacity: 0, x: direction * 16 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: direction * -16 }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              className="text-xs font-medium text-[var(--accent)] select-none whitespace-nowrap"
+            >
+              {themes[theme].name}
+            </motion.span>
+          </AnimatePresence>
+        </div>
+
+        <button
+          onClick={goNext}
+          aria-label="Next theme"
+          className="flex h-9 w-8 items-center justify-center rounded-r-full text-[var(--muted)] transition-colors hover:text-[var(--accent)]"
+        >
+          <ChevronRight className="h-3.5 w-3.5" />
+        </button>
+      </motion.div>
+
+      {/* Keyboard hint — fades out after first theme switch */}
+      <AnimatePresence>
+        {showHint && (
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="hidden lg:block text-[10px] tracking-wide text-[var(--muted)] lg:pl-2 select-none"
+          >
+            ← → to switch
+          </motion.span>
+        )}
+      </AnimatePresence>
+
+      {/* Theme Gallery link */}
+      <button
+        onClick={() => {
+          resetChoice();
+          router.push("/");
+        }}
+        className="text-[10px] tracking-wide text-[var(--muted)] transition-colors hover:text-[var(--accent)] lg:pl-2"
+      >
+        Theme Gallery
+      </button>
     </div>
   );
 }
