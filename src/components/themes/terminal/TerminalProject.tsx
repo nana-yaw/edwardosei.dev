@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { projects } from "@/data/projects";
 import { motion, AnimatePresence } from "framer-motion";
+import DeviceMockup from "@/components/DeviceMockup";
 
 const project = projects[0];
 
@@ -15,6 +16,7 @@ const tabs = [
   { id: "architecture", label: "architecture" },
   { id: "security", label: "security" },
   { id: "testing", label: "testing" },
+  { id: "screenshots", label: "screenshots" },
 ] as const;
 
 type TabId = (typeof tabs)[number]["id"];
@@ -392,6 +394,42 @@ function TestingTab() {
 }
 
 // ---------------------------------------------------------------------------
+// Tab content: screenshots
+// ---------------------------------------------------------------------------
+function ScreenshotsTab() {
+  return (
+    <div
+      className="text-sm"
+      style={{ fontFamily: "var(--font-fira-code)" }}
+    >
+      {/* Command prompt */}
+      <div className="mb-4" style={{ color: C.green }}>
+        $ ls ./screenshots/
+      </div>
+
+      {/* Screenshot grid */}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        {project.screenshots.map((shot) => (
+          <div key={shot.src}>
+            <DeviceMockup
+              device={shot.device}
+              src={shot.src}
+              alt={shot.alt}
+            />
+            <div
+              className="mt-2 truncate text-xs"
+              style={{ color: C.muted }}
+            >
+              {shot.src.split("/").pop()}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Tab content router
 // ---------------------------------------------------------------------------
 function TabContent({ tabId }: { tabId: TabId }) {
@@ -406,6 +444,8 @@ function TabContent({ tabId }: { tabId: TabId }) {
       return <SecurityTab />;
     case "testing":
       return <TestingTab />;
+    case "screenshots":
+      return <ScreenshotsTab />;
   }
 }
 
