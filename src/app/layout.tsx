@@ -30,34 +30,34 @@ const firaCode = Fira_Code({
 
 export const metadata: Metadata = {
   title: {
-    default: "D.O-N.E — Edward Osei-Nyarko",
-    template: "%s | D.O-N.E",
+    default: "devONE | Edward Osei-Nyarko",
+    template: "%s | devONE",
   },
   description:
-    "Backend engineer building production systems that serve communities. From physics to code — security-first, problem-first.",
+    "Software developer building production systems that serve communities. Security-first. Problem-first.",
   metadataBase: new URL("https://edwardosei.dev"),
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://edwardosei.dev",
-    siteName: "D.O-N.E — Edward Osei-Nyarko",
-    title: "D.O-N.E — Edward Osei-Nyarko",
+    siteName: "devONE | Edward Osei-Nyarko",
+    title: "devONE | Edward Osei-Nyarko",
     description:
-      "Backend engineer building production systems that serve communities. Security-first. Problem-first.",
+      "Software developer building production systems that serve communities. Security-first. Problem-first.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "D.O-N.E — Edward Osei-Nyarko, Backend Engineer",
+        alt: "devONE | Edward Osei-Nyarko, Software Developer",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "D.O-N.E — Edward Osei-Nyarko",
+    title: "devONE | Edward Osei-Nyarko",
     description:
-      "Backend engineer building production systems that serve communities.",
+      "Software developer building production systems that serve communities.",
     images: ["/og-image.png"],
   },
   robots: {

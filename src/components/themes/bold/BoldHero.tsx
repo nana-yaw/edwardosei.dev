@@ -2,6 +2,7 @@
 
 import { profile } from "@/data/profile";
 import { motion } from "framer-motion";
+import Avatar from "@/components/Avatar";
 
 const fadeIn = (delay: number) => ({
   initial: { opacity: 0, y: 24 },
@@ -65,18 +66,10 @@ export function BoldHero() {
               {profile.taglines.bold}
             </motion.p>
 
-            {/* EO initials circle */}
-            <motion.div
-              {...fadeIn(0.45)}
-              className="mt-10 flex h-16 w-16 items-center justify-center rounded-full border-2 border-[#FF6B4A]"
-            >
-              <span
-                className="text-sm font-bold tracking-wide text-[#FF6B4A]"
-                style={{ fontFamily: "var(--font-space-grotesk)" }}
-              >
-                EO
-              </span>
-            </motion.div>
+            {/* Photo */}
+            <div className="mt-10">
+              <Avatar src="/photos/edward.jpg" size="md" />
+            </div>
           </div>
 
           {/* Right column — Statement stat */}

@@ -22,13 +22,13 @@ export function MinimalNav() {
       }`}
     >
       <div className="mx-auto flex max-w-[720px] items-center justify-between px-6 py-5">
-        {/* D.O-N.E logo — Playfair Display italic */}
+        {/* devONE logo — Playfair Display italic */}
         <a
           href="#"
           style={{ fontFamily: "var(--font-playfair)" }}
           className="text-lg italic tracking-tight text-[#1a1a2e]"
         >
-          D.O-N.E
+          devONE
         </a>
 
         {/* Desktop nav links */}

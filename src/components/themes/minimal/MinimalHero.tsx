@@ -2,6 +2,7 @@
 
 import { profile } from "@/data/profile";
 import { motion } from "framer-motion";
+import Avatar from "@/components/Avatar";
 
 const fadeInUp = (delay: number) => ({
   initial: { opacity: 0, y: 20 },
@@ -13,18 +14,10 @@ export function MinimalHero() {
   return (
     <section className="flex min-h-dvh items-center bg-[#fafaf9] px-6">
       <div className="mx-auto w-full max-w-[720px] py-32">
-        {/* EO initials */}
-        <motion.div
-          {...fadeInUp(0)}
-          className="mb-8 flex h-20 w-20 items-center justify-center rounded-full border border-[#1a1a2e]"
-        >
-          <span
-            style={{ fontFamily: "var(--font-playfair)" }}
-            className="text-xl text-[#1a1a2e]"
-          >
-            EO
-          </span>
-        </motion.div>
+        {/* Photo */}
+        <div className="mb-8">
+          <Avatar src="/photos/edward.jpg" size="lg" />
+        </div>
 
         {/* Label */}
         <motion.p

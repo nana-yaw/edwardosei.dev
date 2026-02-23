@@ -31,10 +31,10 @@ export function ThemeChooser() {
           className="text-4xl sm:text-5xl font-light tracking-[0.3em] text-white"
           style={{ fontFamily: "var(--font-inter)" }}
         >
-          D.O-N.E
+          devONE
         </h1>
         <p className="mt-3 text-sm tracking-[0.15em] uppercase text-neutral-500">
-          Developer Osei-Nyarko Edward
+          Edward Osei-Nyarko
         </p>
       </div>
 

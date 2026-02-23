@@ -28,6 +28,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     document.documentElement.setAttribute("data-theme", newTheme);
   }, []);
 
+  const resetChoice = useCallback(() => {
+    setHasChosen(false);
+    localStorage.removeItem(CHOSEN_KEY);
+  }, []);
+
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
@@ -35,7 +40,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   if (!mounted) return null;
 
   return (
-    <ThemeContext value={{ theme, setTheme, hasChosen }}>
+    <ThemeContext value={{ theme, setTheme, hasChosen, resetChoice }}>
       {children}
     </ThemeContext>
   );

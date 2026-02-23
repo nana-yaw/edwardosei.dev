@@ -345,7 +345,7 @@ function TestingTab() {
           Unit &amp; Component Tests (Vitest)
         </div>
         <div style={{ color: C.muted }} className="pl-4 text-xs leading-6">
-          {project.testing.unit.replace("Vitest — ", "")}
+          {project.testing.unit.replace("Vitest, ", "")}
         </div>
       </div>
 
@@ -355,7 +355,7 @@ function TestingTab() {
           E2E Tests (Python Playwright)
         </div>
         <div style={{ color: C.muted }} className="pl-4 text-xs leading-6">
-          {project.testing.e2e.replace("Python Playwright — ", "")}
+          {project.testing.e2e.replace("Python Playwright, ", "")}
         </div>
       </div>
 
@@ -365,7 +365,7 @@ function TestingTab() {
           Mutation Testing (Stryker)
         </div>
         <div style={{ color: C.muted }} className="pl-4 text-xs leading-6">
-          {project.testing.mutation.replace("Stryker — ", "")}
+          {project.testing.mutation.replace("Stryker, ", "")}
         </div>
       </div>
 

@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "D.O-N.E — Edward Osei-Nyarko, Backend Engineer";
+export const alt = "devONE | Edward Osei-Nyarko, Software Developer";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -30,7 +30,7 @@ export default function OGImage() {
             marginBottom: 32,
           }}
         >
-          D.O-N.E
+          devONE
         </div>
         <div
           style={{
@@ -50,7 +50,7 @@ export default function OGImage() {
             lineHeight: 1.5,
           }}
         >
-          Backend engineer building production systems that serve communities.
+          Software developer building production systems that serve communities.
         </div>
         <div
           style={{

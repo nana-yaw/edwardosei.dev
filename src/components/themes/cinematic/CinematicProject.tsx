@@ -117,7 +117,7 @@ export function CinematicProject() {
             {/* ── Security Defense Stack — THE hero graphic ──────── */}
             <div className="mb-10">
               <h4 className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-[#4f7df5]">
-                Defense in Depth — 6 Layers
+                Defense in Depth · 6 Layers
               </h4>
               <div className="overflow-hidden rounded-xl border border-white/[0.06]">
                 {project.securityLayers.map((layer, i) => (

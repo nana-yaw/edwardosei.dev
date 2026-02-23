@@ -7,6 +7,7 @@ interface ThemeContextValue {
   theme: ThemeId;
   setTheme: (theme: ThemeId) => void;
   hasChosen: boolean;
+  resetChoice: () => void;
 }
 
 export const ThemeContext = createContext<ThemeContextValue | null>(null);

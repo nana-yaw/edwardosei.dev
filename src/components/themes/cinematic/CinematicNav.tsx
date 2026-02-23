@@ -23,12 +23,12 @@ export function CinematicNav() {
           : "py-5 bg-transparent"
       }`}
     >
-      {/* D.O-N.E brand mark */}
+      {/* devONE brand mark */}
       <a
         href="#hero"
-        className="text-lg font-light tracking-[0.25em] text-white/90"
+        className="text-lg font-light tracking-[0.15em] text-white/90"
       >
-        D.O-N.E
+        devONE
       </a>
 
       {/* Desktop nav */}
