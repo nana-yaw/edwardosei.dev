@@ -3,6 +3,8 @@
 import { projects } from "@/data/projects";
 import { motion } from "framer-motion";
 import DeviceMockup from "@/components/DeviceMockup";
+import { CodeBlock } from "@/components/graphics/CodeBlock";
+import { TestBreakdown } from "@/components/graphics/TestBreakdown";
 
 const project = projects[0];
 
@@ -17,6 +19,52 @@ const revealDelay = (delay: number) => ({
   ...reveal,
   transition: { ...reveal.transition, delay },
 });
+
+function MinimalShieldRing({
+  layers,
+  depth,
+}: {
+  layers: readonly { name: string; detail: string }[];
+  depth: number;
+}) {
+  if (depth >= layers.length) {
+    return (
+      <div className="mt-3 flex items-center justify-center rounded-md border border-[#1a1a2e]/15 py-4">
+        <span
+          className="text-[0.7rem] font-medium uppercase tracking-[0.15em] text-[#1a1a2e]/30"
+          style={{ fontFamily: "Inter, sans-serif" }}
+        >
+          Protected Data
+        </span>
+      </div>
+    );
+  }
+
+  const layer = layers[depth];
+
+  return (
+    <div
+      className={`rounded-lg border px-3 py-2.5 sm:px-4 sm:py-3 ${depth > 0 ? "mt-2" : ""}`}
+      style={{ borderColor: `rgba(26, 26, 46, ${0.06 + depth * 0.025})` }}
+    >
+      <div
+        className="mb-1 flex items-baseline gap-2"
+        style={{ fontFamily: "Inter, sans-serif" }}
+      >
+        <span className="text-[0.75rem] font-semibold text-[#1a1a2e]/35">
+          {String(depth + 1).padStart(2, "0")}
+        </span>
+        <span className="text-[0.85rem] font-semibold text-[#1a1a2e]">
+          {layer.name}
+        </span>
+        <span className="hidden text-[0.78rem] text-[#1a1a2e]/45 sm:inline">
+          · {layer.detail}
+        </span>
+      </div>
+      <MinimalShieldRing layers={layers} depth={depth + 1} />
+    </div>
+  );
+}
 
 export function MinimalProject() {
   return (
@@ -129,7 +177,7 @@ export function MinimalProject() {
           className="mb-10 border-t border-[#1a1a2e]/10"
         />
 
-        {/* ── Architecture ─────────────────────────────────── */}
+        {/* ── Architecture — Visual Diagram ──────────────────── */}
         <motion.div {...revealDelay(0)} className="mb-12">
           <h3
             className="mb-6 text-[1.5rem] text-[#1a1a2e]"
@@ -138,23 +186,48 @@ export function MinimalProject() {
             Architecture
           </h3>
 
-          <div className="border-t border-[#1a1a2e]/10">
-            {project.architecture.layers.map((layer) => (
-              <div
-                key={layer.name}
-                className="border-b border-[#1a1a2e]/10 py-4"
-              >
-                <p
-                  className="text-[0.95rem] leading-relaxed text-[#1a1a2e]/75"
-                  style={{ fontFamily: "Inter, sans-serif" }}
+          <div
+            className="relative pl-8"
+            role="img"
+            aria-label="4-layer system architecture"
+          >
+            {/* Vertical connecting line */}
+            <div
+              className="absolute left-[7px] top-2 bottom-2 w-px bg-[#1a1a2e]/12"
+              aria-hidden="true"
+            />
+
+            {project.architecture.layers.map((layer, i) => {
+              const isAuth = layer.name === "Auth & Security";
+              return (
+                <div
+                  key={layer.name}
+                  className={`relative ${i > 0 ? "pt-5" : ""}`}
                 >
-                  <strong className="font-semibold text-[#1a1a2e]">
-                    {layer.name}
-                  </strong>{" "}
-                  ({layer.tech}). {layer.details}
-                </p>
-              </div>
-            ))}
+                  {/* Circle marker on the line */}
+                  <div
+                    className={`absolute h-[14px] w-[14px] rounded-full border-2 ${isAuth ? "border-[#1a1a2e]/50 bg-[#1a1a2e]/10" : "border-[#1a1a2e]/20 bg-[#fafaf9]"}`}
+                    style={{ left: "-25px", top: i > 0 ? "22px" : "2px" }}
+                    aria-hidden="true"
+                  />
+                  <p
+                    className="text-[0.95rem] leading-relaxed text-[#1a1a2e]/75"
+                    style={{ fontFamily: "Inter, sans-serif" }}
+                  >
+                    <strong
+                      className={`font-semibold ${isAuth ? "text-[#1a1a2e]" : "text-[#1a1a2e]"}`}
+                    >
+                      {layer.name}
+                    </strong>{" "}
+                    <span className="text-[#1a1a2e]/45">({layer.tech})</span>
+                    <br />
+                    <span className="text-[0.88rem] text-[#1a1a2e]/50">
+                      {layer.details}
+                    </span>
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </motion.div>
 
@@ -170,7 +243,7 @@ export function MinimalProject() {
           </blockquote>
         </motion.div>
 
-        {/* ── Security layers — numbered list ──────────────── */}
+        {/* ── Security layers — concentric visual ────────────── */}
         <motion.div {...revealDelay(0)} className="mb-12">
           <h3
             className="mb-6 text-[1.5rem] text-[#1a1a2e]"
@@ -179,25 +252,51 @@ export function MinimalProject() {
             Security Layers
           </h3>
 
-          <ol
-            className="space-y-3"
+          <div
+            role="img"
+            aria-label="6-layer defense in depth security architecture"
+          >
+            <MinimalShieldRing layers={project.securityLayers} depth={0} />
+          </div>
+        </motion.div>
+
+        {/* ── Real Code ──────────────────────────────────────── */}
+        <motion.div {...revealDelay(0)} className="mb-12">
+          <h3
+            className="mb-6 text-[1.5rem] text-[#1a1a2e]"
+            style={{ fontFamily: "Playfair Display, serif", fontWeight: 400 }}
+          >
+            Source Code
+          </h3>
+
+          <CodeBlock
+            code={project.codeSnippet.code}
+            filename={project.codeSnippet.filename}
+            variant="minimal"
+          />
+        </motion.div>
+
+        {/* ── Test Distribution ──────────────────────────────── */}
+        <motion.div {...revealDelay(0)} className="mb-12">
+          <h3
+            className="mb-6 text-[1.5rem] text-[#1a1a2e]"
+            style={{ fontFamily: "Playfair Display, serif", fontWeight: 400 }}
+          >
+            Test Suite
+          </h3>
+
+          <TestBreakdown
+            breakdown={project.testingBreakdown}
+            variant="minimal"
+          />
+
+          <p
+            className="mt-4 text-[0.88rem] text-[#1a1a2e]/50"
             style={{ fontFamily: "Inter, sans-serif" }}
           >
-            {project.securityLayers.map((layer, i) => (
-              <li
-                key={layer.name}
-                className="text-[0.95rem] leading-relaxed text-[#1a1a2e]/75"
-              >
-                <span className="mr-2 font-semibold text-[#1a1a2e]/40">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <strong className="font-semibold text-[#1a1a2e]">
-                  {layer.name}
-                </strong>{" "}
-                · {layer.detail}
-              </li>
-            ))}
-          </ol>
+            {project.stats.tests} tests across {project.stats.testFiles} files.
+            Security dominates.
+          </p>
         </motion.div>
 
         {/* ── Tech stack — inline with middots ─────────────── */}

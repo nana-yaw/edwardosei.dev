@@ -3,6 +3,9 @@
 import { projects } from "@/data/projects";
 import { motion } from "framer-motion";
 import DeviceMockup from "@/components/DeviceMockup";
+import { CodeBlock } from "@/components/graphics/CodeBlock";
+import { TestBreakdown } from "@/components/graphics/TestBreakdown";
+import { TechIcon } from "@/components/graphics/TechIcons";
 
 const project = projects[0];
 
@@ -78,6 +81,77 @@ const revealUp = (delay: number = 0) => ({
   viewport: { once: true, margin: "-60px" } as const,
   transition: { duration: 0.8, ease: "easeOut" as const, delay },
 });
+
+function BoldShieldRing({
+  layers,
+  depth,
+}: {
+  layers: readonly { name: string; detail: string }[];
+  depth: number;
+}) {
+  if (depth >= layers.length) {
+    return (
+      <div
+        className="mt-3 flex items-center justify-center py-6"
+        style={{
+          border: "1px solid rgba(255, 107, 74, 0.25)",
+          background: "rgba(255, 107, 74, 0.04)",
+        }}
+      >
+        <div className="text-center">
+          <div
+            className="font-['Space_Grotesk'] text-xs font-bold uppercase tracking-[0.25em]"
+            style={{ color: "#FF6B4A" }}
+          >
+            Protected
+          </div>
+          <div
+            className="text-[0.6rem] uppercase tracking-[0.2em]"
+            style={{ color: "rgba(255, 107, 74, 0.5)" }}
+          >
+            Core Data
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const layer = layers[depth];
+  const coralOpacity = 0.06 + depth * 0.04;
+
+  return (
+    <div
+      className={`px-3 py-2.5 sm:px-4 sm:py-3 ${depth > 0 ? "mt-2" : ""}`}
+      style={{
+        border: "1px solid rgba(255,255,255,0.06)",
+        borderLeft: `${2 + depth}px solid rgba(255, 107, 74, ${coralOpacity})`,
+        background: "#0a0a0a",
+      }}
+    >
+      <div className="mb-1 flex items-center gap-3">
+        <span
+          className="font-['Space_Grotesk'] text-lg font-bold"
+          style={{ color: "#FF6B4A" }}
+        >
+          {depth + 1}
+        </span>
+        <span
+          className="text-sm font-bold"
+          style={{ color: "#f5f5f0" }}
+        >
+          {layer.name}
+        </span>
+        <span
+          className="hidden text-[0.78rem] sm:inline"
+          style={{ color: "#666666" }}
+        >
+          — {layer.detail}
+        </span>
+      </div>
+      <BoldShieldRing layers={layers} depth={depth + 1} />
+    </div>
+  );
+}
 
 export function BoldProject() {
   return (
@@ -280,41 +354,8 @@ export function BoldProject() {
             </span>
           </div>
 
-          <div className="grid grid-cols-1 gap-px sm:grid-cols-2 lg:grid-cols-3"
-            style={{ background: "rgba(255,255,255,0.08)" }}
-          >
-            {project.securityLayers.map((layer, i) => (
-              <motion.div
-                key={layer.name}
-                {...stagger(0.06 * i)}
-                className="flex gap-5 px-6 py-6 sm:px-8 sm:py-8"
-                style={{ background: "#0a0a0a" }}
-              >
-                <span
-                  className="flex h-10 w-10 shrink-0 items-center justify-center font-['Space_Grotesk'] text-lg font-bold"
-                  style={{
-                    color: "#FF6B4A",
-                    border: "1px solid rgba(255,107,74,0.3)",
-                  }}
-                >
-                  {i + 1}
-                </span>
-                <div>
-                  <div
-                    className="text-sm font-bold"
-                    style={{ color: "#f5f5f0" }}
-                  >
-                    {layer.name}
-                  </div>
-                  <p
-                    className="mt-1 text-sm leading-relaxed"
-                    style={{ color: "#666666" }}
-                  >
-                    {layer.detail}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
+          <div role="img" aria-label="6-layer defense in depth security architecture">
+            <BoldShieldRing layers={project.securityLayers} depth={0} />
           </div>
         </motion.div>
 
@@ -369,54 +410,97 @@ export function BoldProject() {
         </motion.div>
 
         {/* ================================================================
-            ARCHITECTURE — Clean, structured layers
+            ARCHITECTURE — Visual stack diagram
             ================================================================ */}
         <motion.div {...revealUp(0)} className="mb-24">
           <div className="mb-8 flex items-center gap-3">
-            <span
-              className="text-xs font-semibold uppercase tracking-[0.25em]"
-              style={{ color: "#FF6B4A" }}
-            >
+            <span className="text-xs font-semibold uppercase tracking-[0.25em]" style={{ color: "#FF6B4A" }}>
               Architecture
             </span>
-            <span
-              className="h-px flex-1"
-              style={{ background: "rgba(255,255,255,0.08)" }}
-            />
+            <span className="h-px flex-1" style={{ background: "rgba(255,255,255,0.08)" }} />
+          </div>
+          <div role="img" aria-label="4-layer system architecture: Client, Real-time, Auth and Security, Data">
+            {project.architecture.layers.map((layer, i) => {
+              const isAuth = layer.name === "Auth & Security";
+              return (
+                <div key={layer.name}>
+                  {/* Arrow connector */}
+                  {i > 0 && (
+                    <div className="flex justify-center py-1.5" aria-hidden="true">
+                      <svg width="20" height="28" viewBox="0 0 20 28" fill="none">
+                        <line x1="10" y1="0" x2="10" y2="20" stroke="rgba(255,255,255,0.08)" strokeWidth="1.5" />
+                        <path d="M5 17 L10 26 L15 17" stroke="rgba(255,107,74,0.3)" strokeWidth="1.5" fill="none" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                  )}
+                  {/* Layer block */}
+                  <motion.div
+                    {...stagger(0.08 * i)}
+                    className="px-6 py-5 sm:px-8"
+                    style={{
+                      background: "#0a0a0a",
+                      border: "1px solid rgba(255,255,255,0.08)",
+                      borderLeft: isAuth ? "4px solid #FF6B4A" : "1px solid rgba(255,255,255,0.08)",
+                    }}
+                  >
+                    <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                      <span className="font-['Space_Grotesk'] text-base font-bold" style={{ color: "#f5f5f0" }}>
+                        {layer.name}
+                      </span>
+                      <span className="text-sm font-medium" style={{ color: "#FF6B4A" }}>
+                        {layer.tech}
+                      </span>
+                    </div>
+                    <p className="mt-1.5 text-sm leading-relaxed" style={{ color: "#666666" }}>
+                      {layer.details}
+                    </p>
+                  </motion.div>
+                </div>
+              );
+            })}
+          </div>
+        </motion.div>
+
+        {/* ================================================================
+            REAL CODE — Haversine check-in function
+            ================================================================ */}
+        <motion.div {...revealUp(0)} className="mb-24">
+          <div className="mb-8 flex items-center gap-3">
+            <span className="text-xs font-semibold uppercase tracking-[0.25em]" style={{ color: "#FF6B4A" }}>
+              Real Code
+            </span>
+            <span className="h-px flex-1" style={{ background: "rgba(255,255,255,0.08)" }} />
           </div>
 
-          <div
-            className="grid grid-cols-1 gap-px"
-            style={{ background: "rgba(255,255,255,0.08)" }}
-          >
-            {project.architecture.layers.map((layer, i) => (
-              <motion.div
-                key={layer.name}
-                {...stagger(0.08 * i)}
-                className="grid grid-cols-1 gap-2 px-6 py-5 sm:grid-cols-[160px_200px_1fr] sm:items-center sm:gap-8 sm:px-8"
-                style={{ background: "#0a0a0a" }}
-              >
-                <span
-                  className="font-['Space_Grotesk'] text-sm font-bold"
-                  style={{ color: "#f5f5f0" }}
-                >
-                  {layer.name}
-                </span>
-                <span
-                  className="text-sm font-medium"
-                  style={{ color: "#FF6B4A" }}
-                >
-                  {layer.tech}
-                </span>
-                <span
-                  className="text-sm leading-relaxed"
-                  style={{ color: "#666666" }}
-                >
-                  {layer.details}
-                </span>
-              </motion.div>
-            ))}
+          <CodeBlock
+            code={project.codeSnippet.code}
+            filename={project.codeSnippet.filename}
+            variant="bold"
+          />
+        </motion.div>
+
+        {/* ================================================================
+            TEST DISTRIBUTION — where the tests focus
+            ================================================================ */}
+        <motion.div {...revealUp(0)} className="mb-24">
+          <div className="mb-8 flex items-center gap-3">
+            <span className="text-xs font-semibold uppercase tracking-[0.25em]" style={{ color: "#FF6B4A" }}>
+              Test Suite
+            </span>
+            <span className="h-px flex-1" style={{ background: "rgba(255,255,255,0.08)" }} />
+            <span className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: "#666666" }}>
+              {project.stats.testFiles} Files
+            </span>
           </div>
+
+          <TestBreakdown
+            breakdown={project.testingBreakdown}
+            variant="bold"
+          />
+
+          <p className="mt-4 text-sm" style={{ color: "#666666" }}>
+            24 of 36 unit test files focus on security.
+          </p>
         </motion.div>
 
         {/* ================================================================
@@ -441,12 +525,13 @@ export function BoldProject() {
               <motion.span
                 key={tech}
                 {...stagger(0.03 * i)}
-                className="px-4 py-2 text-sm font-medium transition-colors duration-300 hover:border-[rgba(255,107,74,0.3)] hover:text-[#FF6B4A]"
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors duration-300 hover:border-[rgba(255,107,74,0.3)] hover:text-[#FF6B4A]"
                 style={{
                   border: "1px solid rgba(255,255,255,0.08)",
                   color: "#999",
                 }}
               >
+                <TechIcon name={tech} color="#FF6B4A" size={14} />
                 {tech}
               </motion.span>
             ))}

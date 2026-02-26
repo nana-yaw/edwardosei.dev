@@ -80,10 +80,16 @@ export function TerminalExperience() {
                     <span className="text-[#d29922]">* </span>
                     <span className="text-[#d29922]">{hash}</span>
                     {job.current && (
-                      <span className="text-[#3fb950]">
-                        {" "}
-                        (HEAD -&gt; main)
-                      </span>
+                      <>
+                        <span className="text-[#3fb950]">
+                          {" "}
+                          (HEAD -&gt; main)
+                        </span>
+                        <span
+                          className="ml-1 inline-block h-4 w-[7px] animate-pulse bg-[#3fb950]/70 align-text-bottom"
+                          aria-hidden="true"
+                        />
+                      </>
                     )}
                     <span className="font-bold text-[#c9d1d9]">
                       {" "}

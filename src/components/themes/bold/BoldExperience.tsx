@@ -62,9 +62,19 @@ export function BoldExperience() {
                     {job.company}
                   </h3>
                   {job.current && (
-                    <span className="flex-shrink-0 border border-[#FF6B4A]/30 px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.15em] text-[#FF6B4A]">
+                    <motion.span
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.2 }}
+                      className="flex flex-shrink-0 items-center gap-1.5 border border-[#FF6B4A]/30 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-[0.15em] text-[#FF6B4A]"
+                    >
+                      <span className="relative flex h-1.5 w-1.5">
+                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#FF6B4A] opacity-50" />
+                        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#FF6B4A]" />
+                      </span>
                       Current
-                    </span>
+                    </motion.span>
                   )}
                 </div>
 
