@@ -493,7 +493,7 @@ export function TerminalProject() {
 
   return (
     <section
-      id="projects"
+      id="project"
       className="px-5 py-20 md:py-28"
       style={{ backgroundColor: C.bg }}
     >

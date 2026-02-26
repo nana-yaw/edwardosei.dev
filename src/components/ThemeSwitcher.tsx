@@ -29,6 +29,7 @@ export function ThemeSwitcher() {
   const [direction, setDirection] = useState(0);
   const [showHint, setShowHint] = useState(true);
   const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
   const router = useRouter();
 
   // Pulse on mount
@@ -78,9 +79,13 @@ export function ThemeSwitcher() {
   useEffect(() => {
     function onTouchStart(e: TouchEvent) {
       touchStartX.current = e.touches[0].clientX;
+      touchStartY.current = e.touches[0].clientY;
     }
     function onTouchEnd(e: TouchEvent) {
       const dx = e.changedTouches[0].clientX - touchStartX.current;
+      const dy = e.changedTouches[0].clientY - touchStartY.current;
+      // Ignore primarily vertical gestures (scrolling)
+      if (Math.abs(dy) > Math.abs(dx)) return;
       if (Math.abs(dx) >= SWIPE_THRESHOLD) {
         if (dx < 0) goNext();
         else goPrev();

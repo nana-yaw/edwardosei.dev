@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { navItems, resumeUrl } from "@/data/navigation";
+import { useActiveSection } from "@/hooks/useActiveSection";
 
 export function MinimalNav() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const activeSection = useActiveSection();
 
   useEffect(() => {
     function onScroll() {
@@ -24,7 +26,7 @@ export function MinimalNav() {
       <div className="mx-auto flex max-w-[720px] items-center justify-between px-6 py-5">
         {/* devONE logo — Playfair Display italic */}
         <a
-          href="#"
+          href="#hero"
           style={{ fontFamily: "var(--font-playfair)" }}
           className="text-lg italic tracking-tight text-[#1a1a2e]"
         >
@@ -35,13 +37,22 @@ export function MinimalNav() {
         <ul className="hidden md:flex items-center gap-8">
           {navItems.map((item) => (
             <li key={item.href}>
-              <a
-                href={item.href}
-                className="group relative text-[13px] font-medium text-[#5a5a72] transition-colors duration-250 hover:text-[#1a1a2e]"
-              >
-                {item.label}
-                <span className="absolute -bottom-1 left-0 h-px w-0 bg-[#1a1a2e] transition-[width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-full" />
-              </a>
+              {(() => {
+                const isActive = activeSection === item.href.slice(1);
+                return (
+                  <a
+                    href={item.href}
+                    className={`group relative text-[13px] font-medium transition-colors duration-250 ${
+                      isActive ? "text-[#1a1a2e]" : "text-[#5a5a72] hover:text-[#1a1a2e]"
+                    }`}
+                  >
+                    {item.label}
+                    <span className={`absolute -bottom-1 left-0 h-px bg-[#1a1a2e] transition-[width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                      isActive ? "w-full" : "w-0 group-hover:w-full"
+                    }`} />
+                  </a>
+                );
+              })()}
             </li>
           ))}
           <li>
@@ -90,7 +101,11 @@ export function MinimalNav() {
                 <a
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
-                  className="text-[13px] font-medium text-[#5a5a72] transition-colors hover:text-[#1a1a2e]"
+                  className={`text-[13px] font-medium transition-colors ${
+                    activeSection === item.href.slice(1)
+                      ? "text-[#1a1a2e]"
+                      : "text-[#5a5a72] hover:text-[#1a1a2e]"
+                  }`}
                 >
                   {item.label}
                 </a>

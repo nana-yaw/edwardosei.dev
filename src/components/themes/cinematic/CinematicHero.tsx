@@ -52,7 +52,7 @@ export function CinematicHero() {
           className="mt-10 flex gap-4"
         >
           <a
-            href="#projects"
+            href="#project"
             className="border border-white/20 px-6 py-3 text-sm text-white/70 transition-colors duration-200 hover:border-white hover:text-white"
           >
             View Projects

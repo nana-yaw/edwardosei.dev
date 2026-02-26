@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { navItems, resumeUrl } from "@/data/navigation";
+import { useActiveSection } from "@/hooks/useActiveSection";
 
 function DevOneBrand() {
   return (
@@ -19,6 +20,7 @@ function DevOneBrand() {
 export function BoldNav() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const activeSection = useActiveSection();
 
   useEffect(() => {
     function onScroll() {
@@ -28,14 +30,28 @@ export function BoldNav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Lock body scroll when mobile menu is open
+  // Lock body scroll when mobile menu is open (iOS-safe pattern)
   useEffect(() => {
     if (mobileOpen) {
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
       document.body.style.overflow = "hidden";
     } else {
+      const top = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
       document.body.style.overflow = "";
+      if (top) {
+        window.scrollTo(0, parseInt(top || "0") * -1);
+      }
     }
     return () => {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
       document.body.style.overflow = "";
     };
   }, [mobileOpen]);
@@ -58,7 +74,11 @@ export function BoldNav() {
             <li key={item.href}>
               <a
                 href={item.href}
-                className="text-xs font-medium uppercase tracking-[0.2em] text-[#666] transition-colors duration-200 hover:text-[#f5f5f0]"
+                className={`text-xs font-medium uppercase tracking-[0.2em] transition-colors duration-200 ${
+                  activeSection === item.href.slice(1)
+                    ? "text-[#f5f5f0]"
+                    : "text-[#666] hover:text-[#f5f5f0]"
+                }`}
                 style={{ fontFamily: "var(--font-inter)" }}
               >
                 {item.label}
