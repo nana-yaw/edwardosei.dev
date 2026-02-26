@@ -55,8 +55,13 @@ export function MinimalExperience() {
               <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 md:gap-12">
                 {/* Left column — period & location */}
                 <div className="flex flex-col gap-1">
-                  <span className="text-sm text-[#8a8a9a] leading-relaxed">
+                  <span className="flex items-center gap-2 text-sm text-[#8a8a9a] leading-relaxed">
                     {job.period}
+                    {job.current && (
+                      <span className="rounded-full bg-[#1a1a2e]/8 px-2 py-0.5 text-[0.6rem] font-semibold uppercase tracking-wider text-[#1a1a2e]/60">
+                        Current
+                      </span>
+                    )}
                   </span>
                   <span className="text-sm text-[#8a8a9a] leading-relaxed">
                     {job.location}
@@ -64,7 +69,7 @@ export function MinimalExperience() {
                 </div>
 
                 {/* Right column — role, company, achievements */}
-                <div>
+                <div className={job.current ? "border-l-2 border-[#1a1a2e]/20 pl-4" : ""}>
                   <h3
                     className="text-lg font-semibold text-[#1a1a2e] leading-snug"
                     style={{ fontFamily: "var(--font-inter)" }}

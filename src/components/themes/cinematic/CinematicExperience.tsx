@@ -57,12 +57,42 @@ export function CinematicExperience() {
               {...itemReveal(index * 0.15)}
               className="relative mb-16 last:mb-0"
             >
-              {/* Timeline dot */}
-              <div className="absolute -left-8 top-1.5 h-2.5 w-2.5 rounded-full border border-blue-400/60 bg-[#0a0a0a] md:-left-[1.125rem]" />
+              {/* Timeline dot — pulses on reveal, green ring if current */}
+              <motion.div
+                initial={{ scale: 0 }}
+                whileInView={{ scale: 1 }}
+                viewport={{ once: true }}
+                transition={{
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 15,
+                  delay: index * 0.15 + 0.1,
+                }}
+                className="absolute -left-8 top-1.5 md:-left-[1.125rem]"
+              >
+                <div
+                  className={`h-2.5 w-2.5 rounded-full border bg-[#0a0a0a] ${
+                    job.current
+                      ? "border-emerald-400/80"
+                      : "border-blue-400/60"
+                  }`}
+                />
+                {job.current && (
+                  <span
+                    className="absolute -right-1 -top-1 block h-1.5 w-1.5 rounded-full bg-emerald-400"
+                    aria-label="Current position"
+                  />
+                )}
+              </motion.div>
 
               {/* Period */}
-              <p className="mb-1 text-xs font-medium uppercase tracking-[0.15em] text-white/30">
+              <p className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.15em] text-white/30">
                 {job.period}
+                {job.current && (
+                  <span className="rounded-full bg-emerald-400/10 px-2 py-0.5 text-[0.6rem] font-semibold tracking-wide text-emerald-400">
+                    Current
+                  </span>
+                )}
               </p>
 
               {/* Role */}

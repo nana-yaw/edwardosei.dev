@@ -4,6 +4,8 @@ import { useState } from "react";
 import { projects } from "@/data/projects";
 import { motion, AnimatePresence } from "framer-motion";
 import DeviceMockup from "@/components/DeviceMockup";
+import { CodeBlock } from "@/components/graphics/CodeBlock";
+import { TestBreakdown } from "@/components/graphics/TestBreakdown";
 
 const project = projects[0];
 
@@ -16,6 +18,7 @@ const tabs = [
   { id: "architecture", label: "architecture" },
   { id: "security", label: "security" },
   { id: "testing", label: "testing" },
+  { id: "code", label: "checkIn.ts" },
   { id: "screenshots", label: "screenshots" },
 ] as const;
 
@@ -389,6 +392,17 @@ function TestingTab() {
         Total: {project.stats.tests} tests across {project.stats.testFiles}{" "}
         files
       </div>
+
+      {/* Visual breakdown */}
+      <div className="mt-6">
+        <div className="mb-3 text-sm font-bold" style={{ color: C.text }}>
+          File Distribution
+        </div>
+        <TestBreakdown
+          breakdown={project.testingBreakdown}
+          variant="terminal"
+        />
+      </div>
     </div>
   );
 }
@@ -430,6 +444,26 @@ function ScreenshotsTab() {
 }
 
 // ---------------------------------------------------------------------------
+// Tab content: checkIn.ts (code snippet)
+// ---------------------------------------------------------------------------
+function CodeTab() {
+  return (
+    <div>
+      {/* Command prompt */}
+      <div className="mb-4 text-sm" style={{ color: C.green, fontFamily: "var(--font-fira-code)" }}>
+        $ cat src/attendance/checkIn.ts
+      </div>
+      <CodeBlock
+        code={project.codeSnippet.code}
+        filename={project.codeSnippet.filename}
+        variant="terminal"
+        className="border-0 rounded-none"
+      />
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Tab content router
 // ---------------------------------------------------------------------------
 function TabContent({ tabId }: { tabId: TabId }) {
@@ -444,6 +478,8 @@ function TabContent({ tabId }: { tabId: TabId }) {
       return <SecurityTab />;
     case "testing":
       return <TestingTab />;
+    case "code":
+      return <CodeTab />;
     case "screenshots":
       return <ScreenshotsTab />;
   }

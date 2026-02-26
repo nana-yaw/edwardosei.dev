@@ -180,6 +180,13 @@ export const projects = [
         "24 dedicated files: RBAC enforcement, PII projection, rate limiting, auth guards, XSS prevention, XLSX sanitization, OWASP fixes",
     },
 
+    testingBreakdown: [
+      { category: "Security (Unit)", files: 24, color: "security" as const },
+      { category: "Core Domain (Unit)", files: 4, color: "core" as const },
+      { category: "Features & Utils (Unit)", files: 8, color: "feature" as const },
+      { category: "E2E (Playwright)", files: 17, color: "e2e" as const },
+    ],
+
     // Sanitized from docs/ewc-architecture-portfolio.md — no internal thresholds
     securityLayers: [
       { name: "Input Validation", detail: "String length limits, email format validation, enum constraints, bounded pagination" },
