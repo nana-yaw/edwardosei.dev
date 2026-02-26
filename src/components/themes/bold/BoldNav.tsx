@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { navItems, resumeUrl } from "@/data/navigation";
-import { useActiveSection } from "@/hooks/useActiveSection";
+import type { SectionId } from "@/hooks/useActiveSection";
 
 function DevOneBrand() {
   return (
@@ -17,10 +17,9 @@ function DevOneBrand() {
   );
 }
 
-export function BoldNav() {
+export function BoldNav({ activeSection }: { activeSection: SectionId | null }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const activeSection = useActiveSection();
 
   useEffect(() => {
     function onScroll() {

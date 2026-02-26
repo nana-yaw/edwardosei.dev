@@ -3,12 +3,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { navItems, resumeUrl } from "@/data/navigation";
-import { useActiveSection } from "@/hooks/useActiveSection";
+import type { SectionId } from "@/hooks/useActiveSection";
 
-export function TerminalNav() {
+export function TerminalNav({ activeSection }: { activeSection: SectionId | null }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const activeSection = useActiveSection();
 
   useEffect(() => {
     function onScroll() {

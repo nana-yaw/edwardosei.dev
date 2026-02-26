@@ -1,13 +1,16 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import type { ThemeId } from "@/lib/themes";
+import type { ThemeId, PureThemeId } from "@/lib/themes";
 
 interface ThemeContextValue {
   theme: ThemeId;
   setTheme: (theme: ThemeId) => void;
   hasChosen: boolean;
   resetChoice: () => void;
+  isStory: boolean;
+  storyTheme: PureThemeId;
+  setStoryTheme: (theme: PureThemeId) => void;
 }
 
 export const ThemeContext = createContext<ThemeContextValue | null>(null);

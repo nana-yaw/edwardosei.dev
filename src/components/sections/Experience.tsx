@@ -2,27 +2,29 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useTheme } from "@/hooks/useTheme";
+import { STORY_SECTION_THEMES } from "@/lib/storyConfig";
 import { CinematicExperience } from "@/components/themes/cinematic";
 import { MinimalExperience } from "@/components/themes/minimal";
 import { BoldExperience } from "@/components/themes/bold";
 import { TerminalExperience } from "@/components/themes/terminal";
 
 export function Experience() {
-  const { theme } = useTheme();
+  const { theme, isStory } = useTheme();
+  const effectiveTheme = isStory ? STORY_SECTION_THEMES.experience : theme;
 
   const Component =
-    theme === "cinematic"
+    effectiveTheme === "cinematic"
       ? CinematicExperience
-      : theme === "minimal"
+      : effectiveTheme === "minimal"
         ? MinimalExperience
-        : theme === "bold"
+        : effectiveTheme === "bold"
           ? BoldExperience
           : TerminalExperience;
 
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        key={theme}
+        key={effectiveTheme}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}

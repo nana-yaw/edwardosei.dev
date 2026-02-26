@@ -5,16 +5,16 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
-import { themes, themeOrder, type ThemeId } from "@/lib/themes";
+import { themes, themeOrder, type PureThemeId } from "@/lib/themes";
 
-const dotColors: Record<ThemeId, string> = {
+const dotColors: Record<PureThemeId, string> = {
   cinematic: "#4f7df5",
   minimal: "#1a1a2e",
   bold: "#7c3aed",
   terminal: "#4ade80",
 };
 
-const pulseRingColors: Record<ThemeId, string> = {
+const pulseRingColors: Record<PureThemeId, string> = {
   cinematic: "rgba(79, 125, 245, 0.4)",
   minimal: "rgba(26, 26, 46, 0.25)",
   bold: "rgba(124, 58, 237, 0.4)",
@@ -24,7 +24,7 @@ const pulseRingColors: Record<ThemeId, string> = {
 const SWIPE_THRESHOLD = 50;
 
 export function ThemeSwitcher() {
-  const { theme, setTheme, resetChoice } = useTheme();
+  const { theme, setTheme, resetChoice, isStory, storyTheme } = useTheme();
   const [shouldPulse, setShouldPulse] = useState(false);
   const [direction, setDirection] = useState(0);
   const [showHint, setShowHint] = useState(true);
@@ -38,21 +38,27 @@ export function ThemeSwitcher() {
     return () => clearTimeout(timer);
   }, []);
 
-  const currentIndex = themeOrder.indexOf(theme);
+  // For the carousel, use the pure theme index
+  // In story mode, start cycling from the first pure theme
+  const displayTheme: PureThemeId = isStory ? storyTheme : (theme as PureThemeId);
+  const currentIndex = isStory ? -1 : themeOrder.indexOf(theme);
 
   const goNext = useCallback(() => {
-    const next = (currentIndex + 1) % themeOrder.length;
+    const startIndex = isStory ? 0 : (currentIndex + 1) % themeOrder.length;
+    const next = isStory ? startIndex : startIndex;
     setDirection(1);
     setTheme(themeOrder[next]);
     setShowHint(false);
-  }, [currentIndex, setTheme]);
+  }, [currentIndex, isStory, setTheme]);
 
   const goPrev = useCallback(() => {
-    const prev = (currentIndex - 1 + themeOrder.length) % themeOrder.length;
+    const startIndex = isStory
+      ? themeOrder.length - 1
+      : (currentIndex - 1 + themeOrder.length) % themeOrder.length;
     setDirection(-1);
-    setTheme(themeOrder[prev]);
+    setTheme(themeOrder[startIndex]);
     setShowHint(false);
-  }, [currentIndex, setTheme]);
+  }, [currentIndex, isStory, setTheme]);
 
   // Keyboard arrow keys
   useEffect(() => {
@@ -99,7 +105,10 @@ export function ThemeSwitcher() {
     };
   }, [goNext, goPrev]);
 
-  const ringColor = pulseRingColors[theme];
+  const ringColor = pulseRingColors[displayTheme];
+  const dotColor = dotColors[displayTheme];
+  const label = isStory ? "Story" : themes[theme].name;
+  const animKey = isStory ? `story-${storyTheme}` : theme;
 
   return (
     <div className="fixed bottom-6 right-6 lg:bottom-auto lg:right-auto lg:top-[72px] lg:left-6 z-50 flex flex-col items-end lg:items-start gap-1.5">
@@ -135,19 +144,19 @@ export function ThemeSwitcher() {
 
         <div className="flex items-center gap-2 px-1 min-w-[90px] justify-center">
           <span
-            className="h-2 w-2 rounded-full shrink-0 transition-colors duration-150"
-            style={{ background: dotColors[theme] }}
+            className="h-2 w-2 rounded-full shrink-0 transition-colors duration-300"
+            style={{ background: dotColor }}
           />
           <AnimatePresence mode="wait" initial={false}>
             <motion.span
-              key={theme}
+              key={animKey}
               initial={{ opacity: 0, x: direction * 16 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: direction * -16 }}
               transition={{ duration: 0.2, ease: "easeInOut" }}
               className="text-xs font-medium text-[var(--accent)] select-none whitespace-nowrap"
             >
-              {themes[theme].name}
+              {label}
             </motion.span>
           </AnimatePresence>
         </div>
@@ -175,6 +184,16 @@ export function ThemeSwitcher() {
           </motion.span>
         )}
       </AnimatePresence>
+
+      {/* Re-enter Story mode (shown when in a pure theme) */}
+      {!isStory && (
+        <button
+          onClick={() => setTheme("story")}
+          className="text-[10px] tracking-wide text-[var(--muted)] transition-colors hover:text-[var(--accent)] lg:pl-2"
+        >
+          Story mode
+        </button>
+      )}
 
       {/* Theme Gallery link */}
       <button

@@ -2,12 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { navItems, resumeUrl } from "@/data/navigation";
-import { useActiveSection } from "@/hooks/useActiveSection";
+import type { SectionId } from "@/hooks/useActiveSection";
 
-export function CinematicNav() {
+export function CinematicNav({ activeSection }: { activeSection: SectionId | null }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const activeSection = useActiveSection();
 
   useEffect(() => {
     function onScroll() {
