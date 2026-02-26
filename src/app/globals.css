@@ -1,3 +1,33 @@
+@property --bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #0a0a0a;
+}
+
+@property --text {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #e5e5e5;
+}
+
+@property --accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #4f7df5;
+}
+
+@property --muted {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #737373;
+}
+
+@property --border {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #262626;
+}
+
 @import "tailwindcss";
 
 /* ── Theme tokens ─────────────────────────────────────── */
@@ -63,6 +93,19 @@
   --font-heading: var(--font-inter);
   --font-body: var(--font-inter);
   --nav-height: 52px;
+}
+
+/* ── Story / Full Experience (initial = cinematic) ───── */
+
+[data-theme="story"] {
+  --bg: #0a0a0a;
+  --text: #e5e5e5;
+  --accent: #4f7df5;
+  --muted: #737373;
+  --border: #262626;
+  --font-heading: var(--font-inter);
+  --font-body: var(--font-inter);
+  --nav-height: 56px;
 }
 
 /* ── Base ─────────────────────────────────────────────── */

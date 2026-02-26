@@ -12,7 +12,7 @@ const fadeInUp = (delay: number) => ({
 
 export function MinimalHero() {
   return (
-    <section className="flex min-h-dvh items-center bg-[#fafaf9] px-6">
+    <section id="hero" className="flex min-h-dvh items-center bg-[#fafaf9] px-6">
       <div className="mx-auto w-full max-w-[720px] py-32">
         {/* Photo */}
         <div className="mb-8">

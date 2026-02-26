@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useTheme } from "@/hooks/useTheme";
-import type { ThemeId } from "@/lib/themes";
+import type { PureThemeId } from "@/lib/themes";
 
 // ---------------------------------------------------------------------------
 // Avatar
@@ -43,7 +43,7 @@ interface ThemeTokens {
   font: string;
 }
 
-const themeTokens: Record<ThemeId, ThemeTokens> = {
+const themeTokens: Record<PureThemeId, ThemeTokens> = {
   cinematic: {
     border: "border border-white/20",
     text: "text-[#f0f0f5]",
@@ -84,8 +84,9 @@ export default function Avatar({
   src,
   className = "",
 }: AvatarProps) {
-  const { theme } = useTheme();
-  const tokens = themeTokens[theme];
+  const { theme, isStory, storyTheme } = useTheme();
+  const effectiveTheme = isStory ? storyTheme : theme as PureThemeId;
+  const tokens = themeTokens[effectiveTheme];
 
   const shared = [
     "rounded-full bg-transparent flex items-center justify-center",

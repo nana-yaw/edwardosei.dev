@@ -7,6 +7,7 @@ import { Skills } from "@/components/sections/Skills";
 import { Contact } from "@/components/sections/Contact";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { ScrollButton } from "@/components/ScrollButton";
+import { StoryOrchestrator } from "@/components/StoryOrchestrator";
 
 export default function PortfolioPage() {
   return (
@@ -17,6 +18,7 @@ export default function PortfolioPage() {
       >
         Skip to content
       </a>
+      <StoryOrchestrator />
       <Nav />
       <main id="main-content">
         <Hero />

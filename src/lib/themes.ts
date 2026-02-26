@@ -1,4 +1,7 @@
-export type ThemeId = "cinematic" | "minimal" | "bold" | "terminal";
+export type ThemeId = "cinematic" | "minimal" | "bold" | "terminal" | "story";
+
+/** Pure (non-story) theme IDs */
+export type PureThemeId = Exclude<ThemeId, "story">;
 
 export interface ThemeDefinition {
   id: ThemeId;
@@ -46,6 +49,15 @@ export const themes: Record<ThemeId, ThemeDefinition> = {
     preview: "linear-gradient(135deg, #0a0e17 0%, #1a2332 100%)",
     font: { heading: "Inter", body: "Inter", mono: "Fira Code" },
   },
+  story: {
+    id: "story",
+    name: "Story",
+    subtitle: "The Full Experience",
+    description: "See all four themes as you scroll.",
+    preview:
+      "conic-gradient(from 0deg, #0a0a0a, #fafaf9, #7c3aed, #4ade80)",
+    font: { heading: "Inter", body: "Inter" },
+  },
 };
 
 export const themeOrder: ThemeId[] = [
@@ -54,4 +66,4 @@ export const themeOrder: ThemeId[] = [
   "bold",
   "terminal",
 ];
-export const defaultTheme: ThemeId = "cinematic";
+export const defaultTheme: ThemeId = "story";
