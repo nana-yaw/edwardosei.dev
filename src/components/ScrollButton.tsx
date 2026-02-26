@@ -13,9 +13,12 @@ export function ScrollButton() {
   }, []);
 
   const handleClick = () => {
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     window.scrollTo({
       top: atTop ? document.documentElement.scrollHeight : 0,
-      behavior: "smooth",
+      behavior: prefersReduced ? "instant" : "smooth",
     });
   };
 

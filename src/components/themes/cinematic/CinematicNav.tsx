@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { navItems, resumeUrl } from "@/data/navigation";
+import { useActiveSection } from "@/hooks/useActiveSection";
 
 export function CinematicNav() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const activeSection = useActiveSection();
 
   useEffect(() => {
     function onScroll() {
@@ -37,7 +39,11 @@ export function CinematicNav() {
           <li key={item.href}>
             <a
               href={item.href}
-              className="text-sm font-medium text-white/40 hover:text-white/90 transition-colors tracking-wide"
+              className={`text-sm font-medium transition-colors tracking-wide ${
+                activeSection === item.href.slice(1)
+                  ? "text-white/90"
+                  : "text-white/40 hover:text-white/90"
+              }`}
             >
               {item.label}
             </a>
@@ -74,7 +80,11 @@ export function CinematicNav() {
               <a
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
-                className="text-sm font-medium text-white/50 hover:text-white/90 transition-colors"
+                className={`text-sm font-medium transition-colors ${
+                  activeSection === item.href.slice(1)
+                    ? "text-white/90"
+                    : "text-white/50 hover:text-white/90"
+                }`}
               >
                 {item.label}
               </a>

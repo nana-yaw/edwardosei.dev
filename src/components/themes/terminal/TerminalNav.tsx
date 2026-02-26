@@ -3,10 +3,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { navItems, resumeUrl } from "@/data/navigation";
+import { useActiveSection } from "@/hooks/useActiveSection";
 
 export function TerminalNav() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const activeSection = useActiveSection();
 
   useEffect(() => {
     function onScroll() {
@@ -64,13 +66,20 @@ export function TerminalNav() {
         <ul className="hidden items-center gap-6 md:flex">
           {navItems.map((item) => (
             <li key={item.href}>
-              <a
-                href={item.href}
-                className="text-xs text-[#484f58] transition-colors duration-150 hover:text-[#c9d1d9]"
-                style={{ fontFamily: "var(--font-fira-code)" }}
-              >
-                ./{item.label.toLowerCase()}
-              </a>
+              {(() => {
+                const isActive = activeSection === item.href.slice(1);
+                return (
+                  <a
+                    href={item.href}
+                    className={`text-xs transition-colors duration-150 ${
+                      isActive ? "text-[#c9d1d9]" : "text-[#484f58] hover:text-[#c9d1d9]"
+                    }`}
+                    style={{ fontFamily: "var(--font-fira-code)" }}
+                  >
+                    {isActive ? ">" : "./"}{item.label.toLowerCase()}
+                  </a>
+                );
+              })()}
             </li>
           ))}
           <li>

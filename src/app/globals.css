@@ -23,6 +23,7 @@
   --border: #262626;
   --font-heading: var(--font-inter);
   --font-body: var(--font-inter);
+  --nav-height: 56px;
 }
 
 /* ── Minimal / Editorial ──────────────────────────────── */
@@ -35,6 +36,7 @@
   --border: #e5e5e0;
   --font-heading: var(--font-playfair);
   --font-body: var(--font-inter);
+  --nav-height: 64px;
 }
 
 /* ── Bold / Statement ─────────────────────────────────── */
@@ -47,6 +49,7 @@
   --border: #262626;
   --font-heading: var(--font-space-grotesk);
   --font-body: var(--font-space-grotesk);
+  --nav-height: 64px;
 }
 
 /* ── Terminal / Engineer ──────────────────────────────── */
@@ -59,12 +62,14 @@
   --border: #1e293b;
   --font-heading: var(--font-inter);
   --font-body: var(--font-inter);
+  --nav-height: 52px;
 }
 
 /* ── Base ─────────────────────────────────────────────── */
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: var(--nav-height, 60px);
 }
 
 body {
