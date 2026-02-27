@@ -7,6 +7,7 @@ import {
 } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { PostHogProvider } from "@/components/PostHogProvider";
+import { ReducedMotionProvider } from "@/components/ReducedMotionProvider";
 import "./globals.css";
 
 const inter = Inter({
@@ -42,24 +43,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://edwardosei.dev",
     siteName: "devONE | Edward Osei-Nyarko",
-    title: "devONE | Edward Osei-Nyarko",
-    description:
-      "Software developer building production systems that serve communities. Security-first. Problem-first.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "devONE | Edward Osei-Nyarko, Software Developer",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "devONE | Edward Osei-Nyarko",
-    description:
-      "Software developer building production systems that serve communities.",
-    images: ["/og-image.png"],
   },
   robots: {
     index: true,
@@ -83,9 +69,11 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="antialiased">
-        <PostHogProvider>
-          <ThemeProvider>{children}</ThemeProvider>
-        </PostHogProvider>
+        <ReducedMotionProvider>
+          <PostHogProvider>
+            <ThemeProvider>{children}</ThemeProvider>
+          </PostHogProvider>
+        </ReducedMotionProvider>
       </body>
     </html>
   );
