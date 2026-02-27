@@ -1,5 +1,6 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
 import {
   motion,
   AnimatePresence,
@@ -10,6 +11,23 @@ import { useTheme } from "@/hooks/useTheme";
 import { useStoryNav } from "@/context/StoryNavContext";
 import { useIdleAutoHide } from "@/hooks/useIdleAutoHide";
 import { StoryProgressBar } from "@/components/StoryProgressBar";
+
+/* ── Desktop detection via matchMedia ──────────────────────── */
+const DESKTOP_MQ = "(hover: hover) and (pointer: fine)";
+
+function subscribeDesktop(cb: () => void) {
+  const mq = window.matchMedia(DESKTOP_MQ);
+  mq.addEventListener("change", cb);
+  return () => mq.removeEventListener("change", cb);
+}
+
+function getDesktopSnapshot() {
+  return window.matchMedia(DESKTOP_MQ).matches;
+}
+
+function getDesktopServerSnapshot() {
+  return false; // SSR: assume touch/mobile
+}
 
 /**
  * Immersive overlay for Story mode — replaces the traditional nav
@@ -24,6 +42,13 @@ export function StoryOverlay() {
   const { currentIndex, goNext, goPrev, total, isGraduating } = useStoryNav();
   const controlsVisible = useIdleAutoHide();
   const prefersReduced = useReducedMotion();
+
+  // Desktop detection — show "scroll" instead of "swipe" on hover+pointer devices
+  const isDesktop = useSyncExternalStore(
+    subscribeDesktop,
+    getDesktopSnapshot,
+    getDesktopServerSnapshot,
+  );
 
   // Graduation overlay persists briefly after isStory becomes false
   if (!isStory && !isGraduating) return null;
@@ -94,7 +119,7 @@ export function StoryOverlay() {
                     transition={{ duration: prefersReduced ? 0 : 0.25 }}
                     className="text-[10px] uppercase tracking-[0.15em] flex items-center gap-1"
                   >
-                    Swipe to explore
+                    {isDesktop ? "Scroll to explore" : "Swipe to explore"}
                     <motion.span
                       animate={prefersReduced ? {} : { x: [0, 4, 0] }}
                       transition={prefersReduced ? {} : { duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
@@ -133,7 +158,7 @@ export function StoryOverlay() {
             className="pointer-events-none absolute bottom-20 sm:bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-1.5"
             style={{ color: "color-mix(in srgb, var(--text) 40%, transparent)" }}
           >
-            <span className="text-[10px] uppercase tracking-[0.2em]">swipe</span>
+            <span className="text-[10px] uppercase tracking-[0.2em]">{isDesktop ? "scroll" : "swipe"}</span>
             <motion.div
               animate={
                 prefersReduced

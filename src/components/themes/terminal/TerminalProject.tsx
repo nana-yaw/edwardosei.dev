@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { projects } from "@/data/projects";
+import { getFeaturedProject, getAlsoBuiltProjects } from "@/data/projects";
 import { motion, AnimatePresence } from "framer-motion";
 import DeviceMockup from "@/components/DeviceMockup";
 import { CodeBlock } from "@/components/graphics/CodeBlock";
 import { TestBreakdown } from "@/components/graphics/TestBreakdown";
 
-const project = projects[0];
+const project = getFeaturedProject();
 
 // ---------------------------------------------------------------------------
 // Tab definitions
@@ -20,6 +20,7 @@ const tabs = [
   { id: "testing", label: "testing" },
   { id: "code", label: "checkIn.ts" },
   { id: "screenshots", label: "screenshots" },
+  { id: "projects", label: "projects" },
 ] as const;
 
 type TabId = (typeof tabs)[number]["id"];
@@ -464,6 +465,108 @@ function CodeTab() {
 }
 
 // ---------------------------------------------------------------------------
+// Tab content: projects listing
+// ---------------------------------------------------------------------------
+function ProjectsTab() {
+  const alsoBuilt = getAlsoBuiltProjects();
+
+  return (
+    <div
+      className="text-sm"
+      style={{ fontFamily: "var(--font-fira-code)" }}
+    >
+      {/* Command prompt */}
+      <div className="mb-4" style={{ color: C.green }}>
+        $ ls ~/projects
+      </div>
+
+      {/* Active project — EWC */}
+      <div
+        className="mb-5 rounded border px-4 py-3"
+        style={{ borderColor: C.green + "40", backgroundColor: C.green + "08" }}
+      >
+        <div className="flex items-center gap-2 mb-2">
+          <span style={{ color: C.green }}>●</span>
+          <span style={{ color: C.text }} className="font-bold">
+            {project.name}
+          </span>
+          <span
+            className="ml-auto rounded-full px-2 py-0.5 text-[0.65rem]"
+            style={{ backgroundColor: C.green + "20", color: C.green }}
+          >
+            featured
+          </span>
+        </div>
+        <div style={{ color: C.muted }} className="text-xs leading-5 mb-2">
+          {project.subtitle}
+        </div>
+        <div className="flex flex-wrap gap-1.5">
+          {project.techStack.slice(0, 6).map((t) => (
+            <span
+              key={t}
+              className="rounded px-1.5 py-0.5 text-[0.6rem]"
+              style={{ backgroundColor: C.border, color: C.muted }}
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Also built projects */}
+      {alsoBuilt.map((p) => (
+        <div
+          key={p.slug}
+          className="mb-4 rounded border px-4 py-3"
+          style={{ borderColor: C.border }}
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <span style={{ color: C.yellow }}>◆</span>
+            <span style={{ color: C.text }} className="font-bold">
+              {p.name}
+            </span>
+            {p.liveUrl && (
+              <a
+                href={p.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-auto text-[0.65rem] transition-opacity hover:opacity-80"
+                style={{ color: C.keyBlue }}
+              >
+                {p.liveUrl.replace("https://", "")}
+              </a>
+            )}
+          </div>
+          <div style={{ color: C.muted }} className="text-xs leading-5 mb-2">
+            {p.subtitle}
+          </div>
+          {/* Highlights */}
+          <div className="space-y-1 mb-2">
+            {p.highlights.map((h) => (
+              <div key={h} className="text-xs leading-5 flex items-start gap-2">
+                <span style={{ color: C.green }}>▸</span>
+                <span style={{ color: C.text + "cc" }}>{h}</span>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {p.techStack.map((t) => (
+              <span
+                key={t}
+                className="rounded px-1.5 py-0.5 text-[0.6rem]"
+                style={{ backgroundColor: C.border, color: C.muted }}
+              >
+                {t}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Tab content router
 // ---------------------------------------------------------------------------
 function TabContent({ tabId }: { tabId: TabId }) {
@@ -482,6 +585,8 @@ function TabContent({ tabId }: { tabId: TabId }) {
       return <CodeTab />;
     case "screenshots":
       return <ScreenshotsTab />;
+    case "projects":
+      return <ProjectsTab />;
   }
 }
 
@@ -628,7 +733,7 @@ export function TerminalProject() {
         </div>
 
         {/* ─── GitHub link below the terminal ─── */}
-        <div className="mt-6">
+        {project.githubUrl && <div className="mt-6">
           <a
             href={project.githubUrl}
             target="_blank"
@@ -662,7 +767,7 @@ export function TerminalProject() {
               />
             </svg>
           </a>
-        </div>
+        </div>}
       </div>
     </section>
   );
