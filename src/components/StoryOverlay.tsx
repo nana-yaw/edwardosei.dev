@@ -28,8 +28,9 @@ export function StoryOverlay() {
   // Graduation overlay persists briefly after isStory becomes false
   if (!isStory && !isGraduating) return null;
 
-  // Derived: hint shows only on first section (once navigated, currentIndex > 0 hides it)
+  // Derived values
   const showHint = currentIndex === 0;
+  const isLastSection = currentIndex === total - 1;
 
   return (
     <div className="fixed inset-0 z-50 pointer-events-none" aria-hidden="false">
@@ -78,25 +79,44 @@ export function StoryOverlay() {
               />
             </button>
 
-            {/* Section counter — bottom right */}
+            {/* Section counter / last-section CTA — bottom right */}
             <div
               className="pointer-events-none absolute bottom-16 right-4 sm:bottom-6 sm:right-6 flex items-center gap-1"
               style={{ color: "color-mix(in srgb, var(--text) 50%, transparent)" }}
             >
               <AnimatePresence mode="wait">
-                <motion.span
-                  key={currentIndex}
-                  initial={{ opacity: 0, x: 8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -8 }}
-                  transition={{ duration: prefersReduced ? 0 : 0.2 }}
-                  className="font-mono text-xs tabular-nums"
-                >
-                  {currentIndex + 1}
-                </motion.span>
+                {isLastSection ? (
+                  <motion.span
+                    key="cta"
+                    initial={{ opacity: 0, x: 8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -8 }}
+                    transition={{ duration: prefersReduced ? 0 : 0.25 }}
+                    className="text-[10px] uppercase tracking-[0.15em] flex items-center gap-1"
+                  >
+                    Swipe to explore
+                    <motion.span
+                      animate={prefersReduced ? {} : { x: [0, 4, 0] }}
+                      transition={prefersReduced ? {} : { duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                      →
+                    </motion.span>
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key={currentIndex}
+                    initial={{ opacity: 0, x: 8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -8 }}
+                    transition={{ duration: prefersReduced ? 0 : 0.2 }}
+                    className="font-mono text-xs tabular-nums"
+                  >
+                    {currentIndex + 1}
+                    <span className="font-mono text-xs">/</span>
+                    <span className="font-mono text-xs">{total}</span>
+                  </motion.span>
+                )}
               </AnimatePresence>
-              <span className="font-mono text-xs">/</span>
-              <span className="font-mono text-xs">{total}</span>
             </div>
           </motion.div>
         )}
