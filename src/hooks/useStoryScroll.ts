@@ -1,22 +1,22 @@
 "use client";
 
 import { useEffect } from "react";
-import { useActiveSection } from "@/hooks/useActiveSection";
 import { useTheme } from "@/hooks/useTheme";
+import { useStoryNav } from "@/context/StoryNavContext";
 import { STORY_SECTION_THEMES } from "@/lib/storyConfig";
 
 /**
- * Bridges scroll-spy to theme switching in Story mode.
- * When Story is active, updates the sub-theme as the user scrolls
+ * Bridges horizontal navigation to theme switching in Story mode.
+ * When Story is active, updates the sub-theme as the user swipes
  * between sections. No-op when a pure theme is selected.
  */
 export function useStoryScroll() {
-  const activeSection = useActiveSection();
+  const { currentSectionId } = useStoryNav();
   const { isStory, setStoryTheme } = useTheme();
 
   useEffect(() => {
-    if (!isStory || !activeSection) return;
-    const targetTheme = STORY_SECTION_THEMES[activeSection];
+    if (!isStory || !currentSectionId) return;
+    const targetTheme = STORY_SECTION_THEMES[currentSectionId];
     setStoryTheme(targetTheme);
-  }, [isStory, activeSection, setStoryTheme]);
+  }, [isStory, currentSectionId, setStoryTheme]);
 }
