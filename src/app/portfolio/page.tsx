@@ -9,10 +9,11 @@ import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { ScrollButton } from "@/components/ScrollButton";
 import { StoryOrchestrator } from "@/components/StoryOrchestrator";
 import { StoryOverlay } from "@/components/StoryOverlay";
+import { StoryNavProvider } from "@/context/StoryNavContext";
 
 export default function PortfolioPage() {
   return (
-    <>
+    <StoryNavProvider>
       <a
         href="#main-content"
         className="fixed left-4 top-4 z-[100] -translate-y-full rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--bg)] transition-transform focus:translate-y-0"
@@ -32,6 +33,6 @@ export default function PortfolioPage() {
       </main>
       <ThemeSwitcher />
       <ScrollButton />
-    </>
+    </StoryNavProvider>
   );
 }

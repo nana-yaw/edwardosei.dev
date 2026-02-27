@@ -10,10 +10,10 @@ interface StoryCardRevealProps {
 }
 
 const containerVariants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, x: 40 },
   visible: {
     opacity: 1,
-    y: 0,
+    x: 0,
     transition: {
       duration: 0.5,
       ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number],
@@ -22,8 +22,8 @@ const containerVariants = {
 };
 
 /**
- * Wraps section content with a staggered entrance animation in Story mode.
- * Re-triggers on each scroll into view (not `once`).
+ * Wraps section content with a horizontal entrance animation in Story mode.
+ * Re-triggers on each swipe into view (not `once`).
  * In non-Story mode or with reduced motion, renders children directly.
  */
 export function StoryCardReveal({ children, enabled }: StoryCardRevealProps) {
