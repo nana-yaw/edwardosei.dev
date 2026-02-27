@@ -1,6 +1,7 @@
 "use client";
 
 import { profile } from "@/data/profile";
+import { useTheme } from "@/hooks/useTheme";
 import { motion } from "framer-motion";
 
 const sectionReveal = {
@@ -18,6 +19,13 @@ const jobReveal = (delay: number) => ({
 });
 
 export function BoldExperience() {
+  const { isStory } = useTheme();
+
+  // Story mode: show only the most recent role to fit one viewport
+  const jobs = isStory
+    ? profile.experience.filter((job) => job.current)
+    : profile.experience;
+
   return (
     <section id="experience" className="relative bg-[#0a0a0a] px-4 py-12 sm:px-6 sm:py-24 md:py-32 overflow-hidden">
       {/* Section number watermark */}
@@ -48,7 +56,7 @@ export function BoldExperience() {
 
           {/* Jobs */}
           <div className="space-y-12 sm:space-y-20">
-            {profile.experience.map((job, index) => (
+            {jobs.map((job, index) => (
               <motion.div
                 key={`${job.company}-${job.period}`}
                 {...jobReveal(index * 0.15)}
@@ -103,7 +111,7 @@ export function BoldExperience() {
                 </ul>
 
                 {/* Separator between jobs */}
-                {index < profile.experience.length - 1 && (
+                {index < jobs.length - 1 && (
                   <div
                     className="mt-20 h-px w-16"
                     style={{ backgroundColor: "rgba(255, 255, 255, 0.08)" }}
