@@ -8,6 +8,7 @@ import { Contact } from "@/components/sections/Contact";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { ScrollButton } from "@/components/ScrollButton";
 import { StoryOrchestrator } from "@/components/StoryOrchestrator";
+import { StoryOverlay } from "@/components/StoryOverlay";
 
 export default function PortfolioPage() {
   return (
@@ -19,6 +20,7 @@ export default function PortfolioPage() {
         Skip to content
       </a>
       <StoryOrchestrator />
+      <StoryOverlay />
       <Nav />
       <main id="main-content">
         <Hero />

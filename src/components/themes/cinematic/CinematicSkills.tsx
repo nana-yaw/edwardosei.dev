@@ -34,7 +34,7 @@ export function CinematicSkills() {
   return (
     <section
       id="skills"
-      className="bg-[#0a0a0a] px-6 py-24 md:py-32"
+      className="bg-[#0a0a0a] px-4 py-12 sm:px-6 sm:py-24 md:py-32"
     >
       <div className="mx-auto max-w-4xl">
         {/* Section label */}
@@ -48,18 +48,18 @@ export function CinematicSkills() {
         {/* Title */}
         <motion.h2
           {...sectionReveal}
-          className="mb-16 text-3xl font-bold tracking-tight text-white md:text-4xl"
+          className="mb-8 text-2xl font-bold tracking-tight text-white sm:mb-16 sm:text-3xl md:text-4xl"
         >
           Technical toolkit.
         </motion.h2>
 
         {/* Skills grid */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
           {groups.map(([key, skills], index) => (
             <motion.div
               key={key}
               {...cardReveal(index * 0.1)}
-              className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-6"
+              className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-4 sm:p-6"
             >
               {/* Group title */}
               <h3 className="mb-4 text-[11px] font-medium uppercase tracking-[0.2em] text-blue-400/70">

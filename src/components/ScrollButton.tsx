@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { ArrowUp, ArrowDown } from "lucide-react";
+import { useTheme } from "@/hooks/useTheme";
 
 export function ScrollButton() {
+  const { isStory } = useTheme();
   const [atTop, setAtTop] = useState(true);
 
   useEffect(() => {
@@ -21,6 +23,9 @@ export function ScrollButton() {
       behavior: prefersReduced ? "instant" : "smooth",
     });
   };
+
+  // Story mode uses immersive overlay
+  if (isStory) return null;
 
   return (
     <button

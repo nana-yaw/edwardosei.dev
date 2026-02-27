@@ -12,7 +12,9 @@ export function Nav() {
   const { theme, isStory, storyTheme } = useTheme();
   const activeSection = useActiveSection();
 
-  // In story mode, nav follows the current scroll-driven sub-theme
+  // Story mode uses immersive overlay instead of traditional nav
+  if (isStory) return null;
+
   const effectiveTheme = isStory ? storyTheme : theme;
 
   const Component =

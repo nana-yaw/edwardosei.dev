@@ -15,7 +15,7 @@ const fadeUp = {
 
 export function MinimalContact() {
   return (
-    <section id="contact" className="bg-[#fafaf9] py-36 px-6">
+    <section id="contact" className="bg-[#fafaf9] py-16 px-5 sm:py-24 sm:px-6 md:py-36">
       <div className="mx-auto max-w-[720px]">
         {/* Heading */}
         <motion.h2
@@ -24,7 +24,7 @@ export function MinimalContact() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
           style={{ fontFamily: "var(--font-playfair)", fontWeight: 400 }}
-          className="text-4xl text-[#1a1a2e]"
+          className="text-3xl sm:text-4xl text-[#1a1a2e]"
         >
           Get in touch
         </motion.h2>
@@ -35,7 +35,7 @@ export function MinimalContact() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
-          className="mt-14 flex flex-col gap-6"
+          className="mt-8 sm:mt-14 flex flex-col gap-4 sm:gap-6"
         >
           <a
             href={`mailto:${profile.email}`}
@@ -87,7 +87,7 @@ export function MinimalContact() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
-          className="mt-32"
+          className="mt-16 sm:mt-32"
         >
           <hr className="mb-10 border-t border-[#e5e5e0]" />
 
