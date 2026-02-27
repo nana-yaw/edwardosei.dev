@@ -32,11 +32,23 @@ export function ThemeSwitcher() {
   const touchStartY = useRef(0);
   const router = useRouter();
 
+  const wasStoryRef = useRef(isStory);
+
   // Pulse on mount
   useEffect(() => {
     const timer = setTimeout(() => setShouldPulse(true), 2000);
     return () => clearTimeout(timer);
   }, []);
+
+  // Pulse after graduating from Story mode (isStory: true → false)
+  useEffect(() => {
+    if (wasStoryRef.current && !isStory) {
+      // Delay pulse to let the graduation fade-from-black complete
+      const timer = setTimeout(() => setShouldPulse(true), 600);
+      return () => clearTimeout(timer);
+    }
+    wasStoryRef.current = isStory;
+  }, [isStory]);
 
   // For the carousel, use the pure theme index
   // In story mode, start cycling from the first pure theme
