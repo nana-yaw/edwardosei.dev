@@ -2,7 +2,6 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useTheme } from "@/hooks/useTheme";
-import { STORY_SECTION_THEMES } from "@/lib/storyConfig";
 import { CinematicProject } from "@/components/themes/cinematic";
 import { MinimalProject } from "@/components/themes/minimal";
 import { BoldProject } from "@/components/themes/bold";
