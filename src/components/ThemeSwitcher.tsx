@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
@@ -24,13 +23,12 @@ const pulseRingColors: Record<PureThemeId, string> = {
 const SWIPE_THRESHOLD = 50;
 
 export function ThemeSwitcher() {
-  const { theme, setTheme, resetChoice, isStory, storyTheme } = useTheme();
+  const { theme, setTheme, isStory, storyTheme } = useTheme();
   const [shouldPulse, setShouldPulse] = useState(false);
   const [direction, setDirection] = useState(0);
   const [showHint, setShowHint] = useState(true);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
-  const router = useRouter();
 
   const wasStoryRef = useRef(isStory);
 
@@ -212,16 +210,6 @@ export function ThemeSwitcher() {
         </button>
       )}
 
-      {/* Theme Gallery link */}
-      <button
-        onClick={() => {
-          resetChoice();
-          router.push("/");
-        }}
-        className="text-[10px] tracking-wide text-[var(--muted)] transition-colors hover:text-[var(--accent)] lg:pl-2"
-      >
-        Theme Gallery
-      </button>
     </div>
   );
 }
