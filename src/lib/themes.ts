@@ -53,7 +53,7 @@ export const themes: Record<ThemeId, ThemeDefinition> = {
     id: "story",
     name: "Story",
     subtitle: "The Full Experience",
-    description: "See all four themes as you scroll.",
+    description: "Experience the portfolio as a story.",
     preview:
       "conic-gradient(from 0deg, #0a0a0a, #fafaf9, #7c3aed, #4ade80)",
     font: { heading: "Inter", body: "Inter" },
