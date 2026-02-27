@@ -7,6 +7,7 @@ import { CinematicContact } from "@/components/themes/cinematic";
 import { MinimalContact } from "@/components/themes/minimal";
 import { BoldContact } from "@/components/themes/bold";
 import { TerminalContact } from "@/components/themes/terminal";
+import { StoryCardReveal } from "@/components/StoryCardReveal";
 
 export function Contact() {
   const { theme, isStory } = useTheme();
@@ -30,7 +31,9 @@ export function Contact() {
         exit={{ opacity: 0 }}
         transition={{ duration: 0.3, ease: "easeInOut" as const }}
       >
-        <Component />
+        <StoryCardReveal enabled={isStory}>
+          <Component />
+        </StoryCardReveal>
       </motion.div>
     </AnimatePresence>
   );

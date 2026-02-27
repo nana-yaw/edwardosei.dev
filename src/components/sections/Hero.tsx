@@ -7,6 +7,7 @@ import { CinematicHero } from "@/components/themes/cinematic";
 import { MinimalHero } from "@/components/themes/minimal";
 import { BoldHero } from "@/components/themes/bold";
 import { TerminalHero } from "@/components/themes/terminal";
+import { StoryCardReveal } from "@/components/StoryCardReveal";
 
 export function Hero() {
   const { theme, isStory } = useTheme();
@@ -30,7 +31,9 @@ export function Hero() {
         exit={{ opacity: 0 }}
         transition={{ duration: 0.3, ease: "easeInOut" as const }}
       >
-        <Component />
+        <StoryCardReveal enabled={isStory}>
+          <Component />
+        </StoryCardReveal>
       </motion.div>
     </AnimatePresence>
   );

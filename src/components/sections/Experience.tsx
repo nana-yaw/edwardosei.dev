@@ -7,6 +7,7 @@ import { CinematicExperience } from "@/components/themes/cinematic";
 import { MinimalExperience } from "@/components/themes/minimal";
 import { BoldExperience } from "@/components/themes/bold";
 import { TerminalExperience } from "@/components/themes/terminal";
+import { StoryCardReveal } from "@/components/StoryCardReveal";
 
 export function Experience() {
   const { theme, isStory } = useTheme();
@@ -30,7 +31,9 @@ export function Experience() {
         exit={{ opacity: 0 }}
         transition={{ duration: 0.3, ease: "easeInOut" as const }}
       >
-        <Component />
+        <StoryCardReveal enabled={isStory}>
+          <Component />
+        </StoryCardReveal>
       </motion.div>
     </AnimatePresence>
   );

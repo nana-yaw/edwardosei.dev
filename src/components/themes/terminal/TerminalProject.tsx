@@ -113,7 +113,7 @@ function Indent({
   children: React.ReactNode;
 }) {
   return (
-    <div style={{ paddingLeft: level * 24 }} className="leading-relaxed">
+    <div style={{ paddingLeft: level * 16 }} className="leading-relaxed sm:pl-0" data-level={level}>
       {children}
     </div>
   );
@@ -127,7 +127,7 @@ function PackageTab() {
 
   return (
     <div
-      className="text-sm leading-7"
+      className="text-xs leading-6 sm:text-sm sm:leading-7"
       style={{ fontFamily: "var(--font-fira-code)" }}
     >
       <Bracket>{"{"}</Bracket>
@@ -229,9 +229,9 @@ function ArchitectureTab() {
         $ cat architecture.md
       </div>
 
-      {/* ASCII box diagram */}
-      <div className="overflow-x-auto">
-        <div className="inline-block min-w-[340px]">
+      {/* ASCII box diagram — scrollable on narrow screens */}
+      <div className="overflow-x-auto -mx-3 px-3 sm:mx-0 sm:px-0">
+        <div className="inline-block min-w-[300px] text-xs sm:text-sm sm:min-w-[340px]">
           {layers.map((layer, i) => {
             const isFirst = i === 0;
             const isLast = i === layers.length - 1;
@@ -494,7 +494,7 @@ export function TerminalProject() {
   return (
     <section
       id="project"
-      className="px-5 py-20 md:py-28"
+      className="px-3 py-12 sm:px-5 md:py-28"
       style={{ backgroundColor: C.bg }}
     >
       {/* Section label */}
@@ -506,7 +506,7 @@ export function TerminalProject() {
           {"// ls ~/projects"}
         </div>
         <h2
-          className="mb-10 text-2xl font-bold md:text-3xl"
+          className="mb-6 text-xl font-bold sm:mb-10 sm:text-2xl md:text-3xl"
           style={{ color: C.text, fontFamily: "var(--font-fira-code)" }}
         >
           projects
@@ -569,7 +569,7 @@ export function TerminalProject() {
                   aria-selected={isActive}
                   aria-controls={`panel-${tab.id}`}
                   onClick={() => setActiveTab(tab.id)}
-                  className="relative shrink-0 cursor-pointer px-4 py-2.5 text-xs transition-colors duration-150"
+                  className="relative shrink-0 cursor-pointer px-2.5 py-2 text-[11px] sm:px-4 sm:py-2.5 sm:text-xs transition-colors duration-150"
                   style={{
                     fontFamily: "var(--font-fira-code)",
                     color: isActive ? C.text : C.muted,
@@ -606,7 +606,7 @@ export function TerminalProject() {
 
           {/* Tab content area */}
           <div
-            className="relative min-h-[360px] p-5 md:p-6"
+            className="relative min-h-[280px] p-3 sm:min-h-[360px] sm:p-5 md:p-6"
             style={{ backgroundColor: C.bg }}
           >
             <AnimatePresence mode="wait">

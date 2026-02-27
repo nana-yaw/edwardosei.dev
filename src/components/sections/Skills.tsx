@@ -7,6 +7,7 @@ import { CinematicSkills } from "@/components/themes/cinematic";
 import { MinimalSkills } from "@/components/themes/minimal";
 import { BoldSkills } from "@/components/themes/bold";
 import { TerminalSkills } from "@/components/themes/terminal";
+import { StoryCardReveal } from "@/components/StoryCardReveal";
 
 export function Skills() {
   const { theme, isStory } = useTheme();
@@ -30,7 +31,9 @@ export function Skills() {
         exit={{ opacity: 0 }}
         transition={{ duration: 0.3, ease: "easeInOut" as const }}
       >
-        <Component />
+        <StoryCardReveal enabled={isStory}>
+          <Component />
+        </StoryCardReveal>
       </motion.div>
     </AnimatePresence>
   );

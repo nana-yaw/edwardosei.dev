@@ -19,10 +19,10 @@ const jobReveal = (delay: number) => ({
 
 export function BoldExperience() {
   return (
-    <section id="experience" className="relative bg-[#0a0a0a] px-6 py-24 md:py-32 overflow-hidden">
+    <section id="experience" className="relative bg-[#0a0a0a] px-4 py-12 sm:px-6 sm:py-24 md:py-32 overflow-hidden">
       {/* Section number watermark */}
       <div
-        className="pointer-events-none absolute right-0 top-12 select-none text-[20rem] font-bold leading-none tracking-tighter md:text-[28rem]"
+        className="pointer-events-none absolute right-0 top-12 select-none text-[10rem] font-bold leading-none tracking-tighter sm:text-[20rem] md:text-[28rem]"
         style={{
           fontFamily: "var(--font-space-grotesk)",
           color: "rgba(255, 255, 255, 0.03)",
@@ -47,7 +47,7 @@ export function BoldExperience() {
           </motion.p>
 
           {/* Jobs */}
-          <div className="space-y-20">
+          <div className="space-y-12 sm:space-y-20">
             {profile.experience.map((job, index) => (
               <motion.div
                 key={`${job.company}-${job.period}`}
@@ -56,7 +56,7 @@ export function BoldExperience() {
                 {/* Company name — oversized */}
                 <div className="flex items-baseline gap-4">
                   <h3
-                    className="text-4xl font-bold tracking-tight text-[#f5f5f0] md:text-5xl lg:text-6xl"
+                    className="text-2xl font-bold tracking-tight text-[#f5f5f0] sm:text-4xl md:text-5xl lg:text-6xl"
                     style={{ fontFamily: "var(--font-space-grotesk)" }}
                   >
                     {job.company}

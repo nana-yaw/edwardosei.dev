@@ -105,10 +105,13 @@ export function ThemeSwitcher() {
     };
   }, [goNext, goPrev]);
 
+  // Story mode uses immersive overlay for controls
+  if (isStory) return null;
+
   const ringColor = pulseRingColors[displayTheme];
   const dotColor = dotColors[displayTheme];
-  const label = isStory ? "Story" : themes[theme].name;
-  const animKey = isStory ? `story-${storyTheme}` : theme;
+  const label = themes[theme].name;
+  const animKey = theme;
 
   return (
     <div className="fixed bottom-6 right-6 lg:bottom-auto lg:right-auto lg:top-[72px] lg:left-6 z-50 flex flex-col items-end lg:items-start gap-1.5">

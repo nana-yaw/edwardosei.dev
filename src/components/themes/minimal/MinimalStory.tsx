@@ -12,12 +12,12 @@ const fadeInUp = (delay: number = 0) => ({
 
 export function MinimalStory() {
   return (
-    <section id="story" className="bg-[#fafaf9] py-36 px-6">
+    <section id="story" className="bg-[#fafaf9] py-16 px-5 sm:py-24 sm:px-6 md:py-36">
       <div className="mx-auto max-w-[720px]">
         {/* Top rule separator */}
         <motion.div
           {...fadeInUp(0)}
-          className="mb-16 h-px w-full bg-[#e5e5e0]"
+          className="mb-8 sm:mb-16 h-px w-full bg-[#e5e5e0]"
         />
 
         {/* Heading */}
@@ -40,7 +40,7 @@ export function MinimalStory() {
           <motion.p
             key={index}
             {...fadeInUp(0.2 + index * 0.1)}
-            className="mb-5 text-[17px] font-light leading-[1.8] text-[#5a5a72] last:mb-0"
+            className="mb-4 text-[15px] sm:text-[17px] font-light leading-[1.7] sm:leading-[1.8] text-[#5a5a72] last:mb-0"
           >
             {paragraph}
           </motion.p>
