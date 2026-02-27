@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const SECTION_IDS = [
   "hero",
@@ -13,9 +13,46 @@ const SECTION_IDS = [
 
 export type SectionId = (typeof SECTION_IDS)[number];
 
+/**
+ * Scroll-spy hook — returns the ID of the section most visible in
+ * the viewport. Uses IntersectionObserver with a MutationObserver
+ * to re-attach whenever section DOM elements are replaced (e.g.
+ * when switching into/out of Story mode swaps components).
+ */
 export function useActiveSection(): SectionId | null {
   const [active, setActive] = useState<SectionId | null>(null);
+  const [scanKey, setScanKey] = useState(0);
+  const prevElementsRef = useRef<string>("");
 
+  // MutationObserver: bump scanKey when section elements change
+  useEffect(() => {
+    function checkForChanges() {
+      const sig = SECTION_IDS.map((id) => {
+        const el = document.getElementById(id);
+        // Use element reference identity via a data attribute or tagName+className
+        return el ? `${id}:${el.tagName}:${el.className.slice(0, 20)}` : `${id}:null`;
+      }).join("|");
+
+      if (sig !== prevElementsRef.current) {
+        prevElementsRef.current = sig;
+        setScanKey((k) => k + 1);
+      }
+    }
+
+    const mutation = new MutationObserver(() => {
+      // Debounce: wait for React to finish committing
+      requestAnimationFrame(checkForChanges);
+    });
+
+    mutation.observe(document.body, { childList: true, subtree: true });
+
+    // Initial check
+    checkForChanges();
+
+    return () => mutation.disconnect();
+  }, []);
+
+  // IntersectionObserver: re-runs whenever scanKey changes (DOM changed)
   useEffect(() => {
     const elements = SECTION_IDS.map((id) => document.getElementById(id)).filter(
       (el): el is HTMLElement => el !== null,
@@ -23,7 +60,6 @@ export function useActiveSection(): SectionId | null {
 
     if (elements.length === 0) return;
 
-    // Track which sections are currently intersecting and their ratios
     const ratios = new Map<string, number>();
 
     const observer = new IntersectionObserver(
@@ -36,8 +72,6 @@ export function useActiveSection(): SectionId | null {
           }
         }
 
-        // Pick the section with the highest intersection ratio.
-        // On ties, pick the one that appears first in document order.
         let bestId: SectionId | null = null;
         let bestRatio = 0;
 
@@ -61,7 +95,7 @@ export function useActiveSection(): SectionId | null {
 
     elements.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, []);
+  }, [scanKey]);
 
   return active;
 }
