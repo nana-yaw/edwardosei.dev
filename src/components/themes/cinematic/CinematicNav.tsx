@@ -41,7 +41,7 @@ export function CinematicNav({ activeSection }: { activeSection: SectionId | nul
               className={`text-sm font-medium transition-colors tracking-wide ${
                 activeSection === item.href.slice(1)
                   ? "text-white/90"
-                  : "text-white/40 hover:text-white/90"
+                  : "text-white/60 hover:text-white/90"
               }`}
             >
               {item.label}
@@ -53,7 +53,7 @@ export function CinematicNav({ activeSection }: { activeSection: SectionId | nul
             href={resumeUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-medium text-white/40 hover:text-white/90 transition-colors tracking-wide"
+            className="text-sm font-medium text-white/60 hover:text-white/90 transition-colors tracking-wide"
           >
             Resume
           </a>
@@ -82,7 +82,7 @@ export function CinematicNav({ activeSection }: { activeSection: SectionId | nul
                 className={`text-sm font-medium transition-colors ${
                   activeSection === item.href.slice(1)
                     ? "text-white/90"
-                    : "text-white/50 hover:text-white/90"
+                    : "text-white/60 hover:text-white/90"
                 }`}
               >
                 {item.label}
@@ -94,7 +94,7 @@ export function CinematicNav({ activeSection }: { activeSection: SectionId | nul
               href={resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm font-medium text-white/50 hover:text-white/90 transition-colors"
+              className="text-sm font-medium text-white/60 hover:text-white/90 transition-colors"
             >
               Resume
             </a>
