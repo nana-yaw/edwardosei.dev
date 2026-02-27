@@ -4,7 +4,7 @@ import type { SectionId } from "@/hooks/useActiveSection";
 /** Maps each page section to the theme it renders in Story mode. */
 export const STORY_SECTION_THEMES: Record<SectionId, PureThemeId> = {
   hero: "cinematic",
-  project: "terminal",
+  project: "cinematic",
   story: "minimal",
   experience: "bold",
   skills: "cinematic",

@@ -8,32 +8,39 @@ import { MinimalProject } from "@/components/themes/minimal";
 import { BoldProject } from "@/components/themes/bold";
 import { TerminalProject } from "@/components/themes/terminal";
 import { StoryCardReveal } from "@/components/StoryCardReveal";
+import { StoryProjectCard } from "@/components/StoryProjectCard";
 
 export function Project() {
   const { theme, isStory } = useTheme();
-  const effectiveTheme = isStory ? STORY_SECTION_THEMES.project : theme;
+
+  // Story mode: render compact project card instead of full showcase
+  if (isStory) {
+    return (
+      <StoryCardReveal enabled>
+        <StoryProjectCard />
+      </StoryCardReveal>
+    );
+  }
 
   const Component =
-    effectiveTheme === "cinematic"
+    theme === "cinematic"
       ? CinematicProject
-      : effectiveTheme === "minimal"
+      : theme === "minimal"
         ? MinimalProject
-        : effectiveTheme === "bold"
+        : theme === "bold"
           ? BoldProject
           : TerminalProject;
 
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        key={effectiveTheme}
+        key={theme}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.3, ease: "easeInOut" as const }}
       >
-        <StoryCardReveal enabled={isStory}>
-          <Component />
-        </StoryCardReveal>
+        <Component />
       </motion.div>
     </AnimatePresence>
   );

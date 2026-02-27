@@ -38,7 +38,7 @@ export function StoryCardReveal({ children, enabled }: StoryCardRevealProps) {
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: false, amount: 0.2 }}
+      viewport={{ once: false, amount: "some", margin: "-5% 0px" }}
     >
       {children}
     </motion.div>
