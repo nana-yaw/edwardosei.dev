@@ -1,5 +1,5 @@
-import { ThemeChooser } from "@/components/ThemeChooser";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return <ThemeChooser />;
+  redirect("/portfolio");
 }
