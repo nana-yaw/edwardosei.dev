@@ -15,14 +15,18 @@ import { StoryProgressBar } from "@/components/StoryProgressBar";
  * Immersive overlay for Story mode — replaces the traditional nav
  * with an Instagram/TikTok-style UI: progress bar, section counter,
  * swipe hint, tap zones, and an exit button.
+ *
+ * Also renders the graduation fade-to-black overlay when the user
+ * swipes past the last section.
  */
 export function StoryOverlay() {
   const { isStory, setTheme } = useTheme();
-  const { currentIndex, goNext, goPrev, total } = useStoryNav();
+  const { currentIndex, goNext, goPrev, total, isGraduating } = useStoryNav();
   const controlsVisible = useIdleAutoHide();
   const prefersReduced = useReducedMotion();
 
-  if (!isStory) return null;
+  // Graduation overlay persists briefly after isStory becomes false
+  if (!isStory && !isGraduating) return null;
 
   // Derived: hint shows only on first section (once navigated, currentIndex > 0 hides it)
   const showHint = currentIndex === 0;
@@ -100,7 +104,7 @@ export function StoryOverlay() {
 
       {/* ── Swipe hint — first card only, before any navigation ── */}
       <AnimatePresence>
-        {showHint && (
+        {showHint && !isGraduating && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -125,6 +129,23 @@ export function StoryOverlay() {
               <ChevronRight className="h-4 w-4" />
             </motion.div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Graduation fade-to-black overlay ──────────────── */}
+      <AnimatePresence>
+        {isGraduating && (
+          <motion.div
+            key="graduation-fade"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: prefersReduced ? 0 : 0.3 }}
+            className="fixed inset-0 z-[100] pointer-events-auto"
+            style={{ backgroundColor: "#000" }}
+            aria-hidden="true"
+            role="presentation"
+          />
         )}
       </AnimatePresence>
     </div>

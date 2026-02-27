@@ -52,6 +52,7 @@ export interface StoryHorizontalNav {
  */
 export function useStoryHorizontalNav(
   enabled: boolean,
+  onGraduate?: () => void,
 ): StoryHorizontalNav {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
@@ -67,11 +68,16 @@ export function useStoryHorizontalNav(
   });
 
   const indexRef = useRef(0);
+  const graduateRef = useRef(onGraduate);
 
-  // Keep ref in sync with state
+  // Keep refs in sync
   useEffect(() => {
     indexRef.current = currentIndex;
   }, [currentIndex]);
+
+  useEffect(() => {
+    graduateRef.current = onGraduate;
+  }, [onGraduate]);
 
   const goTo = useCallback(
     (index: number) => {
@@ -100,6 +106,11 @@ export function useStoryHorizontalNav(
   );
 
   const goNext = useCallback(() => {
+    // At the last section → graduate out of Story mode
+    if (indexRef.current >= SECTION_IDS.length - 1) {
+      graduateRef.current?.();
+      return;
+    }
     goTo(indexRef.current + 1);
   }, [goTo]);
 

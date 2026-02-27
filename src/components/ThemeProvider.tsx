@@ -12,6 +12,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [hasChosen, setHasChosen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [storyTheme, setStoryThemeState] = useState<PureThemeId>("cinematic");
+  const [previousTheme, setPreviousTheme] = useState<PureThemeId>("cinematic");
 
   const isStory = theme === "story";
 
@@ -26,6 +27,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const setTheme = useCallback((newTheme: ThemeId) => {
+    // Snapshot current theme before switching to Story
+    if (newTheme === "story" && theme !== "story") {
+      setPreviousTheme(theme as PureThemeId);
+    }
+
     // Brief crossfade on theme change
     document.documentElement.style.transition = "opacity 0.15s ease";
     document.documentElement.style.opacity = "0.6";
@@ -50,7 +56,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         }, 150);
       });
     });
-  }, []);
+  }, [theme]);
 
   // Direct DOM write for story sub-theme changes (no crossfade)
   const setStoryTheme = useCallback((newPureTheme: PureThemeId) => {
@@ -83,8 +89,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       isStory,
       storyTheme,
       setStoryTheme,
+      previousTheme,
     }),
-    [theme, setTheme, hasChosen, resetChoice, isStory, storyTheme, setStoryTheme],
+    [theme, setTheme, hasChosen, resetChoice, isStory, storyTheme, setStoryTheme, previousTheme],
   );
 
   if (!mounted) return null;
