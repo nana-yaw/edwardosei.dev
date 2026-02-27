@@ -7,6 +7,7 @@ import { Skills } from "@/components/sections/Skills";
 import { Contact } from "@/components/sections/Contact";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { ScrollButton } from "@/components/ScrollButton";
+import { TerminalShortcuts } from "@/components/themes/terminal";
 import { StoryOrchestrator } from "@/components/StoryOrchestrator";
 import { StoryOverlay } from "@/components/StoryOverlay";
 import { StoryNavProvider } from "@/context/StoryNavContext";
@@ -33,6 +34,7 @@ export default function PortfolioPage() {
       </main>
       <ThemeSwitcher />
       <ScrollButton />
+      <TerminalShortcuts />
     </StoryNavProvider>
   );
 }
