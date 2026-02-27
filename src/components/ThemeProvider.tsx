@@ -1,30 +1,37 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo, type ReactNode } from "react";
+import { useState, useEffect, useCallback, useMemo, useSyncExternalStore, type ReactNode } from "react";
 import { ThemeContext } from "@/hooks/useTheme";
 import { defaultTheme, type ThemeId, type PureThemeId } from "@/lib/themes";
 
 const STORAGE_KEY = "portfolio-theme";
 const CHOSEN_KEY = "portfolio-theme-chosen";
 
+function readSavedTheme(): ThemeId {
+  if (typeof window === "undefined") return defaultTheme;
+  const raw = localStorage.getItem(STORAGE_KEY);
+  const saved = (raw === "journey" ? "story" : raw) as ThemeId | null;
+  return saved ?? defaultTheme;
+}
+
+function readHasChosen(): boolean {
+  if (typeof window === "undefined") return false;
+  return localStorage.getItem(CHOSEN_KEY) === "true";
+}
+
+// Hydration detection — avoids theme flash on SSR
+const emptySubscribe = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<ThemeId>(defaultTheme);
-  const [hasChosen, setHasChosen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const [theme, setThemeState] = useState<ThemeId>(readSavedTheme);
+  const [hasChosen, setHasChosen] = useState(readHasChosen);
+  const mounted = useSyncExternalStore(emptySubscribe, getClientSnapshot, getServerSnapshot);
   const [storyTheme, setStoryThemeState] = useState<PureThemeId>("cinematic");
   const [previousTheme, setPreviousTheme] = useState<PureThemeId>("cinematic");
 
   const isStory = theme === "story";
-
-  useEffect(() => {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    // Migrate legacy "journey" → "story"
-    const saved = (raw === "journey" ? "story" : raw) as ThemeId | null;
-    const chosen = localStorage.getItem(CHOSEN_KEY) === "true";
-    if (saved) setThemeState(saved);
-    if (chosen) setHasChosen(true);
-    setMounted(true);
-  }, []);
 
   const setTheme = useCallback((newTheme: ThemeId) => {
     // Snapshot current theme before switching to Story

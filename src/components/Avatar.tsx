@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useTheme } from "@/hooks/useTheme";
 import type { PureThemeId } from "@/lib/themes";
@@ -100,9 +101,11 @@ export default function Avatar({
   if (src) {
     return (
       <motion.div className={shared} {...entrance}>
-        <img
+        <Image
           src={src}
           alt="Edward Osei-Nyarko"
+          width={size === "lg" ? 96 : size === "md" ? 72 : 48}
+          height={size === "lg" ? 96 : size === "md" ? 72 : 48}
           className="w-full h-full object-cover rounded-full"
           draggable={false}
         />
