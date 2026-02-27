@@ -86,6 +86,12 @@ export function useStoryHorizontalNav(
       const s = stateRef.current;
       if (s.isTransitioning) return;
 
+      // Graduation: navigating past the last section triggers exit
+      if (index >= SECTION_IDS.length && indexRef.current >= SECTION_IDS.length - 1) {
+        graduateRef.current?.();
+        return;
+      }
+
       const clamped = Math.max(0, Math.min(SECTION_IDS.length - 1, index));
       if (clamped === indexRef.current) return;
 
@@ -106,11 +112,6 @@ export function useStoryHorizontalNav(
   );
 
   const goNext = useCallback(() => {
-    // At the last section → graduate out of Story mode
-    if (indexRef.current >= SECTION_IDS.length - 1) {
-      graduateRef.current?.();
-      return;
-    }
     goTo(indexRef.current + 1);
   }, [goTo]);
 
