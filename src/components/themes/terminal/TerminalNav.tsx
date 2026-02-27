@@ -71,7 +71,7 @@ export function TerminalNav({ activeSection }: { activeSection: SectionId | null
                   <a
                     href={item.href}
                     className={`text-xs transition-colors duration-150 ${
-                      isActive ? "text-[#c9d1d9]" : "text-[#484f58] hover:text-[#c9d1d9]"
+                      isActive ? "text-[#c9d1d9]" : "text-[#6e7681] hover:text-[#c9d1d9]"
                     }`}
                     style={{ fontFamily: "var(--font-fira-code)" }}
                   >
@@ -86,7 +86,7 @@ export function TerminalNav({ activeSection }: { activeSection: SectionId | null
               href={resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-[#484f58] transition-colors duration-150 hover:text-[#c9d1d9]"
+              className="text-xs text-[#6e7681] transition-colors duration-150 hover:text-[#c9d1d9]"
               style={{ fontFamily: "var(--font-fira-code)" }}
             >
               ./resume.pdf
@@ -155,7 +155,7 @@ export function TerminalNav({ activeSection }: { activeSection: SectionId | null
                 <a
                   href={item.href}
                   onClick={handleNavClick}
-                  className="block px-5 py-3 text-xs text-[#484f58] transition-colors duration-150 hover:bg-[#0d1117] hover:text-[#c9d1d9]"
+                  className="block px-5 py-3 text-xs text-[#6e7681] transition-colors duration-150 hover:bg-[#0d1117] hover:text-[#c9d1d9]"
                   style={{ fontFamily: "var(--font-fira-code)" }}
                 >
                   <span className="text-[#3fb950]">$</span>{" "}
@@ -177,7 +177,7 @@ export function TerminalNav({ activeSection }: { activeSection: SectionId | null
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={handleNavClick}
-                className="block px-5 py-3 text-xs text-[#484f58] transition-colors duration-150 hover:bg-[#0d1117] hover:text-[#c9d1d9]"
+                className="block px-5 py-3 text-xs text-[#6e7681] transition-colors duration-150 hover:bg-[#0d1117] hover:text-[#c9d1d9]"
                 style={{ fontFamily: "var(--font-fira-code)" }}
               >
                 <span className="text-[#3fb950]">$</span>{" "}
