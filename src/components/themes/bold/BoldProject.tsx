@@ -1,13 +1,14 @@
 "use client";
 
-import { projects } from "@/data/projects";
+import { getFeaturedProject, getAlsoBuiltProjects } from "@/data/projects";
 import { motion } from "framer-motion";
 import DeviceMockup from "@/components/DeviceMockup";
 import { CodeBlock } from "@/components/graphics/CodeBlock";
 import { TestBreakdown } from "@/components/graphics/TestBreakdown";
 import { TechIcon } from "@/components/graphics/TechIcons";
+import { AlsoBuiltCard } from "@/components/AlsoBuiltCard";
 
-const project = projects[0];
+const project = getFeaturedProject();
 
 // ── Statement stats — oversized numbers that hit hard ──────────────────
 // Grid is 12 columns. Varying spans create asymmetric rhythm.
@@ -155,6 +156,7 @@ function BoldShieldRing({
 
 export function BoldProject() {
   return (
+    <>
     <section
       id="project"
       className="relative overflow-hidden px-6 py-32 sm:px-8 md:py-40"
@@ -573,5 +575,13 @@ export function BoldProject() {
         )}
       </div>
     </section>
+
+      {/* ── Also Built ──────────────────────────────────── */}
+      {getAlsoBuiltProjects().map((p) => (
+        <div key={p.slug} className="mx-auto max-w-5xl px-6 pb-20 sm:px-8">
+          <AlsoBuiltCard project={p} />
+        </div>
+      ))}
+    </>
   );
 }

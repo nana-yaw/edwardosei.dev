@@ -1,11 +1,12 @@
 "use client";
 
-import { projects } from "@/data/projects";
+import { getFeaturedProject, getAlsoBuiltProjects } from "@/data/projects";
 import { motion } from "framer-motion";
 import DeviceMockup from "@/components/DeviceMockup";
 import { CodeBlock } from "@/components/graphics/CodeBlock";
 import { TestBreakdown } from "@/components/graphics/TestBreakdown";
 import { TechIcon } from "@/components/graphics/TechIcons";
+import { AlsoBuiltCard } from "@/components/AlsoBuiltCard";
 
 /* ── Concentric Shield — recursive nesting for defense-in-depth ──────── */
 function ShieldRing({
@@ -62,7 +63,7 @@ function ShieldRing({
   );
 }
 
-const project = projects[0];
+const project = getFeaturedProject();
 
 const stats = [
   { value: String(project.stats.databaseTables), label: "Tables" },
@@ -87,6 +88,7 @@ const revealDelay = (delay: number) => ({
 
 export function CinematicProject() {
   return (
+    <>
     <section id="project" className="relative z-[2] px-6 py-32">
       <div className="mx-auto max-w-[1200px]">
         {/* Section label */}
@@ -371,5 +373,13 @@ export function CinematicProject() {
         </motion.div>
       </div>
     </section>
+
+      {/* ── Also Built ──────────────────────────────────── */}
+      {getAlsoBuiltProjects().map((p) => (
+        <div key={p.slug} className="mx-auto max-w-5xl px-6 pb-20 sm:px-10 lg:px-16">
+          <AlsoBuiltCard project={p} />
+        </div>
+      ))}
+    </>
   );
 }

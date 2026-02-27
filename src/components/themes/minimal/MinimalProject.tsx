@@ -1,12 +1,13 @@
 "use client";
 
-import { projects } from "@/data/projects";
+import { getFeaturedProject, getAlsoBuiltProjects } from "@/data/projects";
 import { motion } from "framer-motion";
 import DeviceMockup from "@/components/DeviceMockup";
 import { CodeBlock } from "@/components/graphics/CodeBlock";
 import { TestBreakdown } from "@/components/graphics/TestBreakdown";
+import { AlsoBuiltCard } from "@/components/AlsoBuiltCard";
 
-const project = projects[0];
+const project = getFeaturedProject();
 
 const reveal = {
   initial: { opacity: 0, y: 20 } as const,
@@ -68,6 +69,7 @@ function MinimalShieldRing({
 
 export function MinimalProject() {
   return (
+    <>
     <section id="project" className="bg-[#fafaf9] px-6 py-28 md:py-36">
       <div className="mx-auto max-w-[720px]">
         {/* ── Section heading ──────────────────────────────── */}
@@ -343,5 +345,13 @@ export function MinimalProject() {
         </motion.div>
       </div>
     </section>
+
+      {/* ── Also Built ──────────────────────────────────── */}
+      {getAlsoBuiltProjects().map((p) => (
+        <div key={p.slug} className="mx-auto max-w-[720px] px-6 pb-20">
+          <AlsoBuiltCard project={p} />
+        </div>
+      ))}
+    </>
   );
 }

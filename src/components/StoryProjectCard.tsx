@@ -1,9 +1,11 @@
 "use client";
 
-import { projects } from "@/data/projects";
+import { getFeaturedProject, getAlsoBuiltProjects } from "@/data/projects";
 import DeviceMockup from "@/components/DeviceMockup";
 
-const project = projects[0];
+const project = getFeaturedProject();
+
+const alsoBuilt = getAlsoBuiltProjects();
 
 const stats = [
   { value: String(project.stats.databaseTables), label: "Tables" },
@@ -143,6 +145,53 @@ export function StoryProjectCard() {
               <polyline points="7 7 17 7 17 17" />
             </svg>
           </a>
+        )}
+
+        {/* Also built teaser */}
+        {alsoBuilt.length > 0 && (
+          <div
+            className="mt-6 rounded-lg px-4 py-3"
+            style={{
+              backgroundColor:
+                "color-mix(in srgb, var(--text) 4%, transparent)",
+              border:
+                "1px solid color-mix(in srgb, var(--text) 8%, transparent)",
+            }}
+          >
+            <p
+              className="mb-1 text-[0.6rem] font-semibold uppercase tracking-[0.2em]"
+              style={{
+                color:
+                  "color-mix(in srgb, var(--accent) 50%, transparent)",
+                fontFamily: "var(--font-body)",
+              }}
+            >
+              Also built
+            </p>
+            {alsoBuilt.map((p) => (
+              <div key={p.slug} className="flex items-center gap-2">
+                <span
+                  className="text-sm font-medium"
+                  style={{
+                    color: "var(--text)",
+                    fontFamily: "var(--font-heading)",
+                  }}
+                >
+                  {p.name}
+                </span>
+                <span
+                  className="text-xs"
+                  style={{
+                    color:
+                      "color-mix(in srgb, var(--text) 40%, transparent)",
+                    fontFamily: "var(--font-body)",
+                  }}
+                >
+                  — {p.subtitle}
+                </span>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </section>

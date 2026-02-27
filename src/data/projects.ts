@@ -1,5 +1,86 @@
-export const projects = [
+/* ── Project data layer ───────────────────────────────────── */
+
+/* ── Shared base ──────────────────────────────────────────── */
+interface ProjectBase {
+  slug: string;
+  name: string;
+  subtitle: string;
+  description: string;
+  techStack: readonly string[];
+  liveUrl: string | null;
+  githubUrl: string | null;
+}
+
+/* ── Featured project (deep data for full theme showcases) ── */
+export interface FeaturedProject extends ProjectBase {
+  kind: "featured";
+  featured: true;
+  longDescription: string;
+  stats: {
+    databaseTables: number;
+    databaseIndexes: number;
+    tests: string;
+    testFiles: number;
+    rbacRoles: number;
+    securityLayers: number;
+    dataSync: string;
+  };
+  features: readonly {
+    name: string;
+    description: string;
+    category: string;
+  }[];
+  screenshots: readonly {
+    src: string;
+    alt: string;
+    device: "desktop" | "mobile";
+  }[];
+  architecture: {
+    layers: readonly {
+      name: string;
+      tech: string;
+      details: string;
+    }[];
+  };
+  testing: {
+    unit: string;
+    e2e: string;
+    mutation: string;
+    security: string;
+  };
+  testingBreakdown: readonly {
+    category: string;
+    files: number;
+    color: "security" | "core" | "feature" | "e2e";
+  }[];
+  securityLayers: readonly { name: string; detail: string }[];
+  securityAudit: readonly { check: string; detail: string }[];
+  rbacRoles: readonly { role: string; scope: string }[];
+  authFlow: readonly string[];
+  tableCategories: readonly { name: string; count: number; key: string }[];
+  securityNarrative: string;
+  codeSnippet: {
+    language: string;
+    filename: string;
+    code: string;
+  };
+}
+
+/* ── Compact "also built" project ─────────────────────────── */
+export interface AlsoBuiltProject extends ProjectBase {
+  kind: "also-built";
+  featured: false;
+  highlights: readonly string[];
+  screenshot?: string;
+}
+
+export type Project = FeaturedProject | AlsoBuiltProject;
+
+/* ── Data ─────────────────────────────────────────────────── */
+
+const projects: readonly Project[] = [
   {
+    kind: "featured",
     slug: "ewc-care-app",
     name: "EWC Care App",
     subtitle: "Full-Stack Pastoral Care Management PWA",
@@ -181,10 +262,10 @@ export const projects = [
     },
 
     testingBreakdown: [
-      { category: "Security (Unit)", files: 24, color: "security" as const },
-      { category: "Core Domain (Unit)", files: 4, color: "core" as const },
-      { category: "Features & Utils (Unit)", files: 8, color: "feature" as const },
-      { category: "E2E (Playwright)", files: 17, color: "e2e" as const },
+      { category: "Security (Unit)", files: 24, color: "security" },
+      { category: "Core Domain (Unit)", files: 4, color: "core" },
+      { category: "Features & Utils (Unit)", files: 8, color: "feature" },
+      { category: "E2E (Playwright)", files: 17, color: "e2e" },
     ],
 
     // Sanitized from docs/ewc-architecture-portfolio.md — no internal thresholds
@@ -262,4 +343,48 @@ function haversineDistance(
 }`,
     },
   },
-] as const;
+
+  /* ── devONE — this portfolio ────────────────────────────── */
+  {
+    kind: "also-built",
+    slug: "devone-portfolio",
+    name: "devONE",
+    subtitle: "This portfolio — 4 themes, 1 codebase",
+    description:
+      "Multi-theme portfolio with horizontal Story mode, CSS custom property theming, and zero runtime theme switching.",
+    techStack: [
+      "Next.js 16",
+      "React 19",
+      "TypeScript 5",
+      "Tailwind CSS 4",
+      "Framer Motion",
+      "Vercel",
+    ],
+    liveUrl: "https://edwardosei.dev",
+    githubUrl: "https://github.com/nana-yaw/edwardosei.dev",
+    featured: false,
+    highlights: [
+      "4 visual themes with full creative independence per theme",
+      "Instagram-style horizontal Story mode with swipe navigation",
+      "CSS custom properties enable zero-JS theme switching",
+      "PostHog analytics with graceful degradation",
+    ],
+  },
+];
+
+/* ── Accessor helpers ─────────────────────────────────────── */
+
+/** Returns the single featured (deep-data) project. */
+export function getFeaturedProject(): FeaturedProject {
+  const p = projects.find((p): p is FeaturedProject => p.kind === "featured");
+  if (!p) throw new Error("No featured project found in data");
+  return p;
+}
+
+/** Returns all compact "also built" projects. */
+export function getAlsoBuiltProjects(): AlsoBuiltProject[] {
+  return projects.filter((p): p is AlsoBuiltProject => p.kind === "also-built");
+}
+
+/** All projects (both types). */
+export { projects };
