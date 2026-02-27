@@ -60,8 +60,9 @@ export function ThemeSwitcher() {
     setShowHint(false);
   }, [currentIndex, isStory, setTheme]);
 
-  // Keyboard arrow keys
+  // Keyboard arrow keys (disabled in Story mode — story nav handles arrows)
   useEffect(() => {
+    if (isStory) return;
     function onKeyDown(e: KeyboardEvent) {
       // Don't hijack arrows if user is typing in an input
       if (
@@ -79,10 +80,11 @@ export function ThemeSwitcher() {
     }
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [goNext, goPrev]);
+  }, [goNext, goPrev, isStory]);
 
-  // Swipe gestures
+  // Swipe gestures (disabled in Story mode — story nav handles swipes)
   useEffect(() => {
+    if (isStory) return;
     function onTouchStart(e: TouchEvent) {
       touchStartX.current = e.touches[0].clientX;
       touchStartY.current = e.touches[0].clientY;
@@ -103,7 +105,7 @@ export function ThemeSwitcher() {
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchend", onTouchEnd);
     };
-  }, [goNext, goPrev]);
+  }, [goNext, goPrev, isStory]);
 
   // Story mode uses immersive overlay for controls
   if (isStory) return null;
