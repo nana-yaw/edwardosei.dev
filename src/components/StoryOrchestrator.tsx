@@ -27,7 +27,7 @@ html[data-story] section {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 /* Sections taller than viewport: don't force centering,
@@ -40,7 +40,7 @@ html[data-story] section:has(> :last-child:nth-child(n+2)) {
 
 @media (pointer: coarse) {
   html[data-story] {
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: y proximity;
   }
   html[data-story] section {
     scroll-snap-align: start;
@@ -74,7 +74,6 @@ html[data-story] section:has(> :last-child:nth-child(n+2)) {
   html[data-story] section {
     min-height: auto;
     display: block;
-    overflow: visible;
   }
 }
 `;
