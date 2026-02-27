@@ -11,6 +11,8 @@ interface ThemeContextValue {
   isStory: boolean;
   storyTheme: PureThemeId;
   setStoryTheme: (theme: PureThemeId) => void;
+  /** Theme that was active before entering Story mode (for graduation) */
+  previousTheme: PureThemeId;
 }
 
 export const ThemeContext = createContext<ThemeContextValue | null>(null);
