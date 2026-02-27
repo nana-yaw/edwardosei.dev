@@ -131,11 +131,10 @@ export function TerminalContact() {
               <span className="text-[#c9d1d9]">exit 0</span>
             </motion.div>
             <motion.div variants={lineVariants}>
-              <span className="text-[#484f58]">// </span>
+              <span className="text-[#484f58]">{"// "}</span>
               <span className="text-[#3fb950]">{profile.brand}</span>
               <span className="text-[#484f58]">
-                {" "}
-                // {profile.brandExpansion}
+                {" // "}{profile.brandExpansion}
               </span>
             </motion.div>
           </motion.div>
@@ -150,7 +149,7 @@ export function TerminalContact() {
           viewport={{ once: true }}
           transition={{ duration: 0.4, delay: 0.3, ease: "easeOut" as const }}
         >
-          exit 0 // {profile.brand} // {profile.brandExpansion}
+          {"exit 0 // "}{profile.brand}{" // "}{profile.brandExpansion}
         </motion.p>
       </div>
     </section>

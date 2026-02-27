@@ -1,46 +1,64 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useReducer, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { profile } from "@/data/profile";
 import Avatar from "@/components/Avatar";
-import { projects } from "@/data/projects";
+import { getFeaturedProject } from "@/data/projects";
 
 const COMMAND_TEXT = "cat README.md";
 const TYPE_SPEED_MS = 60;
 
+interface TypingState {
+  displayed: string;
+  done: boolean;
+}
+
+type TypingAction =
+  | { type: "reset" }
+  | { type: "tick"; text: string; index: number }
+  | { type: "finish"; text: string };
+
+function typingReducer(_state: TypingState, action: TypingAction): TypingState {
+  switch (action.type) {
+    case "reset":
+      return { displayed: "", done: false };
+    case "tick":
+      return { displayed: action.text.slice(0, action.index), done: false };
+    case "finish":
+      return { displayed: action.text, done: true };
+  }
+}
+
 function useTypingEffect(text: string, speed: number) {
-  const [displayed, setDisplayed] = useState("");
-  const [done, setDone] = useState(false);
+  const [state, dispatch] = useReducer(typingReducer, { displayed: "", done: false });
   const indexRef = useRef(0);
 
   useEffect(() => {
     indexRef.current = 0;
-    setDisplayed("");
-    setDone(false);
+    dispatch({ type: "reset" });
 
     const interval = setInterval(() => {
       indexRef.current += 1;
       if (indexRef.current >= text.length) {
-        setDisplayed(text);
-        setDone(true);
+        dispatch({ type: "finish", text });
         clearInterval(interval);
       } else {
-        setDisplayed(text.slice(0, indexRef.current));
+        dispatch({ type: "tick", text, index: indexRef.current });
       }
     }, speed);
 
     return () => clearInterval(interval);
   }, [text, speed]);
 
-  return { displayed, done };
+  return state;
 }
 
 // Build the README output from real data
 function buildReadmeOutput() {
   const experience = profile.experience[0];
   const role = `${experience.role} @ ${experience.company}`;
-  const stats = projects[0].stats;
+  const stats = getFeaturedProject().stats;
 
   const stackItems = [
     "PHP",
@@ -56,7 +74,7 @@ function buildReadmeOutput() {
     description: profile.taglines.terminal, // "I write code that serves communities."
     role,
     stack: stackItems.join(", "),
-    currentProject: `${projects[0].name} (${stats.databaseTables} tables, ${stats.tests} tests, ${stats.securityLayers} security layers)`,
+    currentProject: `${getFeaturedProject().name} (${stats.databaseTables} tables, ${stats.tests} tests, ${stats.securityLayers} security layers)`,
   };
 }
 

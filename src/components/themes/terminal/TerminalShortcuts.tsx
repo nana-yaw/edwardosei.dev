@@ -18,12 +18,12 @@ export function TerminalShortcuts() {
   const { theme } = useTheme();
   const [open, setOpen] = useState(false);
 
-  // Only render for terminal theme
-  if (theme !== "terminal") return null;
-
   const toggle = useCallback(() => setOpen((prev) => !prev), []);
 
   useEffect(() => {
+    // Only listen for terminal theme
+    if (theme !== "terminal") return;
+
     function onKeyDown(e: KeyboardEvent) {
       // Ignore when typing in inputs
       if (
@@ -43,7 +43,10 @@ export function TerminalShortcuts() {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [open, toggle]);
+  }, [open, toggle, theme]);
+
+  // Only render for terminal theme
+  if (theme !== "terminal") return null;
 
   return (
     <>
