@@ -49,30 +49,30 @@ export function AlsoBuiltCard({ project }: { project: AlsoBuiltProject }) {
       {/* Screenshot Carousel */}
       {images.length > 0 && (
         <div
-          className="group relative w-full overflow-hidden"
-          style={{ height: "320px" }}
+          className="group relative w-full overflow-hidden rounded-xl bg-[#1e1e1e]"
+          style={{ aspectRatio: "16 / 10" }}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
-          {/* Images */}
-          {images.map((src, i) => (
-            <img
-              key={src}
-              src={src}
-              alt={`${project.name} — screenshot ${i + 1}`}
-              className="absolute inset-0 h-full w-full object-cover object-top transition-opacity duration-700 ease-in-out"
-              style={{ opacity: i === current ? 1 : 0 }}
-              loading={i === 0 ? "eager" : "lazy"}
-            />
-          ))}
-
-          {/* Bottom gradient fade */}
-          <div
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-24"
-            style={{
-              background: `linear-gradient(to top, color-mix(in srgb, var(--text) 4%, var(--bg)), transparent)`,
-            }}
-          />
+          {/* Top bezel with traffic lights */}
+          <div className="flex items-center gap-1.5 px-3 h-7 bg-[#2a2a2a]">
+            <span className="w-2 h-2 rounded-full bg-[#ff5f57]/70" />
+            <span className="w-2 h-2 rounded-full bg-[#febc2e]/70" />
+            <span className="w-2 h-2 rounded-full bg-[#28c840]/70" />
+          </div>
+          {/* Screen area */}
+          <div className="relative w-full" style={{ height: "calc(100% - 1.75rem)" }}>
+            {images.map((src, i) => (
+              <img
+                key={src}
+                src={src}
+                alt={`${project.name} — screenshot ${i + 1}`}
+                className="absolute inset-0 h-full w-full object-cover object-top transition-opacity duration-700 ease-in-out"
+                style={{ opacity: i === current ? 1 : 0 }}
+                loading={i === 0 ? "eager" : "lazy"}
+              />
+            ))}
+          </div>
 
           {/* Prev / Next arrows (show on hover) */}
           {images.length > 1 && (
