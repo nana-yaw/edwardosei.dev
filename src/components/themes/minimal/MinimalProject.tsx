@@ -3,6 +3,7 @@
 import { getFeaturedProject, getAlsoBuiltProjects } from "@/data/projects";
 import { motion } from "framer-motion";
 import DeviceMockup from "@/components/DeviceMockup";
+import { ScreenshotCarousel } from "@/components/ScreenshotCarousel";
 import { CodeBlock } from "@/components/graphics/CodeBlock";
 import { TestBreakdown } from "@/components/graphics/TestBreakdown";
 import { AlsoBuiltCard } from "@/components/AlsoBuiltCard";
@@ -145,32 +146,24 @@ export function MinimalProject() {
         />
 
         <motion.div {...revealDelay(0.4)} className="mb-10">
-          {/* Hero screenshot — dashboard dark (the most impressive) */}
-          <DeviceMockup
-            device="desktop"
-            src="/screenshots/dashboard-dark.png"
-            alt="Dashboard in dark mode with weekly care trend chart"
+          {/* Desktop screenshots carousel */}
+          <ScreenshotCarousel
+            screenshots={project.screenshots}
+            filter="desktop"
+            interval={4000}
+            variant="mockup"
             className="shadow-sm"
           />
 
-          {/* 2-up row: one desktop + one mobile */}
-          <div className="mt-6 flex items-end gap-6">
-            <div className="flex-1">
-              <DeviceMockup
-                device="desktop"
-                src="/screenshots/members-dark.png"
-                alt="Members management table with filters and stats"
-                className="shadow-sm"
-              />
-            </div>
-            <div className="w-[120px] shrink-0 sm:w-[140px]">
-              <DeviceMockup
-                device="mobile"
-                src="/screenshots/mobile-landing.png"
-                alt="Mobile responsive landing page"
-                className="shadow-sm"
-              />
-            </div>
+          {/* Mobile screenshots carousel */}
+          <div className="mx-auto mt-6 w-[120px] sm:w-[140px]">
+            <ScreenshotCarousel
+              screenshots={project.screenshots}
+              filter="mobile"
+              interval={5000}
+              variant="mockup"
+              className="shadow-sm"
+            />
           </div>
         </motion.div>
 

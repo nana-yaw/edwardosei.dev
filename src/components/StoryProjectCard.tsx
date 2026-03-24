@@ -1,9 +1,11 @@
 "use client";
 
-import { getFeaturedProject } from "@/data/projects";
-import DeviceMockup from "@/components/DeviceMockup";
+import { getFeaturedProject, getAlsoBuiltProjects } from "@/data/projects";
+import { ScreenshotCarousel } from "@/components/ScreenshotCarousel";
+import { AlsoBuiltCard } from "@/components/AlsoBuiltCard";
 
 const project = getFeaturedProject();
+const alsoBuilt = getAlsoBuiltProjects();
 
 const stats = [
   { value: String(project.stats.databaseTables), label: "Tables" },
@@ -14,7 +16,7 @@ const stats = [
 
 /**
  * Compact project summary card for Story mode.
- * Fits a single viewport (~812px) as a teaser for the full project showcase.
+ * Features screenshot carousel for the featured project and also-built cards.
  * Uses CSS custom properties for theme-adaptive colors.
  */
 export function StoryProjectCard() {
@@ -58,12 +60,13 @@ export function StoryProjectCard() {
           {project.subtitle}
         </p>
 
-        {/* Hero screenshot */}
+        {/* Screenshot carousel */}
         <div className="mb-5">
-          <DeviceMockup
-            device="desktop"
-            src="/screenshots/dashboard-dark.png"
-            alt="EWC Care App dashboard with member stats and weekly care trend"
+          <ScreenshotCarousel
+            screenshots={project.screenshots}
+            filter="desktop"
+            interval={4000}
+            variant="mockup"
             className="rounded-lg"
           />
         </div>
@@ -145,6 +148,14 @@ export function StoryProjectCard() {
           </a>
         )}
 
+        {/* Also Built projects */}
+        {alsoBuilt.length > 0 && (
+          <div className="mt-8 space-y-4">
+            {alsoBuilt.map((p) => (
+              <AlsoBuiltCard key={p.slug} project={p} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

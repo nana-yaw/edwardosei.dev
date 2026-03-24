@@ -3,6 +3,7 @@
 import { getFeaturedProject, getAlsoBuiltProjects } from "@/data/projects";
 import { motion } from "framer-motion";
 import DeviceMockup from "@/components/DeviceMockup";
+import { ScreenshotCarousel } from "@/components/ScreenshotCarousel";
 import { CodeBlock } from "@/components/graphics/CodeBlock";
 import { TestBreakdown } from "@/components/graphics/TestBreakdown";
 import { TechIcon } from "@/components/graphics/TechIcons";
@@ -292,44 +293,29 @@ export function BoldProject() {
             />
           </div>
 
-          {/* Asymmetric hero row: desktop 8-col + mobile 4-col */}
+          {/* Asymmetric hero row: desktop carousel 8-col + mobile carousel 4-col */}
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
             <motion.div {...stagger(0)} className="lg:col-span-8">
-              <DeviceMockup
-                device="desktop"
-                src={project.screenshots.filter((s) => s.device === "desktop")[0].src}
-                alt={project.screenshots.filter((s) => s.device === "desktop")[0].alt}
-                className="border border-white/[0.08]"
+              <ScreenshotCarousel
+                screenshots={project.screenshots}
+                filter="desktop"
+                interval={4000}
+                variant="mockup"
+                className="border border-white/[0.08] rounded-xl"
               />
             </motion.div>
             <motion.div
               {...stagger(0.05)}
               className="flex items-end lg:col-span-4"
             >
-              <DeviceMockup
-                device="mobile"
-                src={project.screenshots.filter((s) => s.device === "mobile")[0].src}
-                alt={project.screenshots.filter((s) => s.device === "mobile")[0].alt}
-                className="border border-white/[0.08]"
+              <ScreenshotCarousel
+                screenshots={project.screenshots}
+                filter="mobile"
+                interval={5000}
+                variant="mockup"
+                className="border border-white/[0.08] rounded-xl"
               />
             </motion.div>
-          </div>
-
-          {/* 3-col grid of additional desktop screenshots */}
-          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {project.screenshots
-              .filter((s) => s.device === "desktop")
-              .slice(1, 4)
-              .map((shot, i) => (
-                <motion.div key={shot.src} {...stagger(0.1 + 0.05 * i)}>
-                  <DeviceMockup
-                    device="desktop"
-                    src={shot.src}
-                    alt={shot.alt}
-                    className="border border-white/[0.08]"
-                  />
-                </motion.div>
-              ))}
           </div>
         </motion.div>
 
