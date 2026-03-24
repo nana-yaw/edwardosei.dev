@@ -72,6 +72,7 @@ export interface AlsoBuiltProject extends ProjectBase {
   featured: false;
   highlights: readonly string[];
   screenshot?: string;
+  screenshots?: readonly string[];
 }
 
 export type Project = FeaturedProject | AlsoBuiltProject;
@@ -344,30 +345,77 @@ function haversineDistance(
     },
   },
 
-  /* ── devONE — this portfolio ────────────────────────────── */
+  /* ── Teams Bootcamp — real-time event management ────────── */
   {
     kind: "also-built",
-    slug: "devone-portfolio",
-    name: "devONE",
-    subtitle: "This portfolio — 4 themes, 1 codebase",
+    slug: "teams-bootcamp",
+    name: "EWC Teams Bootcamp",
+    subtitle: "Real-time event scoring & volunteer management for 100+ attendees",
     description:
-      "Multi-theme portfolio with horizontal Story mode, CSS custom property theming, and zero runtime theme switching.",
+      "A production event management system built for a live church bootcamp. 4 competing squads, 20 ministry teams, real-time scoring across projectors and phones, and an admin portal for referees — all synced instantly via Firebase. Used at a real event with 100+ attendees.",
     techStack: [
-      "Next.js 16",
+      "Next.js 15",
       "React 19",
-      "TypeScript 5",
-      "Tailwind CSS 4",
-      "Framer Motion",
+      "TypeScript",
+      "Firebase Realtime DB",
+      "Tailwind CSS",
+      "Playwright E2E",
       "Vercel",
+      "xlsx",
     ],
-    liveUrl: "https://edwardosei.dev",
-    githubUrl: "https://github.com/nana-yaw/edwardosei.dev",
+    liveUrl: "https://teambootcampapp.vercel.app",
+    githubUrl: "https://github.com/nana-yaw",
     featured: false,
     highlights: [
-      "4 visual themes with full creative independence per theme",
-      "Instagram-style horizontal Story mode with swipe navigation",
-      "CSS custom properties enable zero-JS theme switching",
-      "PostHog analytics with graceful degradation",
+      "4-squad competition system (Wine, Ash, White, Gold) with atomic Firebase transactions preventing race conditions during concurrent signups",
+      "Multi-screen architecture: projector leaderboard (/board), referee admin panel, attendee phones — all synced in real-time via Firebase onValue() listeners",
+      "FLIP-based leaderboard animations with canvas-confetti effects when squads score — designed for a 16:9 projector display",
+      "Leaders dashboard with 20 ministry teams, filter by team/community/role, search, and one-click Excel export (roster + game history)",
+      "3-tier PIN-based role system: Team Members select teams, Pastors get elevated views, Senior Pastors access the leaders dashboard with reset controls",
+      "QR code projection route (/qr) for attendee self-registration, community integration with the EWC Care App",
+    ],
+    screenshot: "/screenshots/bootcamp-leaders.png",
+    screenshots: [
+      "/screenshots/bootcamp-registration-filled.png",
+      "/screenshots/bootcamp-leaders.png",
+      "/screenshots/bootcamp-leaderboard.png",
+      "/screenshots/bootcamp-registration.png",
+    ],
+  },
+
+  /* ── NAAT Foundation — WordPress block theme ──────────── */
+  {
+    kind: "also-built",
+    slug: "naat-foundation",
+    name: "NAAT Foundation",
+    subtitle: "Custom WordPress block theme for a Ghana-based nonprofit",
+    description:
+      "A full-featured nonprofit website built with a custom FSE block theme and companion plugin. Handles donations via Paystack (Ghana mobile money) and PayPal, volunteer signup, impact tracking, events, and gallery management.",
+    techStack: [
+      "WordPress",
+      "PHP 8.1",
+      "Full Site Editing",
+      "GiveWP",
+      "Paystack",
+      "WPForms",
+      "Mailchimp",
+      "Cloudflare",
+    ],
+    liveUrl: null,
+    githubUrl: "https://github.com/nana-yaw",
+    featured: false,
+    highlights: [
+      "32 custom dynamic blocks and 15 FSE page templates",
+      "6 custom post types via companion plugin (theme/data separation)",
+      "Ghana payment integration: Paystack mobile money + PayPal international",
+      "4 seasonal color themes + dark mode toggle (WCAG 2.1 AA compliant)",
+      "60+ WordPress Customizer settings for no-code content management",
+    ],
+    screenshot: "/screenshots/naat-homepage.png",
+    screenshots: [
+      "/screenshots/naat-homepage.png",
+      "/screenshots/naat-programs.png",
+      "/screenshots/naat-about.png",
     ],
   },
 ];

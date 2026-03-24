@@ -4,6 +4,7 @@ import { useState } from "react";
 import { getFeaturedProject, getAlsoBuiltProjects } from "@/data/projects";
 import { motion, AnimatePresence } from "framer-motion";
 import DeviceMockup from "@/components/DeviceMockup";
+import { ScreenshotCarousel } from "@/components/ScreenshotCarousel";
 import { CodeBlock } from "@/components/graphics/CodeBlock";
 import { TestBreakdown } from "@/components/graphics/TestBreakdown";
 
@@ -422,23 +423,26 @@ function ScreenshotsTab() {
         $ ls ./screenshots/
       </div>
 
-      {/* Screenshot grid */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        {project.screenshots.map((shot) => (
-          <div key={shot.src}>
-            <DeviceMockup
-              device={shot.device}
-              src={shot.src}
-              alt={shot.alt}
-            />
-            <div
-              className="mt-2 truncate text-xs"
-              style={{ color: C.muted }}
-            >
-              {shot.src.split("/").pop()}
-            </div>
-          </div>
-        ))}
+      {/* Desktop screenshots carousel */}
+      <div className="mb-6">
+        <div className="mb-2 text-xs" style={{ color: C.muted }}>desktop/</div>
+        <ScreenshotCarousel
+          screenshots={project.screenshots}
+          filter="desktop"
+          interval={4000}
+          variant="mockup"
+        />
+      </div>
+
+      {/* Mobile screenshot carousel */}
+      <div className="mx-auto max-w-[200px]">
+        <div className="mb-2 text-xs" style={{ color: C.muted }}>mobile/</div>
+        <ScreenshotCarousel
+          screenshots={project.screenshots}
+          filter="mobile"
+          interval={5000}
+          variant="mockup"
+        />
       </div>
     </div>
   );

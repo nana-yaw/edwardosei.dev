@@ -3,6 +3,7 @@
 import { getFeaturedProject, getAlsoBuiltProjects } from "@/data/projects";
 import { motion } from "framer-motion";
 import DeviceMockup from "@/components/DeviceMockup";
+import { ScreenshotCarousel } from "@/components/ScreenshotCarousel";
 import { CodeBlock } from "@/components/graphics/CodeBlock";
 import { TestBreakdown } from "@/components/graphics/TestBreakdown";
 import { TechIcon } from "@/components/graphics/TechIcons";
@@ -138,40 +139,28 @@ export function CinematicProject() {
                 <span className="h-px flex-1 bg-white/[0.06]" />
               </motion.div>
 
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {project.screenshots
-                  .filter((s) => s.device === "desktop")
-                  .slice(0, 4)
-                  .map((shot, i) => (
-                    <motion.div key={shot.src} {...revealDelay(0.4 + 0.1 * i)}>
-                      <DeviceMockup
-                        device="desktop"
-                        src={shot.src}
-                        alt={shot.alt}
-                        className="rounded-xl border border-white/[0.06]"
-                      />
-                    </motion.div>
-                  ))}
-              </div>
+              <motion.div {...revealDelay(0.4)}>
+                <ScreenshotCarousel
+                  screenshots={project.screenshots}
+                  filter="desktop"
+                  interval={4000}
+                  variant="mockup"
+                  className="rounded-xl border border-white/[0.06]"
+                />
+              </motion.div>
 
-              {/* Mobile screenshot — smaller, standalone */}
-              {project.screenshots
-                .filter((s) => s.device === "mobile")
-                .slice(0, 1)
-                .map((shot) => (
-                  <motion.div
-                    key={shot.src}
-                    {...revealDelay(0.8)}
-                    className="mx-auto mt-6 max-w-[200px]"
-                  >
-                    <DeviceMockup
-                      device="mobile"
-                      src={shot.src}
-                      alt={shot.alt}
-                      className="rounded-xl border border-white/[0.06]"
-                    />
-                  </motion.div>
-                ))}
+              {/* Mobile screenshot carousel */}
+              <motion.div
+                {...revealDelay(0.8)}
+                className="mx-auto mt-6 max-w-[200px]"
+              >
+                <ScreenshotCarousel
+                  screenshots={project.screenshots}
+                  filter="mobile"
+                  interval={5000}
+                  variant="mockup"
+                />
+              </motion.div>
             </div>
 
             {/* ── Security Defense Stack — Concentric Shield ──────── */}
