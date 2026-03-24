@@ -19,6 +19,7 @@ html[data-story] {
 html[data-story] body {
   overflow: hidden;
   height: 100dvh;
+  width: 100vw;
   transition: background-color 0.5s ease, color 0.3s ease;
 }
 

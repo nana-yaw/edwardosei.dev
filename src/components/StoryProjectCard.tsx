@@ -1,11 +1,9 @@
 "use client";
 
-import { getFeaturedProject, getAlsoBuiltProjects } from "@/data/projects";
+import { getFeaturedProject } from "@/data/projects";
 import { ScreenshotCarousel } from "@/components/ScreenshotCarousel";
-import { AlsoBuiltCard } from "@/components/AlsoBuiltCard";
 
 const project = getFeaturedProject();
-const alsoBuilt = getAlsoBuiltProjects();
 
 const stats = [
   { value: String(project.stats.databaseTables), label: "Tables" },
@@ -148,14 +146,6 @@ export function StoryProjectCard() {
           </a>
         )}
 
-        {/* Also Built projects */}
-        {alsoBuilt.length > 0 && (
-          <div className="mt-8 space-y-4">
-            {alsoBuilt.map((p) => (
-              <AlsoBuiltCard key={p.slug} project={p} />
-            ))}
-          </div>
-        )}
       </div>
     </section>
   );
