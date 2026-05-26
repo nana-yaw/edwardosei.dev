@@ -147,3 +147,180 @@ body {
   background: var(--accent, #4f7df5);
   color: var(--bg, #0a0a0a);
 }
+
+/* ── Print Styles ────────────────────────────────────── */
+/* Optimized for PDF export. Forces Editorial theme colors
+   and hides interactive UI elements for a clean document. */
+
+@media print {
+  /* Force Editorial/Minimal theme colors */
+  :root,
+  [data-theme] {
+    --bg: #ffffff !important;
+    --text: #1a1a2e !important;
+    --accent: #1a1a2e !important;
+    --muted: #555555 !important;
+    --border: #d4d4d0 !important;
+    --nav-height: 0px !important;
+  }
+
+  html {
+    scroll-behavior: auto !important;
+    scroll-padding-top: 0 !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #1a1a2e !important;
+    font-family: "Inter", system-ui, sans-serif !important;
+    font-size: 11pt !important;
+    line-height: 1.5 !important;
+  }
+
+  /* Hide all interactive UI artifacts */
+  nav,
+  [class*="ThemeSwitcher"],
+  [class*="ThemeChooser"],
+  [class*="ScrollButton"],
+  [class*="StoryOrchestrator"],
+  [class*="StoryOverlay"],
+  [class*="TerminalShortcuts"],
+  [class*="scroll-to-bottom"],
+  [aria-label*="theme"],
+  [aria-label*="shortcut"],
+  button[class*="story"],
+  a[href="#main-content"] {
+    display: none !important;
+  }
+
+  /* Hide carousel controls (prev/next buttons, dots) */
+  button[aria-label*="screenshot"],
+  button[aria-label*="Previous"],
+  button[aria-label*="Next"],
+  button[aria-label*="Go to"] {
+    display: none !important;
+  }
+
+  /* Hide non-essential fixed/sticky elements */
+  [class*="fixed"],
+  [class*="sticky"] {
+    position: static !important;
+  }
+
+  /* Ensure main content fills the page */
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Remove all animations and transitions */
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
+  }
+
+  /* Prevent page breaks inside key sections */
+  section,
+  [id="hero"],
+  [id="project"],
+  [id="story"],
+  [id="experience"],
+  [id="skills"],
+  [id="contact"] {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Allow page breaks between sections */
+  section + section {
+    page-break-before: auto;
+  }
+
+  /* Reduce excessive whitespace between sections */
+  section {
+    padding-top: 24pt !important;
+    padding-bottom: 24pt !important;
+    min-height: auto !important;
+    height: auto !important;
+  }
+
+  /* Force sections to auto height (remove viewport-height) */
+  [class*="min-h-screen"],
+  [class*="h-screen"],
+  [class*="min-h-dvh"],
+  [class*="h-dvh"] {
+    min-height: auto !important;
+    height: auto !important;
+  }
+
+  /* Show only first carousel image, hide the rest */
+  [class*="carousel"] img:not(:first-child),
+  [class*="Carousel"] img:not(:first-child) {
+    display: none !important;
+  }
+
+  /* Make images print-friendly */
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Links: show URL after link text for reference */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 8pt;
+    color: #737373;
+    word-break: break-all;
+  }
+
+  /* Don't show URL for internal/anchor links */
+  a[href^="#"]::after,
+  a[href^="mailto"]::after,
+  a[href^="/"]::after {
+    content: none !important;
+  }
+
+  /* Print footer with portfolio URL */
+  @page {
+    margin: 0.5in 0.6in;
+
+    @bottom-center {
+      content: "edwardoseidev.vercel.app";
+      font-size: 8pt;
+      color: #999999;
+    }
+  }
+
+  /* First page: no top margin for clean hero */
+  @page :first {
+    margin-top: 0.4in;
+  }
+
+  /* Code blocks: keep readable */
+  code,
+  pre {
+    font-size: 9pt !important;
+    background: #f5f5f0 !important;
+    color: #1a1a2e !important;
+    border: 1px solid #e5e5e0 !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Tech stack tags: compact for print */
+  [class*="tag"],
+  [class*="badge"],
+  [class*="chip"] {
+    border: 1px solid #d4d4d0 !important;
+    background: #f5f5f0 !important;
+    color: #1a1a2e !important;
+    padding: 2pt 6pt !important;
+    font-size: 8pt !important;
+  }
+}
