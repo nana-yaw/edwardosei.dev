@@ -47,7 +47,7 @@ async function spokenSoFar(page: Page): Promise<string[]> {
 }
 
 async function openBreakIt(page: Page) {
-  await page.goto(`/portfolio#${breakItAnchor}`);
+  await page.goto(`/#${breakItAnchor}`);
   const section = page.locator(`#${breakItAnchor}`);
   const region = section.getByRole("status");
   await recordAnnouncements(region);
@@ -116,7 +116,7 @@ test.describe("the scroll button takes keyboard focus with it", () => {
   for (const viewport of [DESKTOP, PHONE]) {
     test(`to the work and back to the top (${viewport.width}px)`, async ({ page }) => {
       await page.setViewportSize(viewport);
-      await page.goto("/portfolio");
+      await page.goto("/");
       const workHeading = page.locator("#project").getByRole("heading", { level: 2 });
 
       await page.getByRole("button", { name: scrollButton.toWork }).focus();
@@ -142,7 +142,7 @@ test.describe("the scroll button takes keyboard focus with it", () => {
       page,
     }) => {
       await page.setViewportSize(viewport);
-      await page.goto("/portfolio");
+      await page.goto("/");
       const workHeading = page.locator("#project").getByRole("heading", { level: 2 });
       await page.getByRole("button", { name: scrollButton.toWork }).click();
       await expect(workHeading).toBeFocused();
@@ -166,7 +166,7 @@ test.describe("the scroll button takes keyboard focus with it", () => {
 
   test("on a phone it is not taken away while it has focus", async ({ page }) => {
     await page.setViewportSize(PHONE);
-    await page.goto("/portfolio");
+    await page.goto("/");
     await page.evaluate(() => window.scrollTo(0, 3000));
     const button = page.getByRole("button", { name: scrollButton.toTop });
     await button.focus();
@@ -197,9 +197,9 @@ test.describe("jumping to the work counts as past the hero", () => {
   }
 
   for (const viewport of [DESKTOP, PHONE]) {
-    test(`loading /portfolio#project (${viewport.width}px)`, async ({ page }) => {
+    test(`loading /#project (${viewport.width}px)`, async ({ page }) => {
       await page.setViewportSize(viewport);
-      await page.goto("/portfolio#project");
+      await page.goto("/#project");
       const header = page.locator("header");
       await expect(page.getByRole("button", { name: scrollButton.toTop })).toBeVisible();
       await expect(header).toHaveAttribute("data-nav", "shown");
@@ -215,7 +215,7 @@ test.describe("jumping to the work counts as past the hero", () => {
 
     test(`the Work link, from the top and from the bar (${viewport.width}px)`, async ({ page }) => {
       await page.setViewportSize(viewport);
-      await page.goto("/portfolio");
+      await page.goto("/");
       const header = page.locator("header");
       const toTop = page.getByRole("button", { name: scrollButton.toTop });
       await page.getByRole("button", { name: scrollButton.toWork }).waitFor();
@@ -252,7 +252,7 @@ test("the build flow keeps its six part headings in live, phone and no-JS modes"
   for (const { viewport, javaScriptEnabled, mode } of modes) {
     const context = await browser.newContext({ viewport, javaScriptEnabled, baseURL });
     const page = await context.newPage();
-    await page.goto("/portfolio");
+    await page.goto("/");
     const section = page.locator(`#${buildPartsSection.id}`);
     if (mode) await expect(section.locator("[data-flow]")).toHaveAttribute("data-mode", mode);
     const headings = section.getByRole("heading", { level: 3 });
@@ -316,7 +316,7 @@ test("nothing in break-it is clipped at 320, 1024, 1100 and 1150 px", async ({
       baseURL,
     });
     const page = await context.newPage();
-    await page.goto(`/portfolio#${breakItAnchor}`);
+    await page.goto(`/#${breakItAnchor}`);
     const section = page.locator(`#${breakItAnchor}`);
     // The widest picture: a long echo, the honest line in the tally, and the
     // longest layer name set in bold as the one that caught it.
@@ -333,7 +333,7 @@ test.describe("which layers are set off shows by more than colour", () => {
   test.use({ viewport: DESKTOP, contextOptions: { reducedMotion: "reduce" } });
 
   test("a mark and words for each set-off layer, and none for the rest", async ({ page }) => {
-    await page.goto(`/portfolio#${breakItAnchor}`);
+    await page.goto(`/#${breakItAnchor}`);
     const section = page.locator(`#${breakItAnchor}`);
     await section.getByRole("button", { name: SPAM }).click();
     await section.getByRole("button", { name: NASTY }).click();
@@ -363,7 +363,7 @@ test.describe("the pipe", () => {
       blocked += 1;
       return route.abort();
     });
-    await page.goto("/portfolio");
+    await page.goto("/");
     await expect(page.locator("[data-pipe]")).toHaveAttribute("data-pipe", "live");
     await expect.poll(() => blocked).toBeGreaterThan(0);
     await page.waitForTimeout(1500);
@@ -385,7 +385,7 @@ test.describe("the pipe", () => {
       await route.continue();
     });
     // The load event waits for the held fonts, so only the HTML is waited for.
-    await page.goto(`/portfolio#${buildPartsSection.id}`, { waitUntil: "domcontentloaded" });
+    await page.goto(`/#${buildPartsSection.id}`, { waitUntil: "domcontentloaded" });
     const flow = page.locator("[data-flow]");
     await expect(flow).toHaveAttribute("data-mode", "live");
     await page.waitForTimeout(300);
@@ -401,7 +401,7 @@ test.describe("the pipe", () => {
   });
 
   test("printing draws no pipe, no scroll button and one header", async ({ page }) => {
-    await page.goto("/portfolio");
+    await page.goto("/");
     await page.getByRole("button", { name: scrollButton.toWork }).waitFor();
     await page.evaluate(() => window.scrollTo(0, 3000));
     await expect(page.getByRole("button", { name: scrollButton.toTop })).toBeVisible();

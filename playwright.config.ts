@@ -17,7 +17,7 @@ export default defineConfig({
   // window.__r3f, which the budget test reads.
   webServer: {
     command: `npm run dev -- --port ${PORT}`,
-    url: `http://localhost:${PORT}/portfolio`,
+    url: `http://localhost:${PORT}/`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },

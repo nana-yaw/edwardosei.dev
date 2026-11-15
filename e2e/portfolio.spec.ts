@@ -4,7 +4,7 @@ import { buildFlow, buildPartsSection, credit, flowQuestions, parts } from "../s
 import { showAdinkra } from "../src/data/culture";
 import { hero } from "../src/data/hero";
 import { build } from "../src/data/heroPicture";
-import { brand, homePath, scrollButton } from "../src/data/navigation";
+import { brand, homePath, printPath, scrollButton } from "../src/data/navigation";
 import { profile } from "../src/data/profile";
 import { sections } from "../src/data/site";
 import { shortenEcho } from "../src/lib/breakit/echo";
@@ -66,7 +66,7 @@ for (const viewport of VIEWPORTS) {
       test.use({ contextOptions: { reducedMotion: "reduce" } });
 
       test("the still picture stays and nothing animates", async ({ page }) => {
-        await page.goto("/portfolio");
+        await page.goto("/");
         await expect(page.getByRole("img", { name: build.diagramLabel })).toBeVisible();
 
         // Only after the scripts have run can "nothing mounted" mean anything.
@@ -110,7 +110,7 @@ for (const viewport of VIEWPORTS) {
     test("the home page's header stays clear of the hero, then slides in and stays past it", async ({
       page,
     }) => {
-      await page.goto("/portfolio");
+      await page.goto("/");
       const header = page.locator("header");
       const brandLink = header.getByRole("link", { name: brand });
       // The scroll button is only drawn once scripts run, and reads the same
@@ -150,11 +150,32 @@ for (const viewport of VIEWPORTS) {
   });
 }
 
+test.describe("the old /portfolio address", () => {
+  test("sends visitors to the home page for good, keeping a section link", async ({
+    page,
+    request,
+  }) => {
+    const response = await request.get("/portfolio", { maxRedirects: 0 });
+    expect(response.status()).toBe(308);
+    expect(new URL(response.headers().location, "http://localhost").pathname).toBe(homePath);
+
+    await page.goto("/portfolio#project");
+    expect(new URL(page.url()).pathname).toBe(homePath);
+    expect(new URL(page.url()).hash).toBe("#project");
+    await expect(page.locator("#project").getByRole("heading", { level: 2 })).toBeInViewport();
+  });
+
+  test("leaves the print version where it was", async ({ request }) => {
+    const response = await request.get(printPath, { maxRedirects: 0 });
+    expect(response.status()).toBe(200);
+  });
+});
+
 test.describe("without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
 
   test("the portfolio's content is all in the HTML", async ({ page }) => {
-    await page.goto("/portfolio");
+    await page.goto("/");
 
     const headline = page.getByRole("heading", { level: 1 });
     await expect(headline).toBeVisible();
@@ -218,7 +239,7 @@ test.describe("without JavaScript, for hiring managers", () => {
 
 test.describe("two doors", () => {
   test("the second hero button opens the hiring page", async ({ page }) => {
-    await page.goto("/portfolio");
+    await page.goto("/");
     await page.getByRole("link", { name: hero.secondary.label }).click();
     await expect(page).toHaveURL(/\/hiring$/);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("remote role");
@@ -236,7 +257,7 @@ test.describe("the Adinkra and kente switch", () => {
   }) => {
     test.skip(showAdinkra, "this run has the switch on");
 
-    const html = await (await request.get("/portfolio")).text();
+    const html = await (await request.get("/")).text();
     expect(html).not.toContain('lang="tw"');
     expect(html).not.toMatch(/adinkra|kente/i);
     expect(html).not.toContain("<pattern");
@@ -246,7 +267,7 @@ test.describe("the Adinkra and kente switch", () => {
       expect(html).not.toContain(part.meaning);
     }
 
-    await page.goto("/portfolio");
+    await page.goto("/");
     const flow = page.locator(`#${buildPartsSection.id}`);
     await expect(flow.locator("[data-flow-box]")).toHaveText(
       parts.map((_, index) => String(index + 1)),
@@ -268,7 +289,7 @@ test.describe("the Adinkra and kente switch", () => {
   test("switched on, every symbol, name and strip is on the page", async ({ page }) => {
     test.skip(!showAdinkra, "this run has the switch off");
 
-    await page.goto("/portfolio");
+    await page.goto("/");
     const flow = page.locator(`#${buildPartsSection.id}`);
     await expect(flow.getByText(buildFlow.ledeWithSymbols, { exact: true })).toBeVisible();
     await expect(flow.getByText(credit, { exact: true })).toBeVisible();
@@ -294,7 +315,7 @@ test.describe("try to break it", () => {
   test.use({ javaScriptEnabled: false });
 
   test("is a section of the home page under the one h1", async ({ page }) => {
-    await page.goto("/portfolio");
+    await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
 
     const section = page.locator(`section#${breakItAnchor}`);
@@ -311,7 +332,7 @@ test.describe("try to break it", () => {
   test("says it is a simulation right under the dare, and links to no live product", async ({
     page,
   }) => {
-    await page.goto("/portfolio");
+    await page.goto("/");
     const section = page.locator(`section#${breakItAnchor}`);
     await expect(section.locator("h2 + p")).toHaveText(intro.notice);
     await expect(section.locator("h2 + p")).toBeVisible();

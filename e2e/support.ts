@@ -12,7 +12,7 @@ export const CASE_STUDIES = [
   { path: "/work/sihene", name: "Si Hene", visit: "Visit sihene.com" },
   { path: "/work/ewc-care-app", name: "EWC Care App", visit: "Visit ewcareapp.online" },
 ] as const;
-export const PAGES = ["/portfolio", "/work/sihene", "/work/ewc-care-app", "/hiring"] as const;
+export const PAGES = ["/", "/work/sihene", "/work/ewc-care-app", "/hiring"] as const;
 
 /** Below this width the page keeps the still picture and loads no 3D code. */
 export const CANVAS_MIN_WIDTH = 768;

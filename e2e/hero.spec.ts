@@ -77,7 +77,7 @@ for (const viewport of VIEWPORTS) {
           window.__THREE_DEVTOOLS__ = hook;
           window.__scenes = scenes;
         });
-        await page.goto("/portfolio");
+        await page.goto("/");
         await page.locator(readyCanvas).waitFor();
 
         // Parts are added as the build goes and the notifications pass
@@ -132,7 +132,7 @@ for (const viewport of VIEWPORTS) {
       });
 
       test("the build plays out and leaves the idea live and taking payments", async ({ page }) => {
-        await page.goto("/portfolio");
+        await page.goto("/");
         await waitForRest(page);
 
         // Every label the build lights is lit, the idea's two endings included.
@@ -154,7 +154,7 @@ for (const viewport of VIEWPORTS) {
         const requests: string[] = [];
         page.on("request", (request) => requests.push(request.url()));
 
-        await page.goto("/portfolio");
+        await page.goto("/");
         await page.locator(keptStill).waitFor();
         await page.evaluate(() => window.scrollTo(0, window.innerHeight));
         await page.waitForTimeout(800);
@@ -173,7 +173,7 @@ test.describe("on-demand rendering", () => {
   test.use({ viewport: { width: 1440, height: 900 } });
 
   test("no frames are drawn while nothing moves", async ({ page }) => {
-    await page.goto("/portfolio");
+    await page.goto("/");
     await waitForRest(page);
     await page.waitForTimeout(800);
 
@@ -190,7 +190,7 @@ test.describe("device pixel ratio", () => {
   test.use({ viewport: { width: 820, height: 1180 }, deviceScaleFactor: 3 });
 
   test("is capped at 2 on a 3x screen", async ({ page }) => {
-    await page.goto("/portfolio");
+    await page.goto("/");
     await page.locator(readyCanvas).waitFor();
     const ratio = await page.evaluate(() => window.__r3f?.pixelRatio ?? null);
     expect(ratio).toBe(2);

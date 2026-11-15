@@ -14,7 +14,7 @@ export const navItems = [
 // The address that loads today. edwardosei.dev is not connected yet; when it
 // is, this is the one line to change (Edward, 15 Nov 2026).
 export const siteUrl = "https://edwardoseidev.vercel.app";
-export const homePath = "/portfolio";
+export const homePath = "/";
 export const resumeUrl = "/Edward_Osei-Nyarko_Resume.pdf";
 export const printPath = "/portfolio/print";
 export const hiringPath = "/hiring";

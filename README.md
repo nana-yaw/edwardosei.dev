@@ -23,7 +23,8 @@ Adinkra symbols and kente strips are on unless the build sets `NEXT_PUBLIC_SHOW_
 ```
 src/
   app/
-    portfolio/        # The home page, plus /portfolio/print
+    page.tsx          # The home page, at /
+    portfolio/print/  # The print version (/portfolio redirects to /)
     work/[slug]/      # Case studies (Si Hene, EWC Care App)
     hiring/           # The page for hiring managers
   components/
