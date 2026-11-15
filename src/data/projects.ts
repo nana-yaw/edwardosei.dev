@@ -214,11 +214,6 @@ const projects: readonly Project[] = [
         device: "desktop",
       },
       {
-        src: "/screenshots/care-dark.png",
-        alt: "Care activity feed with interaction logs and follow-ups",
-        device: "desktop",
-      },
-      {
         src: "/screenshots/attendance-dark.png",
         alt: "Attendance analytics with demographics and check-in methods",
         device: "desktop",

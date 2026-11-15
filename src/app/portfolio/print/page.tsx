@@ -89,16 +89,6 @@ export default function PrintPortfolio() {
           </figure>
           <figure>
             <Image
-              src="/screenshots/care-dark.png"
-              alt="Care activity feed"
-              width={340}
-              height={200}
-              className="screenshot"
-            />
-            <figcaption>Care feed: interaction logs with call/message tracking per member</figcaption>
-          </figure>
-          <figure>
-            <Image
               src="/screenshots/members-dark.png"
               alt="Members management"
               width={340}
