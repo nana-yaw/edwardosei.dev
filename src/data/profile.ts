@@ -14,7 +14,7 @@ export const profile = {
   email: "edward.osei.nyarko@gmail.com",
   github: "https://github.com/nana-yaw",
   githubHandle: "nana-yaw",
-  linkedin: "https://linkedin.com/in/edward-osei-nyarko-5789b3118",
+  linkedin: "https://linkedin.com/in/edwardosei-nyarko",
   location: "Ghana",
 
   origin: {

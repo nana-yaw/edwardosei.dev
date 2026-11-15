@@ -2,7 +2,7 @@
 
 Backend and Full-Stack Engineer
 Accra, Ghana (GMT, UTC+0) | Open to remote roles | edward.osei.nyarko@gmail.com
-[github.com/nana-yaw](https://github.com/nana-yaw) | [linkedin.com/in/edward-osei-nyarko-5789b3118](https://linkedin.com/in/edward-osei-nyarko-5789b3118) | [edwardoseidev.vercel.app](https://edwardoseidev.vercel.app)
+[github.com/nana-yaw](https://github.com/nana-yaw) | [linkedin.com/in/edwardosei-nyarko](https://linkedin.com/in/edwardosei-nyarko) | [edwardoseidev.vercel.app](https://edwardoseidev.vercel.app)
 
 ## Summary
 
