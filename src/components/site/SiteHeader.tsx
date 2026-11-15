@@ -5,33 +5,23 @@ import { brand, homePath, mainId, navItems, skipLabel, stickyNav } from "@/data/
 import { usePastHero } from "./usePastHero";
 import styles from "./SiteHeader.module.css";
 
-type NavState = "top" | "away" | "hidden" | "shown" | "leaving";
-
 interface SiteHeaderProps {
   /** For a page with no hero: the bar stays at the top of the screen from the start. */
   pinned?: boolean;
 }
 
-/** Movement smaller than this is a resting hand, not a change of direction. */
-const SLACK = 6;
 /** As long as the bar takes to slide out, and a little over. */
 const LEAVE_MS = 270;
 
-/* Past the hero: what the bar should be, given what it was and which way the page moved. */
-function nextNavState(state: NavState, y: number, from: number): NavState {
-  if (y > from) return state === "shown" ? "hidden" : state;
-  return "shown";
-}
-
 /* ── Site header ── */
 // Inside the hero it is in flow and scrolls away with the page: the hero is
-// the showcase and no bar is laid over it. Only once the hero is behind the
-// visitor does it become a slim solid bar that hides on the way down and
-// returns on the way up. It is one element throughout, so there is one nav
-// for a screen reader and one set of tab stops. A page with no hero has
-// nothing to keep clear, so there the same slim bar is pinned from the start
-// and never hides: the stylesheet does that alone, with no script. Its links
-// name the home page, so they also work from the other pages.
+// the showcase and no bar is laid over it. Once the hero is behind the
+// visitor it slides in as a slim solid bar and stays, whichever way the page
+// scrolls (Edward, 15 Nov 2026), until the hero comes back. It is one element
+// throughout, so there is one nav for a screen reader and one set of tab
+// stops. A page with no hero has nothing to keep clear, so there the same
+// slim bar is pinned from the start: the stylesheet does that alone, with no
+// script. Its links name the home page, so they also work from the other pages.
 export function SiteHeader({ pinned = false }: SiteHeaderProps) {
   const header = useRef<HTMLElement>(null);
   const pastHero = usePastHero();
@@ -42,7 +32,7 @@ export function SiteHeader({ pinned = false }: SiteHeaderProps) {
 
     if (!pastHero) {
       // Back in the hero. A bar that is showing slides out first; anything
-      // else goes straight back into the flow. No scroll listener exists here.
+      // else goes straight back into the flow.
       if (bar.dataset.nav !== "shown") {
         bar.dataset.nav = "top";
         return;
@@ -54,32 +44,16 @@ export function SiteHeader({ pinned = false }: SiteHeaderProps) {
       return () => window.clearTimeout(timer);
     }
 
+    // Past the hero. Parked out of sight for one painted frame, so that the
+    // next state has somewhere to slide in from, then shown for good. Nothing
+    // listens to the scroll.
     bar.dataset.nav = "away";
-    let from = window.scrollY;
-    let frame = 0;
-
-    // The whole cost of the nav while scrolling: one read of the scroll
-    // position and, when the direction turns, one attribute. No layout is read.
-    const settle = () => {
-      frame = 0;
-      const y = window.scrollY;
-      if (Math.abs(y - from) < SLACK) return;
-      const state = (bar.dataset.nav ?? "away") as NavState;
-      const next = nextNavState(state, y, from);
-      from = y;
-      if (next !== state) bar.dataset.nav = next;
-    };
-    const onScroll = () => {
-      // A tab nobody is looking at has no nav to move.
-      if (frame !== 0 || document.hidden) return;
-      frame = requestAnimationFrame(settle);
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      if (frame !== 0) cancelAnimationFrame(frame);
-    };
+    let frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(() => {
+        bar.dataset.nav = "shown";
+      });
+    });
+    return () => cancelAnimationFrame(frame);
   }, [pastHero, pinned]);
 
   return (

@@ -107,7 +107,7 @@ for (const viewport of VIEWPORTS) {
       });
     }
 
-    test("the home page's header hides on the way down past the hero and returns on the way up", async ({
+    test("the home page's header stays clear of the hero, then slides in and stays past it", async ({
       page,
     }) => {
       await page.goto("/portfolio");
@@ -118,26 +118,34 @@ for (const viewport of VIEWPORTS) {
       await expect(page.getByRole("button", { name: scrollButton.toWork })).toBeVisible();
       await expect(brandLink).toBeInViewport();
 
+      // Inside the hero it scrolls away with the page: no bar over the hero.
+      await page.evaluate(() => window.scrollTo(0, 200));
+      await page.waitForTimeout(400);
+      await expect(header).toHaveAttribute("data-nav", "top");
+
       const pastHero = await page
         .locator("#hero")
         .evaluate((element) => element.getBoundingClientRect().bottom + window.scrollY + 300);
       await page.evaluate((to) => window.scrollTo(0, to), pastHero);
       await expect(page.getByRole("button", { name: scrollButton.toTop })).toBeVisible();
-      await expect(header).not.toBeInViewport();
-
-      await page.evaluate(() => window.scrollBy(0, 300));
-      await page.waitForTimeout(400);
-      await expect(header).not.toBeInViewport();
-
-      // Up again. Each try moves a little further, in case the first move
-      // landed before the header had begun to listen.
-      await expect(async () => {
-        await page.evaluate(() => window.scrollBy(0, -60));
-        await expect(brandLink).toBeInViewport({ timeout: 600 });
-      }).toPass();
       // It slides in, so its resting place is waited for.
       await expect.poll(() => barTop(page)).toBeGreaterThan(HIDDEN_ABOVE);
       expect(await barTop(page)).toBeLessThanOrEqual(0);
+      await expect(brandLink).toBeInViewport();
+
+      // Further down it stays, and on the way up too.
+      for (const by of [300, 900, -60]) {
+        await page.evaluate((distance) => window.scrollBy(0, distance), by);
+        await page.waitForTimeout(400);
+        await expect(header).toHaveAttribute("data-nav", "shown");
+        await expect(brandLink).toBeInViewport();
+        expect(await barTop(page)).toBeGreaterThan(HIDDEN_ABOVE);
+      }
+
+      // Back at the top it slides out and is the in-flow header again.
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await expect(header).toHaveAttribute("data-nav", "top");
+      await expect(brandLink).toBeInViewport();
     });
   });
 }

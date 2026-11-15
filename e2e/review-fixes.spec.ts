@@ -181,22 +181,36 @@ test.describe("the scroll button takes keyboard focus with it", () => {
 });
 
 test.describe("jumping to the work counts as past the hero", () => {
+  /** The bar's solid backing stops this far above the bottom of the header's box. */
+  const BACKING_TRIM = 8;
+
+  /** The Work heading is below the bar's solid backing, not under it. */
+  async function headingClearOfBar(page: Page): Promise<boolean> {
+    const heading = await page
+      .locator("#project")
+      .getByRole("heading", { level: 2 })
+      .evaluate((element) => element.getBoundingClientRect().top);
+    const backingBottom = await page
+      .locator("header")
+      .evaluate((bar) => bar.getBoundingClientRect().bottom);
+    return heading >= backingBottom - BACKING_TRIM;
+  }
+
   for (const viewport of [DESKTOP, PHONE]) {
     test(`loading /portfolio#project (${viewport.width}px)`, async ({ page }) => {
       await page.setViewportSize(viewport);
       await page.goto("/portfolio#project");
       const header = page.locator("header");
       await expect(page.getByRole("button", { name: scrollButton.toTop })).toBeVisible();
-      await expect(header).toHaveAttribute("data-nav", "away");
+      await expect(header).toHaveAttribute("data-nav", "shown");
       await expect(page.locator("#project").getByRole("heading", { level: 2 })).toBeInViewport();
+      await page.waitForTimeout(400);
+      expect(await headingClearOfBar(page)).toBe(true);
 
-      // From here the bar does what it does after scrolling here: away on
-      // the way down, back on the way up.
+      // From here the bar does what it does after scrolling here: it stays.
       await page.evaluate(() => window.scrollBy(0, 400));
-      await expect(async () => {
-        await page.evaluate(() => window.scrollBy(0, -60));
-        await expect(header).toHaveAttribute("data-nav", "shown", { timeout: 600 });
-      }).toPass();
+      await page.waitForTimeout(400);
+      await expect(header).toHaveAttribute("data-nav", "shown");
     });
 
     test(`the Work link, from the top and from the bar (${viewport.width}px)`, async ({ page }) => {
@@ -208,19 +222,20 @@ test.describe("jumping to the work counts as past the hero", () => {
 
       await header.getByRole("link", { name: WORK_LINK }).click();
       await expect(toTop).toBeVisible();
-      await expect(header).toHaveAttribute("data-nav", "away");
+      await expect(header).toHaveAttribute("data-nav", "shown");
+      await page.waitForTimeout(400);
+      expect(await headingClearOfBar(page)).toBe(true);
 
-      // Deep in the page, bring the bar back and use its own Work link.
+      // Deep in the page, use the bar's own Work link.
       await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight / 2));
-      await expect(async () => {
-        await page.evaluate(() => window.scrollBy(0, -60));
-        await expect(header).toHaveAttribute("data-nav", "shown", { timeout: 600 });
-      }).toPass();
+      await page.waitForTimeout(400);
+      await expect(header).toHaveAttribute("data-nav", "shown");
       await header.getByRole("link", { name: WORK_LINK }).click();
       await expect(page.locator("#project").getByRole("heading", { level: 2 })).toBeInViewport();
       await page.waitForTimeout(500);
       await expect(header).toHaveAttribute("data-nav", "shown");
       await expect(toTop).toBeVisible();
+      expect(await headingClearOfBar(page)).toBe(true);
     });
   }
 });

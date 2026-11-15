@@ -8,10 +8,9 @@
    of its backing ever change.
 
    top:     inside the hero. In flow, see-through, scrolls away with the page.
-   away:    just past the hero. Parked out of sight with no slide, since the
-            in-flow header was already long gone when it got here.
-   hidden:  slid out because the visitor is scrolling down.
-   shown:   slid in because they scrolled up. Solid and slim.
+   away:    just past the hero, for one frame. Parked out of sight with no
+            slide, so that "shown" has somewhere to slide in from.
+   shown:   slid in, solid and slim. It stays whichever way the page scrolls.
    leaving: the hero is coming back. Slides out, then returns to the flow.
 
    A page with no hero pins the wrapper instead (see the end of this file). */
@@ -56,14 +55,14 @@
 }
 
 /* Shown, or brought back by the keyboard: focus landing on a link inside a
-   hidden nav must never leave the visitor typing at something off screen. */
+   parked nav must never leave the visitor typing at something off screen. */
 .header[data-nav="shown"],
-.header:is([data-nav="away"], [data-nav="hidden"]):focus-within {
+.header[data-nav="away"]:focus-within {
   transform: translateY(calc(var(--trim) * -1));
 }
 
 .header:is([data-nav="shown"], [data-nav="leaving"])::before,
-.header:is([data-nav="away"], [data-nav="hidden"]):focus-within::before {
+.header[data-nav="away"]:focus-within::before {
   opacity: 1;
 }
 
