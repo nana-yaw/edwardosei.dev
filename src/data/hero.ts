@@ -13,5 +13,5 @@ export const hero = {
   lede: `I'm ${profile.name}, a web developer in Accra, Ghana. You know what you want your product to do. I build what is behind it, the part that makes it come alive.`,
   primary: { label: "Hire me for a project", href: `${homePath}#contact` },
   secondary: { label: "Open to remote roles", href: hiringPath },
-  availability: "Available for free consultations and new projects.",
+  availability: "Available for free consultations and new projects, in Ghana and abroad.",
 } as const;
