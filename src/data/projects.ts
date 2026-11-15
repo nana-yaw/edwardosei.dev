@@ -133,7 +133,7 @@ const projects: readonly Project[] = [
     subtitle:
       "A cultural centre's website, members' area and staff area, built from the owner's mockups",
     summary:
-      "The owner of Si Hene, a membership cultural centre in Accra, gave me mockups and a list of what people should be able to do. I built the product, live payments included.",
+      "The owner of Si Hene, a membership cultural centre in Accra, gave me mockups and a list of what people should be able to do. I built the product in five weeks, live payments included.",
     description:
       "The owner had mockups of the screens and a list of what visitors, members and staff should each be able to do. I turned those into the working product: the public website, a members' area, a staff area, and live online payments.",
     // Only what a visitor to the site can already see. Where the product's
@@ -163,7 +163,9 @@ const projects: readonly Project[] = [
         },
         {
           title: "What I built",
-          body: "I turned those into the working product: the public website, a members' area, a staff area, and live online payments.",
+          // Dates from the project's git history (Edward, 15 Nov 2026): the
+          // first commit of the full product on 25 September, live on 30 October.
+          body: "I turned those into the working product: the public website, a members' area, a staff area, and live online payments. I started building on 25 September and it went live on 30 October, five weeks later. I have kept improving it every week since.",
         },
         {
           title: "How I built it",

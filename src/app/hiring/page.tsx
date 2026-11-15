@@ -19,6 +19,26 @@ const containerClass = "mx-auto w-full max-w-page px-4 sm:px-8 lg:px-12";
 const linkClass =
   "whitespace-nowrap underline decoration-border underline-offset-8 hover:decoration-accent active:text-muted";
 
+/** A name on the left and a sentence on the right, one row each. */
+function NamedRows({ rows }: { rows: readonly { name: string; detail: string }[] }) {
+  return (
+    <dl className="mt-14 border-b border-border">
+      {rows.map((item) => (
+        <div
+          key={item.name}
+          data-reveal
+          className="grid gap-x-16 gap-y-2 border-t border-border py-10 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]"
+        >
+          <dt className="font-stretch-[var(--stretch-display)] text-title font-semibold">
+            {item.name}
+          </dt>
+          <dd className="max-w-[48ch] text-lede text-muted">{item.detail}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
 /* ── For hiring managers ── */
 // The second door from the home page. Role, resume and links first, then
 // working practice in general terms.
@@ -26,7 +46,7 @@ export default function HiringPage() {
   const links = [
     { label: hiring.links.github, href: profile.github },
     { label: hiring.links.linkedin, href: profile.linkedin },
-    { label: hiring.links.email, href: `mailto:${profile.email}` },
+    { label: hiring.links.email, href: `mailto:${profile.email}`, track: "email" },
     hiring.workLink,
   ];
 
@@ -45,12 +65,18 @@ export default function HiringPage() {
               <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
                 <a
                   href={resumeUrl}
+                  data-track="hiring-resume"
                   className="inline-flex h-12 items-center whitespace-nowrap bg-accent px-6 font-semibold text-accent-ink transition-[background-color] duration-150 hover:bg-foreground active:bg-muted"
                 >
                   {hiring.resumeLabel}
                 </a>
                 {links.map((link) => (
-                  <a key={link.href} href={link.href} className={linkClass}>
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    data-track={"track" in link ? link.track : undefined}
+                    className={linkClass}
+                  >
                     {link.label}
                   </a>
                 ))}
@@ -69,23 +95,24 @@ export default function HiringPage() {
             </figure>
           </section>
 
-          {/* ── Practice ── */}
+          {/* ── Terms ── */}
           <section className={`${containerClass} pt-20`}>
+            <h2 className="text-section">{hiring.termsTitle}</h2>
+            <NamedRows rows={hiring.terms} />
+          </section>
+
+          {/* ── Practice ── */}
+          <section className={`${containerClass} pt-36`}>
             <h2 className="text-section">{hiring.practiceTitle}</h2>
-            <dl className="mt-14 border-b border-border">
-              {hiring.practice.map((item) => (
-                <div
-                  key={item.name}
-                  data-reveal
-                  className="grid gap-x-16 gap-y-2 border-t border-border py-10 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]"
-                >
-                  <dt className="font-stretch-[var(--stretch-display)] text-title font-semibold">
-                    {item.name}
-                  </dt>
-                  <dd className="max-w-[48ch] text-lede text-muted">{item.detail}</dd>
-                </div>
-              ))}
-            </dl>
+            <NamedRows rows={hiring.practice} />
+          </section>
+
+          {/* ── One piece of work, told in general terms ── */}
+          <section className={`${containerClass} pt-36`}>
+            <h2 className="text-section">{hiring.storyTitle}</h2>
+            <p data-reveal className="mt-10 max-w-[60ch] text-lede text-muted">
+              {hiring.story}
+            </p>
           </section>
 
           <Experience detail="full" />

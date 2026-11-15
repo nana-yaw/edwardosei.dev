@@ -192,12 +192,14 @@ export function Hero() {
         <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-3">
           <a
             href={hero.primary.href}
+            data-track="hire"
             className="inline-flex h-12 items-center whitespace-nowrap bg-accent px-6 font-semibold text-accent-ink transition-[background-color] duration-150 hover:bg-foreground active:bg-muted"
           >
             {hero.primary.label}
           </a>
           <a
             href={hero.secondary.href}
+            data-track="remote-roles"
             className="inline-flex h-12 items-center whitespace-nowrap underline decoration-border underline-offset-8 hover:decoration-accent active:text-muted"
           >
             {hero.secondary.label}

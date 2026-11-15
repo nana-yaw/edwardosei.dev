@@ -25,6 +25,17 @@ export function PostHogProvider({ children }: { children: ReactNode }) {
       // so it is off here, where the code decides.
       disable_session_recording: true,
     });
+
+    // The ways in (hire, consultation, email, remote roles) are plain links
+    // in the server HTML. They carry data-track, and this one listener
+    // records which was used, so they need no script of their own.
+    const recordContactClick = (event: MouseEvent) => {
+      if (!(event.target instanceof Element)) return;
+      const door = event.target.closest<HTMLElement>("[data-track]")?.dataset.track;
+      if (door) posthog.capture("contact_click", { door });
+    };
+    document.addEventListener("click", recordContactClick);
+    return () => document.removeEventListener("click", recordContactClick);
   }, []);
 
   if (!POSTHOG_KEY) return <>{children}</>;

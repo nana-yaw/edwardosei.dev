@@ -36,14 +36,17 @@ export const profile = {
       // Short forms of the achievements below, for the screen design.
       highlights: [
         "Backend engineer on a subscription software product, building the services behind it.",
-        "Cut the time its automated tests take by half.",
+        "Cut the time its browser tests take by half.",
       ],
       achievements: [
-        "Designed PostgreSQL database isolation architecture for parallel test execution using template-based cloning, reducing total test runtime by 50% with 2-4 concurrent workers",
-        "Built cross-repository orchestration layer decoupling frontend and backend tests through CLI interfaces, establishing clean service boundaries",
-        "Developed PASETO token-based authentication system for test automation, enabling secure stateless API access without session overhead",
-        "Engineered parallel test runner with timing persistence and data-driven load balancing, maintaining 92% pass rate across 24 automated tests",
-        "Refactored infrastructure scripts following YAGNI principles, reducing codebase by 61% while preserving functionality",
+        // Matched to the pull requests (Edward, 15 Nov 2026): the browser
+        // suite went from about 45 to 23 minutes on two workers. Template
+        // cloning was the team's pattern for unit tests; Edward brought it to
+        // the browser tests.
+        "Halved the browser test suite's run time, from about 45 to 23 minutes, by bringing the team's template-cloned PostgreSQL test databases to parallel browser tests",
+        "Moved the browser test suite from Cypress to Playwright",
+        "Added token sign-in for browser tests, so they skip the sign-in screens",
+        "Balanced the parallel test workers using each test's recorded run time, running the slowest tests first",
         "Developed and optimized SaaS APIs using PHP/Symfony with PSR-12 compliance",
         "Implemented interactive onboarding tour with driver.js, improving user adoption",
       ],
@@ -52,7 +55,7 @@ export const profile = {
       company: "Turntabl Ghana Ltd.",
       role: "Software Engineer",
       location: "Accra, Ghana",
-      period: "2021 - 2023",
+      period: "Jan 2021 - May 2023",
       current: false,
       highlights: [
         "Built a news service that grew from 100 to over 1,000 users.",

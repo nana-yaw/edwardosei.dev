@@ -6,7 +6,7 @@ Accra, Ghana (GMT, UTC+0) | Open to remote roles | edward.osei.nyarko@gmail.com
 
 ## Summary
 
-Backend and full-stack engineer with 5+ years building APIs, real-time web apps and test infrastructure in PHP/Symfony and TypeScript/Next.js. Remote engineer at a US SaaS company since 2023, where I cut test runtime by 50%. Sole developer of two live products: a client platform with members' area and online payments, and a real-time progressive web app (PWA) with 280+ tests.
+Backend and full-stack engineer with 5+ years building APIs, real-time web apps and test infrastructure in PHP/Symfony and TypeScript/Next.js. Remote engineer at a US SaaS company since 2023, where I halved the browser test suite's run time. Sole developer of two live products: a client platform with members' area and online payments, and a real-time progressive web app (PWA) with 280+ tests.
 
 ## Skills
 
@@ -21,10 +21,9 @@ Backend and full-stack engineer with 5+ years building APIs, real-time web apps 
 
 ### Backend Engineer | RentPost, Inc. (US SaaS) | Remote | Jul 2023 - Present
 
-- Cut total test runtime by 50% by designing PostgreSQL database isolation (template cloning) and a load-balanced parallel test runner.
+- Halved the browser test suite's run time (about 45 to 23 minutes) by bringing the team's template-cloned PostgreSQL test databases to parallel browser tests, with load balancing by recorded run time.
 - Developed and optimized SaaS APIs in PHP/Symfony to PSR-12 and wrote their technical documentation.
-- Decoupled frontend and backend test suites across repositories through CLI interfaces.
-- Reduced infrastructure scripts by 61% without changing their behavior.
+- Moved the browser test suite from Cypress to Playwright.
 - Shipped an interactive onboarding tour to improve user adoption and reduce support tickets.
 
 ### Software Engineer | Turntabl Ghana Ltd. | Accra, Ghana | Jan 2021 - May 2023

@@ -58,8 +58,21 @@ export const sections = {
     title: "Have a product in mind?",
     links: { github: "GitHub", linkedin: "LinkedIn", resume: "Resume (PDF)" },
     lede: "Send me your mockups, or just describe what you need. I will tell you what it would take to build.",
+    // Edward's decisions (15 Nov 2026): no prices on the site, clients in
+    // Ghana and abroad, quotes in either currency, and a monthly care plan
+    // after launch. With no prices shown, the steps say what an email leads to.
+    nextStepsTitle: "What happens next",
+    nextSteps: [
+      "We talk it through on a free 30-minute call, at a time that suits you. I work on GMT.",
+      "I send a written quote in US dollars or cedis: what I will build, the price and the dates.",
+      "I build it in stages and show you each one working as it is done.",
+      "It goes live at your own address. After that, a monthly care plan keeps it running, if you want one.",
+    ],
   },
 } as const;
+
+// Edward's promise (15 Nov 2026), shown next to each email button.
+export const replyTime = "I reply within 48 hours.";
 
 export const caseStudy = {
   backLabel: "Back to all work",
@@ -75,6 +88,25 @@ export const hiring = {
   resumeLabel: "Read the resume",
   links: { github: "GitHub", linkedin: "LinkedIn", email: "Email" },
   workLink: { label: "See the products", href: `${homePath}#project` },
+  // Edward's answers (15 Nov 2026): backend and full-stack roles,
+  // part-time or contract from now, either way of being engaged, and
+  // overlap for stand-ups and meetings.
+  termsTitle: "Working together",
+  terms: [
+    { name: "Part-time or contract", detail: "I can start now." },
+    {
+      name: "Contractor or employer of record",
+      detail: "Whichever suits your company.",
+    },
+    {
+      name: "On GMT, in your meetings",
+      detail: "I always overlap with your stand-ups and team meetings.",
+    },
+  ],
+  // General on purpose: no company is named here (Edward, 15 Nov 2026).
+  storyTitle: "A test suite, twice as fast",
+  story:
+    "At my current job, the browser tests ran one after another against one shared database and took about 45 minutes. I gave each parallel worker its own copy of the database, cloned from a ready-made template, a technique the team already used for its unit tests. The tests sign in with a token instead of through the screens, and the slowest tests start first so the workers finish together. The suite now runs in about 23 minutes on two workers.",
   practiceTitle: "How I work",
   practice: [
     {

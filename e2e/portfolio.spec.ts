@@ -233,7 +233,8 @@ test.describe("without JavaScript, for hiring managers", () => {
 
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
     await expect(page.getByRole("link", { name: "Read the resume" })).toBeVisible();
-    await expect(page.getByRole("heading", { level: 2 })).toHaveCount(3);
+    // Working together, How I work, the test-suite story, experience, tools.
+    await expect(page.getByRole("heading", { level: 2 })).toHaveCount(5);
   });
 });
 

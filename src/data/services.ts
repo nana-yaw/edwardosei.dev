@@ -79,7 +79,7 @@ export const services: readonly Service[] = [
     proof: experienceProof,
   },
   {
-    name: "Launch and upkeep",
+    name: "Launch, then a monthly care plan",
     proof: liveProof,
   },
 ];

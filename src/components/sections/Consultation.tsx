@@ -1,5 +1,5 @@
 import { profile } from "@/data/profile";
-import { sections } from "@/data/site";
+import { replyTime, sections } from "@/data/site";
 
 /* ── Consultations ── */
 // Sits between the services and the contact section: an owner who is not ready
@@ -20,10 +20,12 @@ export function Consultation() {
           <p className="mt-4 max-w-[48ch] text-muted">{consultation.outcome}</p>
           <a
             href={href}
+            data-track="consultation"
             className="mt-8 inline-flex h-12 items-center whitespace-nowrap bg-accent px-6 font-semibold text-accent-ink transition-[background-color] duration-150 hover:bg-foreground active:bg-muted"
           >
             {consultation.action}
           </a>
+          <p className="mt-4 text-sm text-muted">{replyTime}</p>
         </div>
       </div>
     </section>
