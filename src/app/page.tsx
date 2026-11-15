@@ -24,6 +24,9 @@ import { meta, sections } from "@/data/site";
 
 export const metadata: Metadata = {
   ...meta.portfolio,
+  // The layout's title template only reaches pages below the root, so the
+  // home page, now at /, writes its whole title itself.
+  title: { absolute: meta.titleTemplate.replace("%s", meta.portfolio.title) },
   alternates: { canonical: homePath },
 };
 

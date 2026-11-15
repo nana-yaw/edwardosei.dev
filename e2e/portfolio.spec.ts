@@ -6,7 +6,7 @@ import { hero } from "../src/data/hero";
 import { build } from "../src/data/heroPicture";
 import { brand, homePath, printPath, scrollButton } from "../src/data/navigation";
 import { profile } from "../src/data/profile";
-import { sections } from "../src/data/site";
+import { meta, sections } from "../src/data/site";
 import { shortenEcho } from "../src/lib/breakit/echo";
 import { CASE_STUDIES, IDEA_AT_REST, PAGES, VIEWPORTS, keptStill, still } from "./support";
 
@@ -142,7 +142,7 @@ for (const viewport of VIEWPORTS) {
         expect(await barTop(page)).toBeGreaterThan(HIDDEN_ABOVE);
       }
 
-      // Back at the top it slides out and is the in-flow header again.
+      // Back at the top it is the in-flow header again.
       await page.evaluate(() => window.scrollTo(0, 0));
       await expect(header).toHaveAttribute("data-nav", "top");
       await expect(brandLink).toBeInViewport();
@@ -163,6 +163,11 @@ test.describe("the old /portfolio address", () => {
     expect(new URL(page.url()).pathname).toBe(homePath);
     expect(new URL(page.url()).hash).toBe("#project");
     await expect(page.locator("#project").getByRole("heading", { level: 2 })).toBeInViewport();
+  });
+
+  test("the home page, now at /, keeps the brand in its title", async ({ page }) => {
+    await page.goto("/");
+    await expect(page).toHaveTitle(meta.titleTemplate.replace("%s", meta.portfolio.title));
   });
 
   test("leaves the print version where it was", async ({ request }) => {

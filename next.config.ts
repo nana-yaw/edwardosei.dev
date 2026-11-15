@@ -10,11 +10,6 @@ const nextConfig: NextConfig = {
   // Safe defaults that need no per-page tuning. No CSP yet: the hero, the
   // JSON-LD and analytics would each need an allowance, and a wrong policy
   // fails silently for visitors.
-  // The home page used to live at /portfolio. Old links and bookmarks keep
-  // working, section links included: the browser keeps the #part.
-  async redirects() {
-    return [{ source: "/portfolio", destination: "/", permanent: true }];
-  },
   async headers() {
     return [
       {
@@ -27,6 +22,11 @@ const nextConfig: NextConfig = {
         ],
       },
     ];
+  },
+  // The home page used to live at /portfolio. Old links and bookmarks keep
+  // working, section links included: the browser keeps the #part.
+  async redirects() {
+    return [{ source: "/portfolio", destination: "/", permanent: true }];
   },
 };
 
