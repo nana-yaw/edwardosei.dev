@@ -12,7 +12,7 @@ import {
   type OutcomeKind,
 } from "../src/data/breakIt";
 import { buildPartsSection, parts } from "../src/data/buildFlow";
-import { mainId, navItems, scrollButton } from "../src/data/navigation";
+import { brand, mainId, navItems, scrollButton } from "../src/data/navigation";
 
 const DESKTOP = { width: 1440, height: 900 } as const;
 const PHONE = { width: 360, height: 740 } as const;
@@ -180,32 +180,56 @@ test.describe("the scroll button takes keyboard focus with it", () => {
   });
 });
 
+/** The bar at rest, shown: its box is lifted by one trim, so its top is at -8. */
+const BAR_AT_REST = -8;
+/** The bar's solid backing stops one trim above the bottom of the header's box. */
+const BACKING_TRIM = 8;
+
+/** Waits until the shown bar has finished sliding in. */
+async function barAtRest(page: Page): Promise<void> {
+  const header = page.locator("header");
+  await expect(header).toHaveAttribute("data-nav", "shown");
+  await expect
+    .poll(() => header.evaluate((bar) => Math.round(bar.getBoundingClientRect().top)))
+    .toBe(BAR_AT_REST);
+}
+
+/** Every state the bar passes through from now on, in order. */
+async function recordBarStates(page: Page): Promise<() => Promise<string[]>> {
+  await page.locator("header").evaluate((bar) => {
+    const log: string[] = [];
+    (window as unknown as { barStates: string[] }).barStates = log;
+    new MutationObserver(() => log.push(bar.dataset.nav ?? "")).observe(bar, {
+      attributes: true,
+      attributeFilter: ["data-nav"],
+    });
+  });
+  return () => page.evaluate(() => (window as unknown as { barStates: string[] }).barStates);
+}
+
+/** Where the Work heading starts, and where the bar's solid backing ends. */
+async function headingAndBacking(page: Page): Promise<{ heading: number; backing: number }> {
+  const heading = await page
+    .locator("#project")
+    .getByRole("heading", { level: 2 })
+    .evaluate((element) => element.getBoundingClientRect().top);
+  const backing = await page
+    .locator("header")
+    .evaluate((bar) => bar.getBoundingClientRect().bottom);
+  return { heading, backing: backing - BACKING_TRIM };
+}
+
 test.describe("jumping to the work counts as past the hero", () => {
-  /** The bar's solid backing stops this far above the bottom of the header's box. */
-  const BACKING_TRIM = 8;
-
-  /** The Work heading is below the bar's solid backing, not under it. */
-  async function headingClearOfBar(page: Page): Promise<boolean> {
-    const heading = await page
-      .locator("#project")
-      .getByRole("heading", { level: 2 })
-      .evaluate((element) => element.getBoundingClientRect().top);
-    const backingBottom = await page
-      .locator("header")
-      .evaluate((bar) => bar.getBoundingClientRect().bottom);
-    return heading >= backingBottom - BACKING_TRIM;
-  }
-
   for (const viewport of [DESKTOP, PHONE]) {
     test(`loading /#project (${viewport.width}px)`, async ({ page }) => {
       await page.setViewportSize(viewport);
       await page.goto("/#project");
       const header = page.locator("header");
       await expect(page.getByRole("button", { name: scrollButton.toTop })).toBeVisible();
-      await expect(header).toHaveAttribute("data-nav", "shown");
+      await barAtRest(page);
       await expect(page.locator("#project").getByRole("heading", { level: 2 })).toBeInViewport();
-      await page.waitForTimeout(400);
-      expect(await headingClearOfBar(page)).toBe(true);
+      const { heading, backing } = await headingAndBacking(page);
+      expect(heading).toBeGreaterThanOrEqual(backing);
 
       // From here the bar does what it does after scrolling here: it stays.
       await page.evaluate(() => window.scrollBy(0, 400));
@@ -222,20 +246,91 @@ test.describe("jumping to the work counts as past the hero", () => {
 
       await header.getByRole("link", { name: WORK_LINK }).click();
       await expect(toTop).toBeVisible();
-      await expect(header).toHaveAttribute("data-nav", "shown");
-      await page.waitForTimeout(400);
-      expect(await headingClearOfBar(page)).toBe(true);
+      await barAtRest(page);
+      let { heading, backing } = await headingAndBacking(page);
+      expect(heading).toBeGreaterThanOrEqual(backing);
+
+      // A hand resting on the trackpad after the jump moves the page a little
+      // back up. The bar and the button stay as they are.
+      const states = await recordBarStates(page);
+      for (const by of [-3, 3, -12, 12, -20]) {
+        await page.evaluate((distance) => window.scrollBy(0, distance), by);
+        await page.waitForTimeout(150);
+      }
+      expect(await states()).toEqual([]);
+      await expect(toTop).toBeVisible();
 
       // Deep in the page, use the bar's own Work link.
       await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight / 2));
-      await page.waitForTimeout(400);
-      await expect(header).toHaveAttribute("data-nav", "shown");
+      await barAtRest(page);
       await header.getByRole("link", { name: WORK_LINK }).click();
       await expect(page.locator("#project").getByRole("heading", { level: 2 })).toBeInViewport();
-      await page.waitForTimeout(500);
-      await expect(header).toHaveAttribute("data-nav", "shown");
+      await barAtRest(page);
       await expect(toTop).toBeVisible();
-      expect(await headingClearOfBar(page)).toBe(true);
+      ({ heading, backing } = await headingAndBacking(page));
+      expect(heading).toBeGreaterThanOrEqual(backing);
+    });
+  }
+});
+
+test.describe("the bar past the hero", () => {
+  test.use({ viewport: DESKTOP });
+
+  test("slides in from above the screen", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: scrollButton.toWork }).waitFor();
+    const states = await recordBarStates(page);
+    await page.evaluate(() => window.scrollTo(0, 3000));
+    await barAtRest(page);
+    expect(await states()).toEqual(["away", "shown"]);
+  });
+
+  test("turns round mid-slide instead of vanishing", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: scrollButton.toWork }).waitFor();
+    await page.evaluate(() => window.scrollTo(0, 3000));
+    await barAtRest(page);
+    const heroFoot = await page
+      .locator("#hero")
+      .evaluate((hero) => hero.getBoundingClientRect().bottom + window.scrollY);
+    const states = await recordBarStates(page);
+    // Smoothly up into the hero, then back past it before the slide ends.
+    await page.evaluate((to) => window.scrollTo(0, to), heroFoot - 200);
+    await expect(page.locator("header")).toHaveAttribute("data-nav", "leaving");
+    await page.evaluate((to) => window.scrollTo(0, to), heroFoot + 300);
+    await barAtRest(page);
+    expect(await states()).toEqual(["leaving", "shown"]);
+  });
+
+  for (const motion of ["no-preference", "reduce"] as const) {
+    test(`a jump to the top leaves no gap (motion ${motion})`, async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: motion });
+      await page.goto("/");
+      await page.getByRole("button", { name: scrollButton.toWork }).waitFor();
+      await page.evaluate(() => window.scrollTo(0, 5000));
+      await barAtRest(page);
+      const states = await recordBarStates(page);
+      await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+      await expect(page.locator("header")).toHaveAttribute("data-nav", "top");
+      await expect(page.locator("header").getByRole("link", { name: brand })).toBeInViewport();
+      expect(await states()).toEqual(["top"]);
+    });
+  }
+
+  for (const path of ["/", "/hiring"]) {
+    test(`the strip just under the bar lets clicks through (${path})`, async ({ page }) => {
+      await page.goto(path);
+      // The home page's bar needs its script; the hiring page's is pinned by CSS.
+      if (path === "/") await page.getByRole("button", { name: scrollButton.toWork }).waitFor();
+      await page.evaluate(() => window.scrollTo(0, 3000));
+      await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+      if (path === "/") await barAtRest(page);
+      const insideHeader = await page.locator("header").evaluate((bar) => {
+        const bottom = bar.getBoundingClientRect().bottom;
+        const strip = [bottom - 6, bottom - 2];
+        return strip.map((y) => bar.contains(document.elementFromPoint(window.innerWidth / 2, y)));
+      });
+      expect(insideHeader).toEqual([false, false]);
     });
   }
 });

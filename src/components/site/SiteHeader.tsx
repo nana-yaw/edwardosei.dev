@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { brand, homePath, mainId, navItems, skipLabel, stickyNav } from "@/data/navigation";
+import { MOTION_OK } from "@/components/pipe/useFlowMode";
 import { usePastHero } from "./usePastHero";
 import styles from "./SiteHeader.module.css";
 
@@ -31,9 +32,13 @@ export function SiteHeader({ pinned = false }: SiteHeaderProps) {
     if (!bar || pinned) return;
 
     if (!pastHero) {
-      // Back in the hero. A bar that is showing slides out first; anything
-      // else goes straight back into the flow.
-      if (bar.dataset.nav !== "shown") {
+      // Back in the hero. A bar that is showing slides out first, while the
+      // header's own place is still off screen. After a jump to the top that
+      // place is already in view, and with reduced motion nothing slides, so
+      // then it goes straight back into the flow and no gap is left.
+      const placeInView = (bar.parentElement?.getBoundingClientRect().bottom ?? 0) > 0;
+      const slides = window.matchMedia(MOTION_OK).matches;
+      if (bar.dataset.nav !== "shown" || placeInView || !slides) {
         bar.dataset.nav = "top";
         return;
       }
@@ -42,6 +47,13 @@ export function SiteHeader({ pinned = false }: SiteHeaderProps) {
         bar.dataset.nav = "top";
       }, LEAVE_MS);
       return () => window.clearTimeout(timer);
+    }
+
+    // Past the hero again before the bar had finished leaving: it turns
+    // round from where it is.
+    if (bar.dataset.nav === "leaving") {
+      bar.dataset.nav = "shown";
+      return;
     }
 
     // Past the hero. Parked out of sight for one painted frame, so that the

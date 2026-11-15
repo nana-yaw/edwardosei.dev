@@ -8,43 +8,60 @@ import { useSyncExternalStore } from "react";
 // layout, and it works whatever the hero's height, taller than the screen on
 // a phone included.
 
-/** The hero counts as back this many pixels before its foot reaches the top
- * of the screen: one bar's height, so the bar is already leaving by the time
- * the hero shows and is not seen lying over it. The Work section's scroll
- * margin (Work.tsx) lands every jump to it two pixels past this. */
-const HERO_RETURNS_EARLY = 64;
+/** The visitor is past the hero once its foot is this far above the top of
+ * the screen: one bar's height, so the bar is already leaving by the time the
+ * hero shows and is not seen lying over it. The Work section's scroll margin
+ * (Work.tsx) lands every jump to it two pixels past this. */
+const HERO_LEFT_AT = 64;
+/** The hero only counts as back once its foot comes this close. The gap to
+ * HERO_LEFT_AT is slack, so a hand resting on a trackpad just after a jump to
+ * the work does not send the bar out and back in. */
+const HERO_BACK_AT = 40;
 
 const HERO_ID = "hero";
 let pastHero = false;
-// One observer for everyone who asks. Each asker having its own would let
-// whichever fired first change the answer and leave the others untold.
-let watcher: IntersectionObserver | null = null;
+// One pair of observers for everyone who asks. Each asker having its own would
+// let whichever fired first change the answer and leave the others untold.
+let watchers: IntersectionObserver[] = [];
 const listeners = new Set<() => void>();
+
+function setPastHero(next: boolean): void {
+  if (next === pastHero) return;
+  pastHero = next;
+  listeners.forEach((listener) => listener());
+}
 
 function watchHero(): void {
   const hero = document.getElementById(HERO_ID);
   if (!hero) return;
-  watcher = new IntersectionObserver(
+  // Each observer only ever moves the answer one way: the first says when the
+  // hero has gone, the second when it is back.
+  const leaving = new IntersectionObserver(
     ([entry]) => {
       // Off screen and above it. Off screen below it cannot happen to a hero.
-      const next = !entry.isIntersecting && entry.boundingClientRect.top < 0;
-      if (next === pastHero) return;
-      pastHero = next;
-      listeners.forEach((listener) => listener());
+      if (!entry.isIntersecting && entry.boundingClientRect.top < 0) setPastHero(true);
     },
-    { rootMargin: `${HERO_RETURNS_EARLY}px 0px 0px 0px` },
+    { rootMargin: `${HERO_LEFT_AT}px 0px 0px 0px` },
   );
-  watcher.observe(hero);
+  const returning = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) setPastHero(false);
+    },
+    { rootMargin: `${HERO_BACK_AT}px 0px 0px 0px` },
+  );
+  leaving.observe(hero);
+  returning.observe(hero);
+  watchers = [leaving, returning];
 }
 
 function subscribe(onChange: () => void): () => void {
   listeners.add(onChange);
-  if (!watcher) watchHero();
+  if (watchers.length === 0) watchHero();
   return () => {
     listeners.delete(onChange);
     if (listeners.size > 0) return;
-    watcher?.disconnect();
-    watcher = null;
+    watchers.forEach((watcher) => watcher.disconnect());
+    watchers = [];
     pastHero = false;
   };
 }

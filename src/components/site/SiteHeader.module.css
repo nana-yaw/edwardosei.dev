@@ -20,6 +20,9 @@
      slimmer than the room the header keeps in the layout. */
   --trim: 0.5rem;
   height: var(--header-height);
+  /* Pinned, this box is what sticks, so it too must let the strip under the
+     bar through (see .header). */
+  pointer-events: none;
 }
 
 .header {
@@ -27,6 +30,15 @@
   /* Over the page pipe. */
   z-index: 40;
   height: var(--header-height);
+  /* The box runs a trim past the solid backing. Only the backing and the
+     links take the pointer, so the see-through strip under the bar never
+     takes a click meant for the page. */
+  pointer-events: none;
+}
+
+.header::before,
+.header a {
+  pointer-events: auto;
 }
 
 .header::before {
@@ -54,15 +66,11 @@
   transition: none;
 }
 
-/* Shown, or brought back by the keyboard: focus landing on a link inside a
-   parked nav must never leave the visitor typing at something off screen. */
-.header[data-nav="shown"],
-.header[data-nav="away"]:focus-within {
+.header[data-nav="shown"] {
   transform: translateY(calc(var(--trim) * -1));
 }
 
-.header:is([data-nav="shown"], [data-nav="leaving"])::before,
-.header[data-nav="away"]:focus-within::before {
+.header:is([data-nav="shown"], [data-nav="leaving"])::before {
   opacity: 1;
 }
 
