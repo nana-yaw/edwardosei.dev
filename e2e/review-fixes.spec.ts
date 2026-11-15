@@ -294,10 +294,19 @@ test.describe("the bar past the hero", () => {
       .locator("#hero")
       .evaluate((hero) => hero.getBoundingClientRect().bottom + window.scrollY);
     const states = await recordBarStates(page);
-    // Smoothly up into the hero, then back past it before the slide ends.
-    await page.evaluate((to) => window.scrollTo(0, to), heroFoot - 200);
-    await expect(page.locator("header")).toHaveAttribute("data-nav", "leaving");
-    await page.evaluate((to) => window.scrollTo(0, to), heroFoot + 300);
+    // Up into the hero, then back past it the frame the slide starts. Done in
+    // the page, so no round trip to the test can outlast the slide.
+    await page.evaluate(
+      async ({ up, down }) => {
+        const bar = document.querySelector("header") as HTMLElement;
+        window.scrollTo(0, up);
+        while (bar.dataset.nav !== "leaving") {
+          await new Promise((next) => requestAnimationFrame(next));
+        }
+        window.scrollTo(0, down);
+      },
+      { up: heroFoot - 200, down: heroFoot + 300 },
+    );
     await barAtRest(page);
     expect(await states()).toEqual(["leaving", "shown"]);
   });
@@ -317,6 +326,60 @@ test.describe("the bar past the hero", () => {
     });
   }
 
+  test("a fast trip to the top never leaves the header's place empty", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: scrollButton.toWork }).waitFor();
+    await page.evaluate(() => window.scrollTo(0, 5000));
+    await barAtRest(page);
+    // Every painted frame where the header's own place is on screen but the
+    // header is not in it.
+    await page.locator("header").evaluate((bar) => {
+      const place = bar.parentElement as HTMLElement;
+      const empty: number[] = [];
+      (window as unknown as { emptyFrames: number[] }).emptyFrames = empty;
+      const check = () => {
+        if (place.getBoundingClientRect().bottom > 0 && bar.dataset.nav !== "top") {
+          empty.push(Math.round(window.scrollY));
+        }
+        requestAnimationFrame(check);
+      };
+      requestAnimationFrame(check);
+    });
+    await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+    await page.keyboard.press("Home");
+    // A smooth scroll can come to rest a pixel short of the very top.
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(2);
+    await expect(page.locator("header")).toHaveAttribute("data-nav", "top");
+    await page.waitForTimeout(400);
+    const emptyFrames = await page.evaluate(
+      () => (window as unknown as { emptyFrames: number[] }).emptyFrames,
+    );
+    // The observer that puts the header back reports one painted frame late,
+    // which nobody can see. Before it there were 11 to 16 empty frames.
+    expect(emptyFrames.length).toBeLessThanOrEqual(1);
+  });
+
+  test("with reduced motion it never slides out, even on a slow way back", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    await page.getByRole("button", { name: scrollButton.toWork }).waitFor();
+    const heroFoot = await page
+      .locator("#hero")
+      .evaluate((hero) => hero.getBoundingClientRect().bottom + window.scrollY);
+    await page.evaluate((to) => window.scrollTo(0, to), heroFoot + 300);
+    await barAtRest(page);
+    const states = await recordBarStates(page);
+    // Up through the hero's foot a few pixels a frame.
+    await page.evaluate(async (to) => {
+      while (window.scrollY > to) {
+        window.scrollBy(0, -8);
+        await new Promise((next) => requestAnimationFrame(next));
+      }
+    }, heroFoot - 200);
+    await expect(page.locator("header")).toHaveAttribute("data-nav", "top");
+    expect(await states()).toEqual(["top"]);
+  });
+
   for (const path of ["/", "/hiring"]) {
     test(`the strip just under the bar lets clicks through (${path})`, async ({ page }) => {
       await page.goto(path);
@@ -325,12 +388,14 @@ test.describe("the bar past the hero", () => {
       await page.evaluate(() => window.scrollTo(0, 3000));
       await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
       if (path === "/") await barAtRest(page);
+      // The middle of the solid backing still belongs to the bar; the strip
+      // under it, which only looks like page, belongs to the page.
       const insideHeader = await page.locator("header").evaluate((bar) => {
         const bottom = bar.getBoundingClientRect().bottom;
-        const strip = [bottom - 6, bottom - 2];
-        return strip.map((y) => bar.contains(document.elementFromPoint(window.innerWidth / 2, y)));
+        const points = [bottom - 36, bottom - 6, bottom - 2];
+        return points.map((y) => bar.contains(document.elementFromPoint(window.innerWidth / 2, y)));
       });
-      expect(insideHeader).toEqual([false, false]);
+      expect(insideHeader).toEqual([true, false, false]);
     });
   }
 });

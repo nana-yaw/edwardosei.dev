@@ -2,8 +2,8 @@ import { useSyncExternalStore } from "react";
 
 /* ── Past the hero ── */
 // One answer to "has the visitor scrolled past the hero?", shared by the nav
-// and the scroll button so the two can never disagree. It comes from an
-// IntersectionObserver on the hero, which fires when the hero leaves or comes
+// and the scroll button so the two can never disagree. It comes from two
+// IntersectionObservers on the hero, which fire when the hero leaves or comes
 // back and at no other time: nothing here listens to the scroll or reads
 // layout, and it works whatever the hero's height, taller than the screen on
 // a phone included.
@@ -37,15 +37,17 @@ function watchHero(): void {
   // Each observer only ever moves the answer one way: the first says when the
   // hero has gone, the second when it is back.
   const leaving = new IntersectionObserver(
-    ([entry]) => {
-      // Off screen and above it. Off screen below it cannot happen to a hero.
+    (entries) => {
+      // The latest, if several crossings were queued together. Off screen and
+      // above it; off screen below it cannot happen to a hero.
+      const entry = entries[entries.length - 1];
       if (!entry.isIntersecting && entry.boundingClientRect.top < 0) setPastHero(true);
     },
     { rootMargin: `${HERO_LEFT_AT}px 0px 0px 0px` },
   );
   const returning = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) setPastHero(false);
+    (entries) => {
+      if (entries[entries.length - 1].isIntersecting) setPastHero(false);
     },
     { rootMargin: `${HERO_BACK_AT}px 0px 0px 0px` },
   );

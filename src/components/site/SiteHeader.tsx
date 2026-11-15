@@ -36,17 +36,33 @@ export function SiteHeader({ pinned = false }: SiteHeaderProps) {
       // header's own place is still off screen. After a jump to the top that
       // place is already in view, and with reduced motion nothing slides, so
       // then it goes straight back into the flow and no gap is left.
-      const placeInView = (bar.parentElement?.getBoundingClientRect().bottom ?? 0) > 0;
-      const slides = window.matchMedia(MOTION_OK).matches;
-      if (bar.dataset.nav !== "shown" || placeInView || !slides) {
+      const place = bar.parentElement;
+      const placeInView = () => (place?.getBoundingClientRect().bottom ?? 0) > 0;
+      if (bar.dataset.nav !== "shown" || !window.matchMedia(MOTION_OK).matches || placeInView()) {
         bar.dataset.nav = "top";
         return;
       }
       bar.dataset.nav = "leaving";
-      const timer = window.setTimeout(() => {
+      let timer = 0;
+      let watcher: IntersectionObserver | undefined;
+      const settle = () => {
+        window.clearTimeout(timer);
+        watcher?.disconnect();
         bar.dataset.nav = "top";
-      }, LEAVE_MS);
-      return () => window.clearTimeout(timer);
+      };
+      timer = window.setTimeout(settle, LEAVE_MS);
+      // A fast trip to the top can reach the header's place before the slide
+      // ends. The moment the place shows, the header goes back into it.
+      if (place) {
+        watcher = new IntersectionObserver((entries) => {
+          if (entries[entries.length - 1].isIntersecting) settle();
+        });
+        watcher.observe(place);
+      }
+      return () => {
+        window.clearTimeout(timer);
+        watcher?.disconnect();
+      };
     }
 
     // Past the hero again before the bar had finished leaving: it turns
