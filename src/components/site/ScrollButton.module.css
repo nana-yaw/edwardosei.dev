@@ -1,0 +1,83 @@
+/* ── Scroll button ────────────────────────────────────────── */
+/* Square, hairline, the site's own surface: no pill, no shadow, no bounce.
+   Fixed bottom right. It is only ever moved by a transform, and the lift
+   below is worked out when the footer comes on screen, never while the page
+   scrolls. */
+
+.button {
+  /* How far to rise to stay clear of the footer. */
+  --over-footer: 0px;
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  /* Over the page pipe. */
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 2.75rem;
+  height: 3rem;
+  padding-inline: 1rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transform: translateY(calc(var(--over-footer) * -1));
+  transition: transform 0.2s ease-out, border-color 0.15s;
+}
+
+.button:hover {
+  border-color: var(--accent);
+}
+
+.button:active {
+  color: var(--muted);
+}
+
+/* Drawn pointing up. It turns over when the button's job is to go down. */
+.arrow {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  transition: transform 0.2s ease-out;
+}
+
+.button[data-job="work"] .arrow {
+  transform: rotate(180deg);
+}
+
+@media (min-width: 768px) {
+  .button {
+    right: 1.5rem;
+    bottom: 1.5rem;
+  }
+}
+
+/* On a phone the last screens are the email and the links, and a fixed
+   button would sit on them. Gone entirely there, so it cannot take focus,
+   unless it already has focus: then it stays until focus moves on, so the
+   keyboard is never left on nothing. */
+@media (max-width: 767.98px) {
+  .button[data-near-end]:not(:focus) {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .arrow {
+    transition: none;
+  }
+}
+
+/* Paper cannot scroll. */
+@media print {
+  .button {
+    display: none;
+  }
+}

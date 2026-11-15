@@ -1,49 +1,27 @@
 import type { Metadata } from "next";
-import {
-  Inter,
-  Playfair_Display,
-  Space_Grotesk,
-  Fira_Code,
-} from "next/font/google";
-import { ThemeProvider } from "@/components/ThemeProvider";
+import { Archivo } from "next/font/google";
 import { PostHogProvider } from "@/components/PostHogProvider";
-import { ReducedMotionProvider } from "@/components/ReducedMotionProvider";
 import "./globals.css";
+import { siteUrl } from "@/data/navigation";
+import { meta } from "@/data/site";
 
-const inter = Inter({
-  variable: "--font-inter",
+// One family for display and body. The width axis is what sets the two apart.
+const archivo = Archivo({
+  variable: "--font-archivo",
   subsets: ["latin"],
-});
-
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
-  subsets: ["latin"],
-});
-
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets: ["latin"],
-});
-
-const firaCode = Fira_Code({
-  variable: "--font-fira-code",
-  subsets: ["latin"],
+  axes: ["wdth"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "devONE | Edward Osei-Nyarko",
-    template: "%s | devONE",
+    default: meta.siteName,
+    template: meta.titleTemplate,
   },
-  description:
-    "Software developer building production systems that serve communities. Security-first. Problem-first.",
-  metadataBase: new URL("https://edwardosei.dev"),
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: "https://edwardosei.dev",
-    siteName: "devONE | Edward Osei-Nyarko",
-  },
+  description: meta.description,
+  metadataBase: new URL(siteUrl),
+  // No url here: a site-wide url credited every shared page to the root.
+  openGraph: meta.openGraph,
   twitter: {
     card: "summary_large_image",
   },
@@ -63,17 +41,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${inter.variable} ${playfair.variable} ${spaceGrotesk.variable} ${firaCode.variable}`}
-      suppressHydrationWarning
-    >
+    <html lang="en" className={archivo.variable}>
       <body className="antialiased">
-        <ReducedMotionProvider>
-          <PostHogProvider>
-            <ThemeProvider>{children}</ThemeProvider>
-          </PostHogProvider>
-        </ReducedMotionProvider>
+        <PostHogProvider>{children}</PostHogProvider>
       </body>
     </html>
   );

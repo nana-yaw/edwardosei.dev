@@ -1,40 +1,26 @@
 import Link from "next/link";
+import { SiteHeader } from "@/components/site/SiteHeader";
+import { homePath, mainId } from "@/data/navigation";
+import { notFoundPage } from "@/data/site";
 
 export default function NotFound() {
   return (
-    <div
-      className="flex min-h-dvh flex-col items-center justify-center px-6"
-      style={{ backgroundColor: "var(--bg)", color: "var(--text)" }}
-    >
-      <h1
-        className="text-8xl font-bold tracking-tighter sm:text-9xl"
-        style={{
-          fontFamily: "var(--font-heading)",
-          color: "var(--accent)",
-        }}
+    <>
+      <SiteHeader pinned />
+      {/* One screen with the header, so a page this short never scrolls. */}
+      <main
+        id={mainId}
+        className="mx-auto flex min-h-[calc(100dvh-var(--header-height))] w-full max-w-page flex-col items-start justify-center px-4 sm:px-8 lg:px-12"
       >
-        404
-      </h1>
-      <p
-        className="mt-4 text-lg"
-        style={{
-          color: "color-mix(in srgb, var(--text) 50%, transparent)",
-          fontFamily: "var(--font-body)",
-        }}
-      >
-        Page not found
-      </p>
-      <Link
-        href="/portfolio"
-        className="mt-8 rounded-lg px-6 py-3 text-sm font-medium transition-opacity hover:opacity-80"
-        style={{
-          backgroundColor: "var(--accent)",
-          color: "var(--bg)",
-          fontFamily: "var(--font-body)",
-        }}
-      >
-        Back to portfolio
-      </Link>
-    </div>
+        <h1 className="text-display">{notFoundPage.title}</h1>
+        <p className="mt-6 text-lede text-muted">{notFoundPage.lede}</p>
+        <Link
+          href={homePath}
+          className="mt-9 inline-flex h-12 items-center whitespace-nowrap bg-accent px-6 font-semibold text-accent-ink transition-[background-color] duration-150 hover:bg-foreground active:bg-muted"
+        >
+          {notFoundPage.action}
+        </Link>
+      </main>
+    </>
   );
 }

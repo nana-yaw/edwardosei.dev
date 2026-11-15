@@ -1,0 +1,40 @@
+/* ── The still's wait ─────────────────────────────── */
+/* Where the build is about to play (wide screen, motion allowed, scripts on)
+   the still is held unseen for six seconds, then shows itself if no canvas
+   has taken over. This is an animation and not a transition out of a
+   starting style: a starting style only counts the first time an element is
+   styled, so one early style read (a script measuring the page before the
+   stylesheet lands, a capture tool) cancels it, and the finished picture
+   then shows through the build wherever the model does not cover it. An
+   animation holds from whenever it starts. */
+@media (min-width: 48rem) and (prefers-reduced-motion: no-preference) {
+  @media not (scripting: none) {
+    .heldBack {
+      animation: held-back 6.3s linear both;
+    }
+  }
+}
+
+/* The canvas is known not to be coming: the picture shows now. */
+[data-still] .heldBack {
+  animation: none;
+}
+
+/* A canvas has drawn its first frame: the picture is gone at once and for
+   good. The animation has to go too, because it outranks a plain opacity.
+   Opacity and not visibility, so the picture keeps naming the diagram for
+   assistive tech while the canvas, which is hidden from it, plays. */
+[data-hero-canvas][data-ready="true"] ~ .heldBack {
+  animation: none;
+  opacity: 0;
+}
+
+@keyframes held-back {
+  from,
+  95.238% {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

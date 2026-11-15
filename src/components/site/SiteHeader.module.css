@@ -1,0 +1,102 @@
+/* ── Site header ──────────────────────────────────────────── */
+/* On the home page the header is given a second life once the hero is behind
+   the visitor. Inside the hero it is the plain in-flow header and nothing
+   else: the hero is the showcase and no bar is ever laid over it. Past the
+   hero the same element is lifted out and fixed to the top of the screen, and
+   its place in the flow is held by the wrapper, so nothing under it moves and
+   the page pipe's measurements stay true. Only its transform and the opacity
+   of its backing ever change.
+
+   top:     inside the hero. In flow, see-through, scrolls away with the page.
+   away:    just past the hero. Parked out of sight with no slide, since the
+            in-flow header was already long gone when it got here.
+   hidden:  slid out because the visitor is scrolling down.
+   shown:   slid in because they scrolled up. Solid and slim.
+   leaving: the hero is coming back. Slides out, then returns to the flow.
+
+   A page with no hero pins the wrapper instead (see the end of this file). */
+
+.place {
+  /* Trimmed from the top and bottom of the backing, so the solid bar is
+     slimmer than the room the header keeps in the layout. */
+  --trim: 0.5rem;
+  height: var(--header-height);
+}
+
+.header {
+  position: relative;
+  /* Over the page pipe. */
+  z-index: 40;
+  height: var(--header-height);
+}
+
+.header::before {
+  content: "";
+  position: absolute;
+  inset: var(--trim) 0;
+  z-index: -1;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  opacity: 0;
+}
+
+.header:not([data-nav="top"]) {
+  position: fixed;
+  inset: 0 0 auto;
+  transform: translateY(-100%);
+  transition: transform 0.25s ease-out;
+}
+
+.header:not([data-nav="top"])::before {
+  transition: opacity 0.2s;
+}
+
+.header[data-nav="away"] {
+  transition: none;
+}
+
+/* Shown, or brought back by the keyboard: focus landing on a link inside a
+   hidden nav must never leave the visitor typing at something off screen. */
+.header[data-nav="shown"],
+.header:is([data-nav="away"], [data-nav="hidden"]):focus-within {
+  transform: translateY(calc(var(--trim) * -1));
+}
+
+.header:is([data-nav="shown"], [data-nav="leaving"])::before,
+.header:is([data-nav="away"], [data-nav="hidden"]):focus-within::before {
+  opacity: 1;
+}
+
+/* Reduced motion: it is simply there or not there. */
+@media (prefers-reduced-motion: reduce) {
+  .header:not([data-nav="top"]),
+  .header:not([data-nav="top"])::before {
+    transition: none;
+  }
+}
+
+/* Printed, it is the first line of the first page. A fixed bar would be
+   printed at the top of every sheet, over the words under it. */
+@media print {
+  .header:not([data-nav="top"]) {
+    position: static;
+  }
+}
+
+/* ── Pinned: a page with no hero ── */
+/* The same slim solid bar as "shown", there from the first paint and never
+   hidden. It is the wrapper that sticks: the header cannot travel outside a
+   box of its own height, so it stays in its first state inside it. The
+   wrapper sticks one trim above the screen's edge, which puts the backing
+   exactly where "shown" puts it. No script is involved. */
+
+.place[data-pinned] {
+  position: sticky;
+  top: calc(var(--trim) * -1);
+  /* Over the page's content. */
+  z-index: 40;
+}
+
+.place[data-pinned] .header::before {
+  opacity: 1;
+}

@@ -1,9 +1,8 @@
 "use client";
 
 import posthog from "posthog-js";
-import { PostHogProvider as PHProvider, usePostHog } from "posthog-js/react";
+import { PostHogProvider as PHProvider } from "posthog-js/react";
 import { useEffect, type ReactNode } from "react";
-import { useTheme } from "@/hooks/useTheme";
 
 const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY;
 const POSTHOG_HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com";
@@ -21,26 +20,14 @@ export function PostHogProvider({ children }: { children: ReactNode }) {
       capture_pageview: true,
       capture_pageleave: true,
       autocapture: false, // We track custom events instead
+      // The break-it section promises that nothing typed leaves the page. A
+      // recording switched on from the dashboard would break that promise,
+      // so it is off here, where the code decides.
+      disable_session_recording: true,
     });
   }, []);
 
   if (!POSTHOG_KEY) return <>{children}</>;
 
   return <PHProvider client={posthog}>{children}</PHProvider>;
-}
-
-/**
- * Tracks theme-related events. Place inside both PostHogProvider and ThemeProvider.
- */
-export function PostHogThemeTracker() {
-  const ph = usePostHog();
-  const { theme, isStory } = useTheme();
-
-  // Track theme changes
-  useEffect(() => {
-    if (!ph) return;
-    ph.capture("theme_changed", { theme, is_story: isStory });
-  }, [theme, isStory, ph]);
-
-  return null;
 }

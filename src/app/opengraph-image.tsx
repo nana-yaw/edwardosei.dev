@@ -1,11 +1,18 @@
 import { ImageResponse } from "next/og";
+import { hero } from "@/data/hero";
+import { brand } from "@/data/navigation";
+import { profile } from "@/data/profile";
+import { meta } from "@/data/site";
 
-export const runtime = "edge";
-export const alt = "devONE | Edward Osei-Nyarko, Software Developer";
+export const alt = meta.preview.alt;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
+// Drawn outside the page, where the stylesheet's variables cannot be read, so
+// its colours are written out as plain values.
 export default function OGImage() {
+  const [, bring, deliver] = hero.headline;
+
   return new ImageResponse(
     (
       <div
@@ -16,8 +23,8 @@ export default function OGImage() {
           flexDirection: "column",
           justifyContent: "center",
           padding: "80px",
-          backgroundColor: "#0a0a0a",
-          color: "#f0f0f5",
+          backgroundColor: "#110e09",
+          color: "#ebe5d6",
           fontFamily: "system-ui, sans-serif",
         }}
       >
@@ -25,12 +32,11 @@ export default function OGImage() {
           style={{
             fontSize: 28,
             fontWeight: 300,
-            letterSpacing: "0.3em",
             color: "#737373",
             marginBottom: 32,
           }}
         >
-          devONE
+          {brand}
         </div>
         <div
           style={{
@@ -41,33 +47,26 @@ export default function OGImage() {
             marginBottom: 24,
           }}
         >
-          Edward Osei-Nyarko
+          {profile.name}
         </div>
         <div
           style={{
             fontSize: 24,
-            color: "#8888a0",
+            color: "#b3ab9b",
             lineHeight: 1.5,
           }}
         >
-          Software developer building production systems that serve communities.
+          {meta.preview.line}
         </div>
         <div
           style={{
             display: "flex",
-            gap: 16,
             marginTop: 48,
-            fontSize: 18,
-            color: "#4f7df5",
+            fontSize: 22,
+            color: "#f2b04a",
           }}
         >
-          <span>42 tables</span>
-          <span style={{ color: "#737373" }}>/</span>
-          <span>280+ tests</span>
-          <span style={{ color: "#737373" }}>/</span>
-          <span>6 security layers</span>
-          <span style={{ color: "#737373" }}>/</span>
-          <span>4 themes</span>
+          {bring} {deliver}
         </div>
       </div>
     ),

@@ -1,25 +1,30 @@
 import type { Metadata } from "next";
-import { Nav } from "@/components/sections/Nav";
+import { SiteHeader } from "@/components/site/SiteHeader";
+import { SiteFooter } from "@/components/site/SiteFooter";
+import { ScrollButton } from "@/components/site/ScrollButton";
+import { KenteBandDefs, KenteStrip } from "@/components/kente/KenteStrip";
+import { Seam } from "@/components/kente/Seam";
+import { BreakIt } from "@/components/breakit/BreakIt";
+import { PagePipe } from "@/components/pipe/PagePipe";
 import { Hero } from "@/components/sections/Hero";
-import { Project } from "@/components/sections/Project";
+import { Work } from "@/components/sections/Work";
+import { BuildFlow } from "@/components/sections/BuildFlow";
+import { Approach } from "@/components/sections/Approach";
 import { Story } from "@/components/sections/Story";
 import { Experience } from "@/components/sections/Experience";
-import { Skills } from "@/components/sections/Skills";
+import { Services } from "@/components/sections/Services";
+import { Consultation } from "@/components/sections/Consultation";
 import { Contact } from "@/components/sections/Contact";
-import { ThemeSwitcher } from "@/components/ThemeSwitcher";
-import { ScrollButton } from "@/components/ScrollButton";
-import { TerminalShortcuts } from "@/components/themes/terminal";
-import { ThemeFavicon } from "@/components/ThemeFavicon";
-import { PostHogThemeTracker } from "@/components/PostHogProvider";
-import { StoryOrchestrator } from "@/components/StoryOrchestrator";
-import { StoryOverlay } from "@/components/StoryOverlay";
-import { StoryNavProvider } from "@/context/StoryNavContext";
+import { breakItAnchor } from "@/data/breakIt";
+import { buildPartsSection } from "@/data/buildFlow";
+import { showAdinkra } from "@/data/culture";
+import { homePath, mainId, siteUrl } from "@/data/navigation";
 import { profile } from "@/data/profile";
+import { meta, sections } from "@/data/site";
 
 export const metadata: Metadata = {
-  title: "Portfolio",
-  description:
-    "Edward Osei-Nyarko — Software developer building production systems. 42 database tables, 280+ tests, 6 security layers, 4 visual themes.",
+  ...meta.portfolio,
+  alternates: { canonical: homePath },
 };
 
 const jsonLd = {
@@ -27,7 +32,7 @@ const jsonLd = {
   "@type": "Person",
   name: profile.name,
   jobTitle: profile.title,
-  url: "https://edwardosei.dev",
+  url: siteUrl,
   sameAs: [profile.github, profile.linkedin],
   worksFor: {
     "@type": "Organization",
@@ -39,35 +44,66 @@ const jsonLd = {
   },
 };
 
+// The page pipe is laid over the whole of main. A seam is lifted one step
+// above it, so the pipe passes behind the seam instead of across it.
+const OVER_PIPE = "relative z-[2]";
+
+/** The sections the page pipe feeds, in page order. Each gets one junction. */
+const PIPE_STOPS = [
+  "project",
+  buildPartsSection.id,
+  "approach",
+  breakItAnchor,
+  "story",
+  "experience",
+  "skills",
+  sections.consultation.anchor,
+  "contact",
+];
+
+// Server-rendered: every word below is in the HTML before any script runs.
 export default function PortfolioPage() {
   return (
-    <StoryNavProvider>
+    <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        // "<" is escaped so no data value can ever close the script tag.
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
       />
-      <a
-        href="#main-content"
-        className="fixed left-4 top-4 z-[100] -translate-y-full rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-[var(--bg)] transition-transform focus:translate-y-0"
-      >
-        Skip to content
-      </a>
-      <StoryOrchestrator />
-      <StoryOverlay />
-      <Nav />
-      <main id="main-content">
+      {showAdinkra ? (
+        <>
+          <KenteBandDefs />
+          <div aria-hidden="true">
+            <KenteStrip band="a" className="block h-3 w-full sm:h-4 lg:h-5" />
+          </div>
+        </>
+      ) : null}
+      <SiteHeader />
+      <main id={mainId} className="relative">
         <Hero />
-        <Project />
-        <Story />
+        <Work />
+        <Seam bands={["b"]} className={`mt-28 lg:mt-36 ${OVER_PIPE}`} />
+        <BuildFlow />
+        <Approach />
+        <Seam bands={["a", "c"]} weight="thin" className={`mt-28 lg:mt-36 ${OVER_PIPE}`} />
+        <BreakIt />
+        {/* Story brings a top margin meant for the Approach section. The
+            section above already ends in its own space, so this cancels the
+            margin. */}
+        <div className="-mt-36 lg:-mt-44">
+          <Story />
+        </div>
         <Experience />
-        <Skills />
+        <Services />
+        <Consultation />
+        <Seam bands={["c"]} className={`mt-28 lg:mt-36 ${OVER_PIPE}`} />
         <Contact />
+        <PagePipe stops={PIPE_STOPS} flowStop={buildPartsSection.id} />
       </main>
-      <ThemeSwitcher />
+      <SiteFooter />
       <ScrollButton />
-      <TerminalShortcuts />
-      <ThemeFavicon />
-      <PostHogThemeTracker />
-    </StoryNavProvider>
+    </>
   );
 }

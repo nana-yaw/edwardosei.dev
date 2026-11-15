@@ -1,0 +1,132 @@
+/* ── Page pipe ────────────────────────────────────────────── */
+/* Decoration laid over the page: it takes no clicks and holds no content.
+   Only stroke-dashoffset, transform and opacity ever change. */
+
+.layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: clip;
+  pointer-events: none;
+}
+
+.drawing {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+}
+
+/* While the pipe follows the scroll it repaints every frame. On its own
+   layer that repaint is a few thin lines, not the page under them. */
+.layer[data-pipe="live"] .drawing {
+  will-change: transform;
+}
+
+.unlit,
+.lit,
+.lead,
+.tail {
+  fill: none;
+  stroke-width: 2;
+}
+
+.unlit {
+  stroke: var(--border);
+}
+
+.lit,
+.lead,
+.tail {
+  stroke: var(--accent);
+}
+
+/* The lit end: a short, thicker stroke on the same path, so it follows every
+   bend for free, and one small blurred dot riding with it for the glow. The
+   dot is the only blurred thing on the pipe and is moved by transform alone. */
+.core {
+  fill: none;
+  stroke: var(--accent);
+  stroke-linecap: round;
+  stroke-width: 4;
+}
+
+.glow {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: -0.625rem 0 0 -0.625rem;
+  border-radius: 50%;
+  background: var(--accent);
+  filter: blur(0.5rem);
+  opacity: 0;
+  will-change: transform;
+}
+
+/* ── Junctions ── */
+
+.node {
+  fill: var(--bg);
+  stroke: var(--border);
+  stroke-width: 2;
+}
+
+.nodeLit {
+  fill: var(--accent);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+.branch {
+  fill: var(--border);
+}
+
+.branchLit {
+  fill: var(--accent);
+  transform: scaleX(0);
+  transform-box: fill-box;
+  transform-origin: left center;
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.junction[data-lit="true"] .nodeLit {
+  opacity: 1;
+}
+
+.junction[data-lit="true"] .branchLit {
+  transform: scaleX(1);
+}
+
+/* ── Phones ── */
+/* The stretch leading to a junction fills first, then the junction and its
+   branch, then whatever pipe runs on from it. */
+
+.lead,
+.tail {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.6s ease-out;
+}
+
+.junction[data-lit="true"] .lead,
+.junction[data-lit="true"] .tail {
+  stroke-dashoffset: 0;
+}
+
+.layer[data-pipe="reveal"] .nodeLit {
+  transition-delay: 0.5s;
+}
+
+.layer[data-pipe="reveal"] .branchLit,
+.layer[data-pipe="reveal"] .tail {
+  transition-delay: 0.6s;
+}
+
+/* Printed, it would be lines drawn across the words. */
+@media print {
+  .layer {
+    display: none;
+  }
+}

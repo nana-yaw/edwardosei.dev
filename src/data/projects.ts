@@ -5,6 +5,10 @@ interface ProjectBase {
   slug: string;
   name: string;
   subtitle: string;
+  /** One or two plain sentences for the screen design. */
+  summary: string;
+  /** The one capture shown beside the project in the Work section. */
+  cover: { src: string; alt: string; width: number; height: number };
   description: string;
   techStack: readonly string[];
   liveUrl: string | null;
@@ -59,6 +63,9 @@ export interface FeaturedProject extends ProjectBase {
   authFlow: readonly string[];
   tableCategories: readonly { name: string; count: number; key: string }[];
   securityNarrative: string;
+  /** One line on why the project exists, set large beside it. */
+  statement: string;
+  caseStudy: CaseStudyContent;
   codeSnippet: {
     language: string;
     filename: string;
@@ -75,21 +82,164 @@ export interface AlsoBuiltProject extends ProjectBase {
   screenshots?: readonly string[];
 }
 
-export type Project = FeaturedProject | AlsoBuiltProject;
+/* ── Case study (the long form of a project, on its own page) ── */
+// Written for a business owner. No detail of how a product is protected,
+// hosted or put together inside.
+interface Shot {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
+export interface CaseStudyContent {
+  path: string;
+  lede: string;
+  visitLabel: string;
+  facts: readonly { label: string; value: string }[];
+  /** Three short statements: where it started, what was built, how. */
+  rows: readonly { title: string; body: string }[];
+  surfacesTitle: string;
+  surfaces: readonly { name: string; detail: string }[];
+  figuresTitle: string;
+  figures: readonly { value: string; label: string }[];
+  /** Where the figures come from, when that needs saying. */
+  figuresNote?: string;
+  desktop: Shot;
+  mobile: Shot;
+  /** A second pair of captures, shown further down. */
+  more?: { desktop: Shot; mobile: Shot };
+}
+
+/* ── Client project (named client work) ── */
+export interface ClientProject extends ProjectBase {
+  kind: "client";
+  featured: false;
+  caseStudy: CaseStudyContent;
+}
+
+export type Project = FeaturedProject | AlsoBuiltProject | ClientProject;
 
 /* ── Data ─────────────────────────────────────────────────── */
 
 const projects: readonly Project[] = [
+  /* ── Si Hene — client work, live ───────────────────────── */
+  // Public facts only, in a business owner's words. No staff names, hosts,
+  // admin paths, limits, prices, or detail of how the product is protected.
+  {
+    kind: "client",
+    slug: "sihene",
+    name: "Si Hene",
+    subtitle:
+      "A cultural centre's website, members' area and staff area, built from the owner's mockups",
+    summary:
+      "The owner of Si Hene, a membership cultural centre in Accra, gave me mockups and a list of what people should be able to do. I built the product, live payments included.",
+    description:
+      "The owner had mockups of the screens and a list of what visitors, members and staff should each be able to do. I turned those into the working product: the public website, a members' area, a staff area, and live online payments.",
+    // Only what a visitor to the site can already see. Where the product's
+    // data lives and what hosts it stay off, at Edward's request.
+    techStack: ["Next.js", "React", "TypeScript"],
+    cover: {
+      src: "/screenshots/sihene/home-desktop.png",
+      alt: "Si Hene home page on a desktop screen",
+      width: 1425,
+      height: 900,
+    },
+    liveUrl: "https://sihene.com",
+    githubUrl: null,
+    featured: false,
+    caseStudy: {
+      path: "/work/sihene",
+      lede: "A cultural centre's website, members' area and staff area, built from the owner's mockups.",
+      visitLabel: "Visit sihene.com",
+      facts: [
+        { label: "Role", value: "Sole developer" },
+        { label: "Live since", value: "30 October 2026" },
+      ],
+      rows: [
+        {
+          title: "What the owner brought",
+          body: "The owner had mockups of the screens and a list of what visitors, members and staff should each be able to do.",
+        },
+        {
+          title: "What I built",
+          body: "I turned those into the working product: the public website, a members' area, a staff area, and live online payments.",
+        },
+        {
+          title: "How I built it",
+          body: "I use AI models and build agents to draft the code. I read, test and release every change myself, and I answer for the result.",
+        },
+      ],
+      surfacesTitle: "One product, three audiences",
+      surfaces: [
+        {
+          name: "Public site",
+          detail: "The centre, its membership, events and places, open to anyone.",
+        },
+        {
+          name: "Members' area",
+          detail:
+            "My Si Hene, where members reserve, contribute and use the Digital Toolkit.",
+        },
+        {
+          name: "Staff area",
+          detail: "Where the centre's team runs the site day to day.",
+        },
+      ],
+      figuresTitle: "The size of it",
+      figures: [
+        { value: "132", label: "pages built" },
+        { value: "822", label: "automated test files" },
+        { value: "3", label: "areas: public, members, staff" },
+      ],
+      figuresNote: "Counted from the project on 14 November 2026.",
+      desktop: {
+        src: "/screenshots/sihene/home-desktop.png",
+        alt: "Si Hene home page on a desktop screen",
+        width: 1425,
+        height: 900,
+      },
+      mobile: {
+        src: "/screenshots/sihene/home-mobile.png",
+        alt: "Si Hene home page on a phone",
+        width: 375,
+        height: 844,
+      },
+      more: {
+        desktop: {
+          src: "/screenshots/sihene/places-desktop.png",
+          alt: "Si Hene Places and Knowledge page on a desktop screen",
+          width: 1425,
+          height: 900,
+        },
+        mobile: {
+          src: "/screenshots/sihene/places-mobile.png",
+          alt: "Si Hene Places and Knowledge page on a phone",
+          width: 375,
+          height: 844,
+        },
+      },
+    },
+  },
+
   {
     kind: "featured",
     slug: "ewc-care-app",
     name: "EWC Care App",
     subtitle: "Full-Stack Pastoral Care Management PWA",
+    summary:
+      "A care app for Empowerment Worship Centre. Pastors and group leaders use it to track members, visits, attendance and follow-ups.",
     description:
       "A comprehensive pastoral care management system for Empowerment Worship Centre. Built for Community Pastors and Circle Guides to manage church members, track pastoral care activities, monitor attendance, handle case management, and support spiritual growth initiatives.",
     longDescription:
-      "Production PWA serving 5+ communities with real-time data synchronization, role-based access control, and AI-powered insights. Manages member data, care interactions, attendance tracking, case management, and spiritual growth initiatives.",
-    liveUrl: null,
+      "Production PWA serving 5 communities with real-time data synchronization, role-based access control, and AI-powered insights. Manages member data, care interactions, attendance tracking, case management, and spiritual growth initiatives.",
+    cover: {
+      src: "/screenshots/dashboard-dark.png",
+      alt: "EWC Care App dashboard with the weekly care trend and follow-ups",
+      width: 1440,
+      height: 900,
+    },
+    liveUrl: "https://ewcareapp.online",
     githubUrl: "https://github.com/nana-yaw",
     featured: true,
 
@@ -126,7 +276,7 @@ const projects: readonly Project[] = [
       {
         name: "AI-Powered Insights",
         description:
-          "Gemini-powered pastoral analytics generating actionable care recommendations from interaction patterns.",
+          "Gemini-powered pastoral analytics: summaries of care records and actionable care recommendations from interaction patterns.",
         category: "ai",
       },
       {
@@ -317,6 +467,92 @@ const projects: readonly Project[] = [
     securityNarrative:
       "I built a tamper-evident audit log for a church app. Nobody asked me to. The data deserved it. Every mutation goes through a 6-layer defense stack. 24 of the 36 unit test files focus on security. I run mutation testing on auth guards to prove that removing an if statement actually breaks something.",
 
+    statement:
+      "It exists because my church community needed better tools for pastoral care.",
+
+    // Plain words only: what it is for and what people do with it.
+    caseStudy: {
+      path: "/work/ewc-care-app",
+      lede: "A care app for a church, built by me alone from the first screen to launch.",
+      visitLabel: "Visit ewcareapp.online",
+      facts: [
+        { label: "Role", value: "Sole developer" },
+        { label: "Built for", value: "Empowerment Worship Centre" },
+      ],
+      rows: [
+        {
+          title: "Why it exists",
+          body: "My church community needed better tools for pastoral care, so I built them.",
+        },
+        {
+          title: "What I built",
+          body: "An app pastors and group leaders open on their phones to see their members, record care, take attendance and follow up on cases.",
+        },
+        {
+          title: "How I built it",
+          body: "Alone. I planned it, built every screen and launched it, and it is live today.",
+        },
+      ],
+      surfacesTitle: "What people do with it",
+      surfaces: [
+        {
+          name: "Check in",
+          detail:
+            "Members check in at a service from their own phone, by scanning a code or by being at the venue.",
+        },
+        {
+          name: "Care and follow-up",
+          detail:
+            "Pastors log visits and calls, open cases and get reminders to follow up.",
+        },
+        {
+          name: "Notifications",
+          detail:
+            "It sends notifications to the phone for birthdays, care reminders and follow-ups.",
+        },
+        {
+          name: "Summaries and insights",
+          detail: "It uses AI to turn the care records into summaries and insights for the team.",
+        },
+        {
+          name: "Works offline",
+          detail: "It installs like an app and keeps working when the signal drops.",
+        },
+      ],
+      figuresTitle: "The size of it",
+      figures: [
+        { value: "280+", label: "automated tests" },
+        { value: "5", label: "communities served" },
+        { value: "6", label: "kinds of user, each with their own view" },
+      ],
+      desktop: {
+        src: "/screenshots/dashboard-dark.png",
+        alt: "EWC Care App dashboard with the weekly care trend and follow-ups",
+        width: 1440,
+        height: 900,
+      },
+      mobile: {
+        src: "/screenshots/mobile-landing.png",
+        alt: "EWC Care App welcome page on a phone",
+        width: 375,
+        height: 812,
+      },
+      more: {
+        desktop: {
+          src: "/screenshots/landing-hero.png",
+          alt: "EWC Care App welcome page on a desktop screen",
+          width: 1440,
+          height: 900,
+        },
+        mobile: {
+          src: "/screenshots/mobile-onboarding.png",
+          alt: "EWC Care App circle lookup on a phone",
+          width: 375,
+          height: 812,
+        },
+      },
+    },
+
     // Real code snippet for the terminal theme
     codeSnippet: {
       language: "typescript",
@@ -346,6 +582,8 @@ function haversineDistance(
     slug: "teams-bootcamp",
     name: "EWC Teams Bootcamp",
     subtitle: "Real-time event scoring & volunteer management for 100+ attendees",
+    summary:
+      "Live scoring and volunteer sign-up for a church bootcamp with over 100 attendees.",
     description:
       "A production event management system built for a live church bootcamp. 4 competing squads, 20 ministry teams, real-time scoring across projectors and phones, and an admin portal for referees — all synced instantly via Firebase. Used at a real event with 100+ attendees.",
     techStack: [
@@ -358,6 +596,12 @@ function haversineDistance(
       "Vercel",
       "xlsx",
     ],
+    cover: {
+      src: "/screenshots/bootcamp-leaderboard.png",
+      alt: "Teams Bootcamp leaderboard showing the four squads' standings",
+      width: 2560,
+      height: 1323,
+    },
     liveUrl: "https://teambootcampapp.vercel.app",
     githubUrl: "https://github.com/nana-yaw",
     featured: false,
@@ -380,42 +624,6 @@ function haversineDistance(
       "/screenshots/bootcamp-registration.png",
     ],
   },
-
-  /* ── NAAT Foundation — WordPress block theme ──────────── */
-  {
-    kind: "also-built",
-    slug: "naat-foundation",
-    name: "NAAT Foundation",
-    subtitle: "Custom WordPress block theme for a Ghana-based nonprofit",
-    description:
-      "A full-featured nonprofit website built with a custom FSE block theme and companion plugin. Handles donations via Paystack (Ghana mobile money) and PayPal, volunteer signup, impact tracking, events, and gallery management.",
-    techStack: [
-      "WordPress",
-      "PHP 8.1",
-      "Full Site Editing",
-      "GiveWP",
-      "Paystack",
-      "WPForms",
-      "Mailchimp",
-      "Cloudflare",
-    ],
-    liveUrl: null,
-    githubUrl: "https://github.com/nana-yaw",
-    featured: false,
-    highlights: [
-      "32 custom dynamic blocks and 15 FSE page templates",
-      "6 custom post types via companion plugin (theme/data separation)",
-      "Ghana payment integration: Paystack mobile money + PayPal international",
-      "4 seasonal color themes + dark mode toggle (WCAG 2.1 AA compliant)",
-      "60+ WordPress Customizer settings for no-code content management",
-    ],
-    screenshot: "/screenshots/naat-homepage.png",
-    screenshots: [
-      "/screenshots/naat-homepage.png",
-      "/screenshots/naat-programs.png",
-      "/screenshots/naat-about.png",
-    ],
-  },
 ];
 
 /* ── Accessor helpers ─────────────────────────────────────── */
@@ -432,5 +640,21 @@ export function getAlsoBuiltProjects(): AlsoBuiltProject[] {
   return projects.filter((p): p is AlsoBuiltProject => p.kind === "also-built");
 }
 
-/** All projects (both types). */
+/** Returns the client project with this slug. */
+export function getClientProject(slug: string): ClientProject {
+  const p = projects.find(
+    (p): p is ClientProject => p.kind === "client" && p.slug === slug,
+  );
+  if (!p) throw new Error(`No client project "${slug}" found in data`);
+  return p;
+}
+
+/** Every project that has a case-study page. */
+export function getCaseStudies(): (ClientProject | FeaturedProject)[] {
+  return projects.filter(
+    (p): p is ClientProject | FeaturedProject => p.kind !== "also-built",
+  );
+}
+
+/** All projects (every kind). */
 export { projects };

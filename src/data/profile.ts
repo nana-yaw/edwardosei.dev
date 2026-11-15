@@ -2,7 +2,6 @@ export const profile = {
   name: "Edward Osei-Nyarko",
   firstName: "Edward",
   lastName: "Osei-Nyarko",
-  brand: "devONE",
   brandExpansion: "Edward Osei-Nyarko",
   title: "Software Developer",
   tagline: "I studied physics, then I learned to code. Now I build systems that solve real problems.",
@@ -34,6 +33,11 @@ export const profile = {
       location: "Remote, US",
       period: "Jul 2023 - Present",
       current: true,
+      // Short forms of the achievements below, for the screen design.
+      highlights: [
+        "Backend engineer on a subscription software product, building the services behind it.",
+        "Cut the time its automated tests take by half.",
+      ],
       achievements: [
         "Designed PostgreSQL database isolation architecture for parallel test execution using template-based cloning, reducing total test runtime by 50% with 2-4 concurrent workers",
         "Built cross-repository orchestration layer decoupling frontend and backend tests through CLI interfaces, establishing clean service boundaries",
@@ -50,6 +54,10 @@ export const profile = {
       location: "Accra, Ghana",
       period: "2021 - 2023",
       current: false,
+      highlights: [
+        "Built a news service that grew from 100 to over 1,000 users.",
+        "Mentored junior engineers and wrote the onboarding guides.",
+      ],
       achievements: [
         "Built News Aggregator REST API using Spring Boot and Kotlin, scaling from 100 to 1,000+ users after company website integration",
         "Optimized API performance for internal systems; wrote technical documentation for engineer onboarding",
@@ -70,20 +78,17 @@ export const profile = {
       "Node.js",
       "TypeScript",
       "JavaScript",
-      "Kotlin",
-      "Java",
       "SQL",
       "Bash",
     ],
-    frameworks: ["Symfony", "Laravel", "Spring Boot", "Next.js", "React"],
-    databases: ["PostgreSQL", "MySQL", "Convex"],
+    frameworks: ["Symfony", "Laravel", "Next.js", "React"],
+    databases: ["PostgreSQL", "MySQL", "Supabase", "Convex"],
     cloud: ["Docker", "AWS", "Linux", "Nginx", "CI/CD"],
     testing: [
       "Cypress",
       "Playwright",
       "Vitest",
       "PHPUnit",
-      "JUnit",
       "Stryker",
     ],
   },

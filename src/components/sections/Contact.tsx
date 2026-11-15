@@ -1,40 +1,42 @@
-"use client";
+import { profile } from "@/data/profile";
+import { resumeUrl } from "@/data/navigation";
+import { sections } from "@/data/site";
 
-import { AnimatePresence, motion } from "framer-motion";
-import { useTheme } from "@/hooks/useTheme";
-import { STORY_SECTION_THEMES } from "@/lib/storyConfig";
-import { CinematicContact } from "@/components/themes/cinematic";
-import { MinimalContact } from "@/components/themes/minimal";
-import { BoldContact } from "@/components/themes/bold";
-import { TerminalContact } from "@/components/themes/terminal";
-import { StoryCardReveal } from "@/components/StoryCardReveal";
-
+/* ── Contact ── */
 export function Contact() {
-  const { theme, isStory } = useTheme();
-  const effectiveTheme = isStory ? STORY_SECTION_THEMES.contact : theme;
-
-  const Component =
-    effectiveTheme === "cinematic"
-      ? CinematicContact
-      : effectiveTheme === "minimal"
-        ? MinimalContact
-        : effectiveTheme === "bold"
-          ? BoldContact
-          : TerminalContact;
+  const links = [
+    { label: sections.contact.links.github, href: profile.github },
+    { label: sections.contact.links.linkedin, href: profile.linkedin },
+    { label: sections.contact.links.resume, href: resumeUrl },
+  ];
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={effectiveTheme}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.3, ease: "easeInOut" as const }}
-      >
-        <StoryCardReveal enabled={isStory}>
-          <Component />
-        </StoryCardReveal>
-      </motion.div>
-    </AnimatePresence>
+    <section
+      id="contact"
+      className="mx-auto w-full max-w-page px-4 pb-32 pt-40 sm:px-8 lg:px-12 lg:pb-40 lg:pt-52"
+    >
+      <h2 className="text-display">{sections.contact.title}</h2>
+      <p className="mt-8 max-w-[48ch] text-lede text-muted">{sections.contact.lede}</p>
+      <p className="mt-12">
+        <a
+          href={`mailto:${profile.email}`}
+          className="whitespace-nowrap text-[1.0625rem] font-semibold underline decoration-accent underline-offset-8 hover:text-accent active:text-muted sm:font-stretch-[var(--stretch-display)] sm:text-title"
+        >
+          {profile.email}
+        </a>
+      </p>
+      <ul className="mt-10 flex flex-wrap gap-x-10 gap-y-3">
+        {links.map((link) => (
+          <li key={link.href}>
+            <a
+              href={link.href}
+              className="whitespace-nowrap underline decoration-border underline-offset-8 hover:decoration-accent active:text-muted"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }

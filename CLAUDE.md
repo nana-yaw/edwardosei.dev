@@ -56,6 +56,7 @@ src/
 npm run dev          # Start dev server
 npm run build        # Production build
 npm run lint         # ESLint check
+npm run test:e2e     # Playwright against a dev build, in the installed Chrome (PW_PORT reuses a running server)
 ```
 
 ## Key Conventions
@@ -71,3 +72,19 @@ npm run lint         # ESLint check
 - WCAG 2.1 AA contrast on all themes
 - Responsive: mobile-first, test at 375px / 768px / 1024px / 1440px
 - Real photo of Edward (or initials "EO" placeholder), NOT 3D avatar
+
+## Single-Design Rebuild (feat/3d-portfolio-rebuild, Nov 2026)
+Supersedes the 4-theme system and story mode described above. One design, one typeface (Archivo, variable weight and width), no mono font, colours only as CSS variables on `:root`. `/portfolio/print` and the `@media print` block stay as they are. The resume PDF is a one-page, ATS-friendly resume built from `scripts/resume.md` with `npm run resume`. The reader is a business owner who needs a product built (Edward, 14 Nov 2026): plain words, outcomes first, and nothing about how a client's product is protected or put together inside. NAAT is not shown. The home page has two doors: "Hire me for a project" and "Open to remote roles", which opens `/hiring` (general engineering practice only). Adinkra symbols and kente strips sit behind one switch, `showAdinkra` in `src/data/culture.ts` (on unless `NEXT_PUBLIC_SHOW_ADINKRA=false`); Edward chose on 15 Nov 2026 to launch with it on, before hearing from the National Folklore Board. Name no payment provider anywhere. Hallmark's audit is the slop gate: no tracked-caps labels or eyebrows, no middle-dot meta strings, `overflow-x: clip` (never `hidden`) on html and body, instant `:focus-visible`, about 80 words per screen.
+
+## 3D Checklist (every WebGL change must pass this)
+- **Pins (exact, no carets):** three 0.187.0, @react-three/fiber 9.8.2 (React 19, peer `>=19 <19.4`), @types/three 0.187.0, gsap 3.15.1, @gsap/react 2.1.2, lenis 1.3.27, @playwright/test 1.64.1. drei only if a helper earns its place, pinned when added. Do not mix R3F 8 or drei 9 APIs.
+- **Next config:** `transpilePackages: ['three']`. The canvas is a client component loaded with `dynamic(..., { ssr: false })`.
+- **Budget:** under 100 draw calls and 100k vertices on any device. The hero target is under 60 calls and 25k vertices (raised from 30 and 5k by Edward, 14 Nov 2026, for the clay hero). Three lights at most, textures 2048px or less.
+- **Shadows:** one shadow-casting light with soft shadows is allowed where the canvas runs, which is tablet and desktop only (allowed by Edward, 14 Nov 2026; before that the rule was no shadows). Shadow map 2048px or less, updated only on frames that render. Phones never run the canvas, so they are unaffected.
+- **DPR capped at 2:** `dpr={[1, 2]}`.
+- **Disposal:** dispose every geometry and material created outside JSX on unmount. No allocation inside `useFrame`.
+- **Static scene:** `frameloop="demand"`; call `invalidate()` only when scroll progress or pointer tilt changes.
+- **Reduced motion:** no Lenis, no ScrollTrigger scrub, no canvas; everything renders in its final state.
+- **Zero JS:** all content is server-rendered HTML. Animation and WebGL are enhancements only.
+- **Static fallback:** a baked still of the hero (`src/components/hero/hero-still.webp`) is the server-rendered default image; the canvas mounts over it only when WebGL2 is available without a major performance caveat, the viewport is at least 48rem wide and motion is allowed, and falls back to the still if the context is lost. Phones keep the still and never download three. Re-bake the still whenever the hero scene or the palette changes.
+- **Measured, not assumed:** dev builds publish `renderer.info` to `window.__r3f`; a Playwright test asserts the budget, a non-blank canvas, the zero-JS content and the reduced-motion branch at 360, 768 and 1440 px.

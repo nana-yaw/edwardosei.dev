@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { profile } from "@/data/profile";
-import { getFeaturedProject, getAlsoBuiltProjects } from "@/data/projects";
+import {
+  getAlsoBuiltProjects,
+  getClientProject,
+  getFeaturedProject,
+} from "@/data/projects";
 
 export const metadata: Metadata = {
   title: "Portfolio (Print)",
@@ -10,10 +14,10 @@ export const metadata: Metadata = {
 };
 
 export default function PrintPortfolio() {
+  const sihene = getClientProject("sihene");
   const featured = getFeaturedProject();
   const alsoBuilt = getAlsoBuiltProjects();
   const bootcamp = alsoBuilt.find((p) => p.slug === "teams-bootcamp");
-  const naat = alsoBuilt.find((p) => p.slug === "naat-foundation");
 
   return (
     <div className="print-portfolio">
@@ -41,39 +45,71 @@ export default function PrintPortfolio() {
         </div>
       </header>
 
-      {/* ── Case Study 1: EWC Care App ─────────────── */}
+      {/* ── Case Study 1: Si Hene ──────────────────── */}
       <section className="case-study">
         <div className="case-label">Case Study 01</div>
+        <div className="project-header">
+          <h2>{sihene.name}</h2>
+          <span className="badge production">In Production</span>
+        </div>
+        <p className="project-subtitle">{sihene.subtitle}</p>
+
+        <p className="narrative">{sihene.summary}</p>
+        <p className="narrative">{sihene.caseStudy.rows[2].body}</p>
+
+        <div className="screenshots-captioned">
+          <figure>
+            <Image
+              src={sihene.caseStudy.desktop.src}
+              alt={sihene.caseStudy.desktop.alt}
+              width={340}
+              height={200}
+              className="screenshot"
+            />
+            <figcaption>Home page: the centre&apos;s public site</figcaption>
+          </figure>
+          {sihene.caseStudy.more && (
+            <figure>
+              <Image
+                src={sihene.caseStudy.more.desktop.src}
+                alt={sihene.caseStudy.more.desktop.alt}
+                width={340}
+                height={200}
+                className="screenshot"
+              />
+              <figcaption>Places and Knowledge: one of the public sections</figcaption>
+            </figure>
+          )}
+        </div>
+
+        <h3>{sihene.caseStudy.surfacesTitle}</h3>
+        <div className="features-grid">
+          {sihene.caseStudy.surfaces.map((surface) => (
+            <div key={surface.name} className="feature">
+              <strong>{surface.name}</strong>
+              <p>{surface.detail}</p>
+            </div>
+          ))}
+        </div>
+
+        {sihene.liveUrl && (
+          <p className="project-link">
+            Live since {sihene.caseStudy.facts[1].value}: {sihene.liveUrl}
+          </p>
+        )}
+      </section>
+
+      {/* ── Case Study 2: EWC Care App ─────────────── */}
+      <section className="case-study">
+        <div className="case-label">Case Study 02</div>
         <div className="project-header">
           <h2>{featured.name}</h2>
           <span className="badge production">In Production</span>
         </div>
         <p className="project-subtitle">{featured.subtitle}</p>
 
-        <p className="narrative">{featured.securityNarrative}</p>
-
-        <div className="stats-grid">
-          <div className="stat">
-            <span className="stat-number">{featured.stats.databaseTables}</span>
-            <span className="stat-label">Tables</span>
-          </div>
-          <div className="stat">
-            <span className="stat-number">{featured.stats.databaseIndexes}</span>
-            <span className="stat-label">Indexes</span>
-          </div>
-          <div className="stat">
-            <span className="stat-number">{featured.stats.tests}</span>
-            <span className="stat-label">Tests</span>
-          </div>
-          <div className="stat">
-            <span className="stat-number">{featured.stats.securityLayers}</span>
-            <span className="stat-label">Security Layers</span>
-          </div>
-          <div className="stat">
-            <span className="stat-number">{featured.stats.rbacRoles}</span>
-            <span className="stat-label">RBAC Roles</span>
-          </div>
-        </div>
+        <p className="narrative">{featured.summary}</p>
+        <p className="narrative">{featured.statement}</p>
 
         {/* Screenshots with captions */}
         <div className="screenshots-captioned">
@@ -109,56 +145,32 @@ export default function PrintPortfolio() {
           </figure>
         </div>
 
-        {/* Architecture */}
-        <h3>Architecture</h3>
-        <div className="arch-layers">
-          {featured.architecture.layers.map((layer) => (
-            <div key={layer.name} className="arch-layer">
-              <strong>{layer.name}</strong>
-              <span className="arch-tech">{layer.tech}</span>
-              <span className="arch-detail">{layer.details}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Security */}
-        <h3>Security: 6-Layer Defense in Depth</h3>
-        <div className="security-list">
-          {featured.securityLayers.map((layer, i) => (
-            <div key={layer.name} className="security-item">
-              <span className="security-num">{String(i + 1).padStart(2, "0")}</span>
-              <div>
-                <strong>{layer.name}</strong>
-                <span className="security-detail">{layer.detail}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Features */}
-        <h3>Capabilities</h3>
+        {/* What people do with it */}
+        <h3>{featured.caseStudy.surfacesTitle}</h3>
         <div className="features-grid">
-          {featured.features.map((f) => (
-            <div key={f.name} className="feature">
-              <strong>{f.name}</strong>
-              <p>{f.description}</p>
+          {featured.caseStudy.surfaces.map((surface) => (
+            <div key={surface.name} className="feature">
+              <strong>{surface.name}</strong>
+              <p>{surface.detail}</p>
             </div>
           ))}
         </div>
 
-        <p className="tech-tags">{featured.techStack.join(" · ")}</p>
+        {featured.liveUrl && (
+          <p className="project-link">Live: {featured.liveUrl}</p>
+        )}
       </section>
 
-      {/* ── Case Study 2: Teams Bootcamp ───────────── */}
+      {/* ── Case Study 3: Teams Bootcamp ───────────── */}
       {bootcamp && (
         <section className="case-study">
-          <div className="case-label">Case Study 02</div>
+          <div className="case-label">Case Study 03</div>
           <div className="project-header">
             <h2>{bootcamp.name}</h2>
             <span className="badge production">In Production</span>
           </div>
           <p className="project-subtitle">{bootcamp.subtitle}</p>
-          <p className="narrative">{bootcamp.description}</p>
+          <p className="narrative">{bootcamp.summary}</p>
 
           <div className="screenshots-captioned two-up">
             {bootcamp.screenshots && bootcamp.screenshots[0] && (
@@ -187,65 +199,9 @@ export default function PrintPortfolio() {
             )}
           </div>
 
-          <h3>What I Built</h3>
-          <ul>
-            {bootcamp.highlights.map((h, i) => (
-              <li key={i}>{h}</li>
-            ))}
-          </ul>
-
-          <p className="tech-tags">{bootcamp.techStack.join(" · ")}</p>
           {bootcamp.liveUrl && (
             <p className="project-link">Live: {bootcamp.liveUrl}</p>
           )}
-        </section>
-      )}
-
-      {/* ── Case Study 3: NAAT Foundation ──────────── */}
-      {naat && (
-        <section className="case-study">
-          <div className="case-label">Case Study 03</div>
-          <div className="project-header">
-            <h2>{naat.name}</h2>
-          </div>
-          <p className="project-subtitle">{naat.subtitle}</p>
-          <p className="narrative">{naat.description}</p>
-
-          <div className="screenshots-captioned two-up">
-            {naat.screenshots && naat.screenshots[0] && (
-              <figure>
-                <Image
-                  src={naat.screenshots[0]}
-                  alt="NAAT homepage"
-                  width={340}
-                  height={200}
-                  className="screenshot"
-                />
-                <figcaption>Homepage: hero slider with seasonal theme (Kwanzaa)</figcaption>
-              </figure>
-            )}
-            {naat.screenshots && naat.screenshots[2] && (
-              <figure>
-                <Image
-                  src={naat.screenshots[2]}
-                  alt="NAAT about page"
-                  width={340}
-                  height={200}
-                  className="screenshot"
-                />
-                <figcaption>About page: founder quote and mission statement</figcaption>
-              </figure>
-            )}
-          </div>
-
-          <h3>What I Built</h3>
-          <ul>
-            {naat.highlights.map((h, i) => (
-              <li key={i}>{h}</li>
-            ))}
-          </ul>
-
-          <p className="tech-tags">{naat.techStack.join(" · ")}</p>
         </section>
       )}
 
@@ -264,7 +220,7 @@ export default function PrintPortfolio() {
       {/* ── Contact ────────────────────────────────── */}
       <footer className="contact-footer">
         <div className="contact-inner">
-          <p className="contact-cta">See the live portfolio with interactive themes, animations, and full project showcases.</p>
+          <p className="contact-cta">See the live portfolio for the full case studies.</p>
           <div className="contact-links">
             <span><strong>Web:</strong> edwardoseidev.vercel.app</span>
           </div>
