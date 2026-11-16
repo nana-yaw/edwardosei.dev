@@ -4,6 +4,8 @@ Personal portfolio for Edward Osei-Nyarko. One design in one typeface, written f
 
 **Live:** [edwardoseidev.vercel.app](https://edwardoseidev.vercel.app)
 
+I work remotely with teams anywhere. Business owners can book a free 30-minute call on the [site](https://edwardoseidev.vercel.app/#consultation). Hiring managers can start at the [hiring page](https://edwardoseidev.vercel.app/hiring) or on [LinkedIn](https://linkedin.com/in/edwardosei-nyarko).
+
 ## Tech Stack
 
 - **Framework:** Next.js 16 (App Router)
