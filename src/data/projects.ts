@@ -541,8 +541,8 @@ const projects: readonly Project[] = [
       },
       more: {
         desktop: {
-          src: "/screenshots/landing-hero.png",
-          alt: "EWC Care App welcome page on a desktop screen",
+          src: "/screenshots/ewc-journey-placed.png",
+          alt: "EWC Care App telling a new member which community and circle they are in, on a desktop screen",
           width: 1440,
           height: 900,
         },
